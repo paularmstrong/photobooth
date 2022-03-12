@@ -1,9 +1,8 @@
 /* eslint-env node */
-
-import {chrome} from '../../.electron-vendors.cache.json';
-import {join} from 'path';
-import {builtinModules} from 'module';
-import vue from '@vitejs/plugin-vue';
+import { chrome } from '../../.electron-vendors.cache.json';
+import { join } from 'path';
+import { builtinModules } from 'module';
+import preact from '@preact/preset-vite';
 
 const PACKAGE_ROOT = __dirname;
 
@@ -19,7 +18,7 @@ const config = {
       '/@/': join(PACKAGE_ROOT, 'src') + '/',
     },
   },
-  plugins: [vue()],
+  plugins: [preact()],
   base: '',
   server: {
     fs: {
@@ -33,9 +32,7 @@ const config = {
     assetsDir: '.',
     rollupOptions: {
       input: join(PACKAGE_ROOT, 'index.html'),
-      external: [
-        ...builtinModules.flatMap(p => [p, `node:${p}`]),
-      ],
+      external: [...builtinModules.flatMap((p) => [p, `node:${p}`])],
     },
     emptyOutDir: true,
     brotliSize: false,

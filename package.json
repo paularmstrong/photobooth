@@ -1,50 +1,48 @@
 {
-  "name": "vite-electron-builder",
+  "name": "photobooth",
   "private": true,
   "engines": {
-    "node": ">=v16.13",
-    "npm": ">=8.1"
+    "node": ">=v16.13"
   },
   "main": "packages/main/dist/index.cjs",
   "scripts": {
-    "build": "npm run build:main && npm run build:preload && npm run build:renderer",
+    "build": "yarn build:main && yarn build:preload && yarn build:renderer",
     "build:main": "cd ./packages/main && vite build",
     "build:preload": "cd ./packages/preload && vite build",
     "build:renderer": "cd ./packages/renderer && vite build",
-    "compile": "cross-env MODE=production npm run build && electron-builder build --config .electron-builder.config.js --dir --config.asar=false",
-    "test": "npm run test:main && npm run test:preload && npm run test:renderer && npm run test:e2e",
-    "test:e2e": "npm run build && vitest run",
+    "compile": "cross-env MODE=production yarn build && electron-builder build --config .electron-builder.config.js --dir --config.asar=false",
+    "test": "yarn test:main && yarn test:preload && yarn test:renderer && yarn test:e2e",
+    "test:e2e": "yarn build && vitest run",
     "test:main": "vitest run -r packages/main --passWithNoTests",
     "test:preload": "vitest run -r packages/preload --passWithNoTests",
     "test:renderer": "vitest run -r packages/renderer --passWithNoTests",
-    "watch": "node scripts/watch.js",
-    "lint": "eslint . --ext js,ts,vue",
-    "typecheck:main": "tsc --noEmit -p packages/main/tsconfig.json",
-    "typecheck:preload": "tsc --noEmit -p packages/preload/tsconfig.json",
-    "typecheck:renderer": "vue-tsc --noEmit -p packages/renderer/tsconfig.json",
-    "typecheck": "npm run typecheck:main && npm run typecheck:preload && npm run typecheck:renderer"
+    "start": "node scripts/watch.js",
+    "lint": "eslint . --fix --ext js,ts",
+    "tsc:main": "tsc --noEmit -p packages/main/tsconfig.json",
+    "tsc:preload": "tsc --noEmit -p packages/preload/tsconfig.json",
+    "tsc:renderer": "tsc --noEmit -p packages/renderer/tsconfig.json",
+    "tsc": "yarn tsc:main && yarn tsc:preload && yarn tsc:renderer"
   },
   "devDependencies": {
+    "@preact/preset-vite": "^2.1.7",
     "@typescript-eslint/eslint-plugin": "5.12.1",
-    "@vitejs/plugin-vue": "2.2.2",
-    "@vue/test-utils": "2.0.0-rc.18",
+    "@typescript-eslint/parser": "^5.14.0",
     "cross-env": "7.0.3",
     "electron": "17.1.0",
     "electron-builder": "22.14.13",
     "electron-devtools-installer": "3.2.0",
     "eslint": "8.9.0",
-    "eslint-plugin-vue": "8.5.0",
     "happy-dom": "2.41.0",
     "nano-staged": "0.6.0",
     "playwright": "1.19.1",
+    "prettier": "^2.5.1",
     "simple-git-hooks": "2.7.0",
-    "typescript": "4.5.5",
+    "typescript": "^4.5.5",
     "vite": "2.8.4",
-    "vitest": "0.5.4",
-    "vue-tsc": "0.31.4"
+    "vitest": "0.5.4"
   },
   "dependencies": {
     "electron-updater": "4.6.5",
-    "vue": "3.2.31"
+    "preact": "^10.6.6"
   }
 }

@@ -1,28 +1,18 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
-    "target": "esnext",
-    "sourceMap": false,
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
     "skipLibCheck": true,
     "strict": true,
-    "isolatedModules": true,
-
-    "types" : ["node"],
-
-    "baseUrl": ".",
-    "paths": {
-      "/@/*": [
-        "./src/*"
-      ]
-    },
+    "target": "esnext"
   },
-  "include": [
-    "src/**/*.ts",
-    "../../types/**/*.d.ts"
-  ],
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.test.ts"
-  ]
+  "include": ["../../types/**/*.d.ts", "."]
 }
