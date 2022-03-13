@@ -1,30 +1,30 @@
 import { app, shell } from 'electron';
 import { URL } from 'url';
 
+type Permissions =
+  | 'clipboard-read'
+  | 'media'
+  | 'display-capture'
+  | 'mediaKeySystem'
+  | 'geolocation'
+  | 'notifications'
+  | 'midi'
+  | 'midiSysex'
+  | 'pointerLock'
+  | 'fullscreen'
+  | 'openExternal'
+  | 'unknown';
+
+const localPermissions = new Set<Permissions>(['media', 'fullscreen']);
+
 /**
  * List of origins that you allow open INSIDE the application and permissions for each of them.
  *
  * In development mode you need allow open `VITE_DEV_SERVER_URL`
  */
-const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<
-  string,
-  Set<
-    | 'clipboard-read'
-    | 'media'
-    | 'display-capture'
-    | 'mediaKeySystem'
-    | 'geolocation'
-    | 'notifications'
-    | 'midi'
-    | 'midiSysex'
-    | 'pointerLock'
-    | 'fullscreen'
-    | 'openExternal'
-    | 'unknown'
-  >
->(
+const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<string, Set<Permissions>>(
   import.meta.env.DEV && import.meta.env.VITE_DEV_SERVER_URL
-    ? [[new URL(import.meta.env.VITE_DEV_SERVER_URL).origin, new Set()]]
+    ? [[new URL(import.meta.env.VITE_DEV_SERVER_URL).origin, localPermissions]]
     : [],
 );
 
@@ -70,7 +70,12 @@ app.on('web-contents-created', (_, contents) => {
    * @see https://www.electronjs.org/docs/latest/tutorial/security#5-handle-session-permission-requests-from-remote-content
    */
   contents.session.setPermissionRequestHandler((webContents, permission, callback) => {
-    const { origin } = new URL(webContents.getURL());
+    const { protocol, origin } = new URL(webContents.getURL());
+
+    // Allow local to access all
+    if (protocol === 'file:') {
+      return callback(true);
+    }
 
     const permissionGranted = !!ALLOWED_ORIGINS_AND_PERMISSIONS.get(origin)?.has(permission);
     callback(permissionGranted);

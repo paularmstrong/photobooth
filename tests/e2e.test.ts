@@ -30,7 +30,7 @@ test('Main window state', async () => {
           resolve(getState());
         } else mainWindow.once('ready-to-show', () => setTimeout(() => resolve(getState()), 0));
       });
-    }
+    },
   );
 
   expect(windowState.isCrashed, 'App was crashed').toBeFalsy();

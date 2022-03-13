@@ -13,7 +13,7 @@ export default {
     return Array.from(
       filenames.reduce((set, filename) => {
         const pack = filename.replace(pathToPackages, '').split(sep)[0];
-        set.add(`yarn tsc:${pack} --if-present`);
+        set.add(`yarn tsc:${pack}`);
         return set;
       }, new Set())
     );

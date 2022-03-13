@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app, systemPreferences } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './mainWindow';
 
@@ -36,25 +36,35 @@ app.on('activate', restoreOrCreateWindow);
  */
 app
   .whenReady()
+  .then(async () => {
+    const statusCam = systemPreferences.getMediaAccessStatus('camera');
+    const statusMic = systemPreferences.getMediaAccessStatus('microphone');
+    console.log('status', statusCam, statusMic);
+    if (statusCam !== 'granted' || statusMic !== 'granted') {
+      const grantedCamera = await systemPreferences.askForMediaAccess('camera');
+      const grantedMicrophone = await systemPreferences.askForMediaAccess('microphone');
+      console.log('was granted?', grantedCamera, grantedMicrophone);
+    }
+  })
   .then(restoreOrCreateWindow)
   .catch((e) => console.error('Failed create window:', e));
 
 /**
  * Install Vue.js or some other devtools in development mode only
  */
-if (import.meta.env.DEV) {
-  app
-    .whenReady()
-    .then(() => import('electron-devtools-installer'))
-    .then(({ default: installExtension, VUEJS3_DEVTOOLS }) =>
-      installExtension(VUEJS3_DEVTOOLS, {
-        loadExtensionOptions: {
-          allowFileAccess: true,
-        },
-      }),
-    )
-    .catch((e) => console.error('Failed install extension:', e));
-}
+// if (import.meta.env.DEV) {
+app
+  .whenReady()
+  .then(() => import('electron-devtools-installer'))
+  .then(({ default: installExtension, VUEJS3_DEVTOOLS }) =>
+    installExtension(VUEJS3_DEVTOOLS, {
+      loadExtensionOptions: {
+        allowFileAccess: true,
+      },
+    }),
+  )
+  .catch((e) => console.error('Failed install extension:', e));
+// }
 
 /**
  * Check new app version in production mode only

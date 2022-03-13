@@ -3,5 +3,6 @@
     "browser": true,
     "node": false
   },
-  "extends": []
+  "extends": ["preact"],
+  "plugins": ["preact"]
 }

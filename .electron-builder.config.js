@@ -18,6 +18,14 @@ const config = {
   extraMetadata: {
     version: process.env.VITE_APP_VERSION,
   },
+  mac: {
+    entitlements: './buildResources/entitlements.mac.plist',
+    // hardenedRuntime: false,
+    extendInfo: {
+      NSCameraUsageDescription: 'This app requires camera access to record video.',
+      NSMicrophoneUsageDescription: 'This app requires microphone access to record audio.',
+    },
+  },
 };
 
 module.exports = config;
