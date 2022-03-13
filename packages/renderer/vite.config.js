@@ -13,11 +13,6 @@ const PACKAGE_ROOT = __dirname;
 const config = {
   mode: process.env.MODE,
   root: PACKAGE_ROOT,
-  resolve: {
-    alias: {
-      '/@/': join(PACKAGE_ROOT, 'src') + '/',
-    },
-  },
   plugins: [preact()],
   base: '',
   server: {
@@ -39,6 +34,11 @@ const config = {
   },
   test: {
     environment: 'happy-dom',
+  },
+  css: {
+    postcss: {
+      plugins: [require('tailwindcss'), require('autoprefixer')],
+    },
   },
 };
 
