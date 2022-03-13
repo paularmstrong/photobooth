@@ -1,5 +1,5 @@
-import type { MaybeMocked } from 'vitest';
 import { beforeEach, expect, test, vi } from 'vitest';
+import type { MaybeMocked } from 'vitest';
 import { restoreOrCreateWindow } from '../src/mainWindow';
 
 import { BrowserWindow } from 'electron';

@@ -1,8 +1,9 @@
 import { h } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { PhotoCapture } from './PhotoCapture';
 
 export function App() {
-  const [, setImageCapture] = useState<ImageCapture | null>(null);
+  const [imageCapture, setImageCapture] = useState<ImageCapture | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export function App() {
   return (
     <div class="bg-black w-screen h-screen overflow-hidden">
       <video autoPlay class="w-screen h-screen -scale-x-100 absolute" ref={videoRef} />
-      {/*{imageCapture ? <PhotoSession imageCapture={imageCapture} /> : null}*/}
+      {imageCapture ? <PhotoCapture imageCapture={imageCapture} /> : null}
     </div>
   );
 }

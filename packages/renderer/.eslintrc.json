@@ -1,8 +1,0 @@
-{
-  "env": {
-    "browser": true,
-    "node": false
-  },
-  "extends": ["preact"],
-  "plugins": ["preact"]
-}

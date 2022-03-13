@@ -1,5 +1,7 @@
 import { contextBridge } from 'electron';
 
+/* eslint-disable no-undef */
+
 /**
  * Typesafe wrapper for `electron.contextBridge.exposeInMainWorld`.
  * Guarantees that all exposed APIs will comply with contracts.

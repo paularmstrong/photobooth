@@ -30,14 +30,14 @@ function updateVendors() {
   return Promise.all([
     writeFile(
       './.electron-vendors.cache.json',
-      JSON.stringify(
+      `${JSON.stringify(
         {
           chrome: chromeMajorVersion,
           node: nodeMajorVersion,
         },
         null,
         2,
-      ) + '\n',
+      )  }\n`,
     ),
 
     writeFile(browserslistrcPath, `Chrome ${chromeMajorVersion}\n`, 'utf8'),
