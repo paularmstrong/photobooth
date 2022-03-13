@@ -37,13 +37,14 @@ app.on('activate', restoreOrCreateWindow);
 app
   .whenReady()
   .then(async () => {
+    if (process.platform !== 'darwin') {
+      return;
+    }
     const statusCam = systemPreferences.getMediaAccessStatus('camera');
     const statusMic = systemPreferences.getMediaAccessStatus('microphone');
-    console.log('status', statusCam, statusMic);
     if (statusCam !== 'granted' || statusMic !== 'granted') {
-      const grantedCamera = await systemPreferences.askForMediaAccess('camera');
-      const grantedMicrophone = await systemPreferences.askForMediaAccess('microphone');
-      console.log('was granted?', grantedCamera, grantedMicrophone);
+      await systemPreferences.askForMediaAccess('camera');
+      await systemPreferences.askForMediaAccess('microphone');
     }
   })
   .then(restoreOrCreateWindow)
