@@ -1,0 +1,7 @@
+{
+  "name": "@gpp/preload",
+  "private": true,
+  "devDependencies": {
+    "vite": "^2.8.4"
+  }
+}

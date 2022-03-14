@@ -1,0 +1,10 @@
+{
+  "name": "@gpp/main",
+  "private": true,
+  "dependencies": {
+    "electron-updater": "4.6.5"
+  },
+  "devDependencies": {
+    "vite": "^2.8.4"
+  }
+}
