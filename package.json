@@ -1,27 +1,18 @@
 {
-  "name": "photobooth",
+  "name": "gopro-photobooth",
   "private": true,
   "engines": {
     "node": ">=v16.13"
   },
   "main": "packages/main/dist/index.cjs",
   "scripts": {
-    "build": "yarn build:main && yarn build:preload && yarn build:renderer",
-    "build:main": "cd ./packages/main && yarn vite build",
-    "build:preload": "cd ./packages/preload && yarn vite build",
-    "build:renderer": "cd ./packages/renderer && yarn vite build",
+    "build": "yarn workspaces foreach -p run build",
     "compile": "cross-env MODE=production yarn build && electron-builder build --config .electron-builder.config.js --dir --config.asar=false",
-    "test": "yarn test:main && yarn test:preload && yarn test:renderer && yarn test:e2e",
+    "test": "yarn workspaces foreach -p run test",
     "test:e2e": "yarn build && vitest run --passWithNoTests",
-    "test:main": "vitest run -r packages/main --passWithNoTests",
-    "test:preload": "vitest run -r packages/preload --passWithNoTests",
-    "test:renderer": "vitest run -r packages/renderer --passWithNoTests",
     "start": "node scripts/watch.js",
     "lint": "eslint . --cache --fix --ext js,cjs,ts,tsx",
-    "tsc:main": "tsc --noEmit -p packages/main/tsconfig.json",
-    "tsc:preload": "tsc --noEmit -p packages/preload/tsconfig.json",
-    "tsc:renderer": "tsc --noEmit -p packages/renderer/tsconfig.json",
-    "tsc": "yarn tsc:main && yarn tsc:preload && yarn tsc:renderer"
+    "tsc": "yarn workspaces foreach -p run tsc"
   },
   "devDependencies": {
     "@types/electron": "^1.6.10",

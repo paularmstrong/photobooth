@@ -1,10 +1,16 @@
 {
   "name": "@gpp/main",
   "private": true,
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run --passWithNoTests"
+  },
   "dependencies": {
     "electron-updater": "4.6.5"
   },
   "devDependencies": {
-    "vite": "^2.8.4"
+    "typescript": "^4.5.5",
+    "vite": "^2.8.4",
+    "vitest": "^0.5.4"
   }
 }

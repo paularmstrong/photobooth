@@ -402,7 +402,9 @@ __metadata:
   resolution: "@gpp/main@workspace:packages/main"
   dependencies:
     electron-updater: 4.6.5
+    typescript: ^4.5.5
     vite: ^2.8.4
+    vitest: ^0.5.4
   languageName: unknown
   linkType: soft
 
@@ -410,7 +412,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@gpp/preload@workspace:packages/preload"
   dependencies:
+    typescript: ^4.5.5
     vite: ^2.8.4
+    vitest: ^0.5.4
   languageName: unknown
   linkType: soft
 
@@ -425,7 +429,9 @@ __metadata:
     postcss: ^8.4.8
     preact: ^10.6.6
     tailwindcss: ^3.0.23
+    typescript: ^4.5.5
     vite: ^2.8.4
+    vitest: ^0.5.4
   languageName: unknown
   linkType: soft
 
@@ -3445,6 +3451,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gopro-photobooth@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "gopro-photobooth@workspace:."
+  dependencies:
+    "@types/electron": ^1.6.10
+    "@types/node": ^17.0.21
+    "@typescript-eslint/eslint-plugin": 5.12.1
+    "@typescript-eslint/parser": ^5.14.0
+    cross-env: 7.0.3
+    electron: 17.1.0
+    electron-builder: 22.14.13
+    electron-devtools-installer: 3.2.0
+    eslint: 8.9.0
+    happy-dom: 2.41.0
+    nano-staged: 0.6.0
+    playwright: 1.19.1
+    prettier: ^2.5.1
+    simple-git-hooks: 2.7.0
+    typescript: ^4.5.5
+    vitest: ^0.5.4
+  languageName: unknown
+  linkType: soft
+
 "got@npm:^9.6.0":
   version: 9.6.0
   resolution: "got@npm:9.6.0"
@@ -4935,29 +4964,6 @@ __metadata:
   checksum: 6c72f5243303d9c60bd98e6446ba7d30ae29e3d56fdb6fae8767e8ba6386f33ee284c97efe3230a0d0217e2b1723b8ab490b1bbf34fcbb2180dbc8a9de47850d
   languageName: node
   linkType: hard
-
-"photobooth@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "photobooth@workspace:."
-  dependencies:
-    "@types/electron": ^1.6.10
-    "@types/node": ^17.0.21
-    "@typescript-eslint/eslint-plugin": 5.12.1
-    "@typescript-eslint/parser": ^5.14.0
-    cross-env: 7.0.3
-    electron: 17.1.0
-    electron-builder: 22.14.13
-    electron-devtools-installer: 3.2.0
-    eslint: 8.9.0
-    happy-dom: 2.41.0
-    nano-staged: 0.6.0
-    playwright: 1.19.1
-    prettier: ^2.5.1
-    simple-git-hooks: 2.7.0
-    typescript: ^4.5.5
-    vitest: ^0.5.4
-  languageName: unknown
-  linkType: soft
 
 "picocolors@npm:^1.0.0":
   version: 1.0.0

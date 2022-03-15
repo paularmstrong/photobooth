@@ -19,11 +19,10 @@ jobs:
         with:
           node-version: 16
           cache: 'yarn'
-
       - name: Install dependencies
         run: yarn install
-
-      - run: yarn run lint
+      - name: Lint
+        run: yarn run lint
 
   typescript:
     runs-on: ubuntu-latest
@@ -34,13 +33,12 @@ jobs:
         with:
           node-version: 16
           cache: 'yarn'
-
       - name: Install dependencies
         run: yarn install
+      - name: Type checks
+        run: yarn run tsc
 
-      - run: yarn run tsc
-
-  main:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -48,30 +46,10 @@ jobs:
         with:
           node-version: 16
           cache: 'yarn'
-      - run: yarn install
-      - run: yarn run test:main
-
-  preload:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          cache: 'yarn'
-      - run: yarn install
-      - run: yarn run test:preload
-
-  renderer:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          cache: 'yarn'
-      - run: yarn install
-      - run: yarn run test:renderer
+      - name: Install dependencies
+        run: yarn install
+      - name: Unit tests
+        run: yarn test
 
   e2e:
     strategy:
@@ -85,7 +63,8 @@ jobs:
         with:
           node-version: 16
           cache: 'yarn'
-      - run: yarn install
+      - name: Install dependencies
+        run: yarn install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       - run: npx playwright install --with-deps chromium
