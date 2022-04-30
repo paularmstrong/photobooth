@@ -1,0 +1,11 @@
+{
+  "name": "@gpp/main",
+  "private": true,
+  "dependencies": {
+    "electron-updater": "4.6.5"
+  },
+  "devDependencies": {
+    "@gpp/webpack": "workspace:packages/webpack",
+    "electron-devtools-installer": "^3.2.0"
+  }
+}
