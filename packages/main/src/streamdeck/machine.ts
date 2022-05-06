@@ -92,6 +92,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
         },
         photo: {
           initial: 'selecting',
+          exit: [assign({ photoType: undefined })],
           states: {
             selecting: {
               entry: [
@@ -113,13 +114,23 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               },
             },
             capturing: {
-              entry: [assign({ keys: () => [null, null, null, null, null, { key: 'back', type: 'DONE' }] }), 'render'],
+              entry: [
+                assign({
+                  keys: () => [null, null, null, null, null, { key: 'back', type: 'DONE' }],
+                }),
+                'render',
+              ],
               on: {
                 DONE: 'reviewing',
               },
             },
             reviewing: {
-              entry: [assign({ keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }] }), 'render'],
+              entry: [
+                assign({
+                  keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }],
+                }),
+                'render',
+              ],
               after: {
                 15000: 'done',
               },
@@ -137,6 +148,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
         },
         video: {
           initial: 'selecting',
+          exit: [assign({ recLength: undefined })],
           states: {
             selecting: {
               entry: [
@@ -158,13 +170,23 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               },
             },
             recording: {
-              entry: [assign({ keys: () => [null, null, null, null, null, { key: 'back', type: 'DONE' }] }), 'render'],
+              entry: [
+                assign({
+                  keys: () => [null, null, null, null, null, { key: 'back', type: 'DONE' }],
+                }),
+                'render',
+              ],
               on: {
                 DONE: 'reviewing',
               },
             },
             reviewing: {
-              entry: [assign({ keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }] }), 'render'],
+              entry: [
+                assign({
+                  keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }],
+                }),
+                'render',
+              ],
               after: {
                 15000: 'done',
               },

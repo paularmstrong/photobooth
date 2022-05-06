@@ -1,9 +1,10 @@
+import type { WebContents } from 'electron';
 import { interpret } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
 import { openStreamDeck } from '@elgato-stream-deck/node';
 import { makeMachine } from './machine';
 
-export async function run() {
+export async function run(webContents: WebContents) {
   const deck = await openStreamDeck();
 
   deck.clearPanel();
@@ -21,8 +22,8 @@ export async function run() {
   });
 
   service.onTransition((state) => {
-    console.log(state.value);
-    console.log(state.context);
+    const { streamdeck, keys, ...meta } = state.context;
+    webContents.send('transition', { value: state.value, meta });
   });
 
   return deck;

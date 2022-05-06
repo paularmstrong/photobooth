@@ -1,5 +1,6 @@
 import type { StreamDeck } from '@elgato-stream-deck/node';
 import { app, systemPreferences } from 'electron';
+import type { BrowserWindow } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
 import { run as runStreamdeck, stop as stopStreamdeck } from './streamdeck';
@@ -56,8 +57,8 @@ app
     }
   })
   .then(restoreOrCreateWindow)
-  .then(async () => {
-    streamdeck = await runStreamdeck();
+  .then(async (window: BrowserWindow) => {
+    streamdeck = await runStreamdeck(window.webContents);
   })
   .catch((e) => console.error('Failed create window:', e));
 

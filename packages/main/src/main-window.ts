@@ -1,16 +1,18 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow } from 'electron';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
-process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 async function createWindow() {
   const browserWindow = new BrowserWindow({
     show: false, // Use 'ready-to-show' event to show window
-    // webPreferences: {
-    // nativeWindowOpen: true,
-    // webviewTag: false, // The webview tag is not recommended. Consider alternatives like iframe or Electron's BrowserView. https://www.electronjs.org/docs/latest/api/webview-tag#warning
-    // preload: join(__dirname, '../../preload/dist/index.cjs'),
-    // },
+    webPreferences: {
+      // nativeWindowOpen: true,
+      // webviewTag: false, // The webview tag is not recommended. Consider alternatives like iframe or Electron's BrowserView. https://www.electronjs.org/docs/latest/api/webview-tag#warning
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+    },
   });
 
   /**
@@ -19,7 +21,7 @@ async function createWindow() {
    *
    * @see https://github.com/electron/electron/issues/25012
    */
-  browserWindow.on("ready-to-show", () => {
+  browserWindow.on('ready-to-show', () => {
     browserWindow?.show();
 
     if (process.env.DEV) {
@@ -47,4 +49,6 @@ export async function restoreOrCreateWindow() {
   }
 
   window.focus();
+
+  return window;
 }
