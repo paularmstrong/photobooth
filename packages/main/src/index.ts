@@ -2,8 +2,7 @@ import type { StreamDeck } from '@elgato-stream-deck/node';
 import { app, systemPreferences } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
-import { handleKeypress, registerShortcuts } from './shortcuts';
-import { run as runStreamdeck, stop as stopStreamdeck } from '@gpp/streamdeck';
+import { run as runStreamdeck, stop as stopStreamdeck } from './streamdeck';
 
 let streamdeck: StreamDeck;
 
@@ -57,9 +56,8 @@ app
     }
   })
   .then(restoreOrCreateWindow)
-  .then(registerShortcuts)
   .then(async () => {
-    streamdeck = await runStreamdeck(handleKeypress);
+    streamdeck = await runStreamdeck();
   })
   .catch((e) => console.error('Failed create window:', e));
 

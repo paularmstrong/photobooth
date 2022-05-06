@@ -2,7 +2,9 @@
 
 export interface Typegen0 {
   '@@xstate/typegen': true;
-  eventsCausingActions: {};
+  eventsCausingActions: {
+    render: 'DONE' | 'done.state.streamdeck.photo' | 'done.state.streamdeck.video' | 'SELECT' | 'GET_HELP';
+  };
   internalEvents: {
     'xstate.init': { type: 'xstate.init' };
   };

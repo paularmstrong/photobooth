@@ -2,11 +2,17 @@
   "name": "@gpp/main",
   "private": true,
   "dependencies": {
-    "@gpp/streamdeck": "workspace:packages/streamdeck",
-    "electron-updater": "4.6.5"
+    "@elgato-stream-deck/node": "^5.4.0-alpha.0",
+    "electron-updater": "4.6.5",
+    "jimp": "^0.16.1",
+    "xstate": "^4.31.0"
   },
   "devDependencies": {
     "@gpp/webpack": "workspace:packages/webpack",
+    "@xstate/cli": "^0.1.7",
     "electron-devtools-installer": "^3.2.0"
+  },
+  "scripts": {
+    "typegen": "xstate typegen 'src/**/*.ts'"
   }
 }

@@ -1,6 +1,7 @@
+import type { StreamDeck } from '@elgato-stream-deck/node';
 import { globalShortcut } from 'electron';
 
-export function registerShortcuts() {
+export function registerShortcuts(handleKeypress: (key: number | string) => void) {
   globalShortcut.register('1', () => {
     handleKeypress('0');
   });
@@ -26,13 +27,15 @@ export function registerShortcuts() {
   });
 }
 
-export function handleKeypress(key: number | string) {
-  const keyNum = typeof key === 'string' ? parseInt(key, 10) : key;
+export function keypressHandler(machine: StreamDeck) {
+  return function handleKeypress(key: number | string) {
+    const keyNum = typeof key === 'string' ? parseInt(key, 10) : key;
 
-  if (keyNum < 0 || keyNum > 5) {
-    console.log('unknown keypress', key, keyNum);
-    return;
-  }
+    if (keyNum < 0 || keyNum > 5) {
+      console.log('unknown keypress', key, keyNum);
+      return;
+    }
 
-  console.log('key pressed', keyNum);
+    console.log('key pressed', keyNum);
+  };
 }
