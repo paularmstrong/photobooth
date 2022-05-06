@@ -4,14 +4,28 @@ import { assign, createMachine } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
 import type { Typegen0 } from './machine.typegen';
 
-import photo from './img/photo.jpg';
-import video from './img/video.jpg';
-import help from './img/help.jpg';
-import back from './img/back.jpg';
+import photo from './img/photo.png';
+import quad from './img/quad.png';
+import quadrytch from './img/quadrytch.png';
+import collage from './img/collage.png';
+import done from './img/done.png';
+import video from './img/video.png';
+import sec5 from './img/5.png';
+import sec10 from './img/10.png';
+import sec15 from './img/15.png';
+import help from './img/help.png';
+import back from './img/back.png';
 
 const images = {
   photo,
+  quad,
+  quadrytch,
+  collage,
+  done,
   video,
+  5: sec5,
+  10: sec10,
+  15: sec15,
   back,
   help,
 } as const;
@@ -21,6 +35,8 @@ type KeyAction = { key: Key; type: string } | null;
 
 interface Context {
   keys: [KeyAction, KeyAction, KeyAction, KeyAction, KeyAction, KeyAction];
+  photoType: string | void;
+  recLength: number | void;
   streamdeck: StreamDeck;
 }
 
@@ -47,21 +63,31 @@ export const makeMachine = (streamdeck: StreamDeck) =>
       },
       context: {
         keys: initialKeys,
+        photoType: undefined,
+        recLength: undefined,
         streamdeck,
       } as Context,
       states: {
         main: {
+          initial: 'normal',
           entry: [
             assign({
               keys: () => initialKeys,
             }),
             'render',
           ],
+          states: {
+            normal: {},
+            help: {
+              after: {
+                20000: 'normal',
+              },
+            },
+          },
           on: {
             TAKE_PHOTOS: { target: 'photo' },
             REC_VIDEO: { target: 'video' },
-            GET_HELP: { target: 'help' },
-            DONE: { target: 'main' },
+            GET_HELP: { target: '.help' },
           },
         },
         photo: {
@@ -69,11 +95,20 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           states: {
             selecting: {
               entry: [
-                assign({ keys: () => [null, null, null, null, null, { key: 'back', type: 'CANCEL' }] }),
+                assign({
+                  keys: () => [
+                    { key: 'quad', type: 'SELECT' },
+                    { key: 'quadrytch', type: 'SELECT' },
+                    { key: 'collage', type: 'SELECT' },
+                    null,
+                    null,
+                    { key: 'back', type: 'CANCEL' },
+                  ],
+                }),
                 'render',
               ],
               on: {
-                SELECT: 'capturing',
+                SELECT: { target: 'capturing', actions: 'selectPhotoType' },
                 CANCEL: 'done',
               },
             },
@@ -84,7 +119,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               },
             },
             reviewing: {
-              entry: [assign({ keys: () => [null, null, null, null, null, { key: 'back', type: 'DONE' }] }), 'render'],
+              entry: [assign({ keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }] }), 'render'],
               after: {
                 15000: 'done',
               },
@@ -105,11 +140,20 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           states: {
             selecting: {
               entry: [
-                assign({ keys: () => [null, null, null, null, null, { key: 'back', type: 'CANCEL' }] }),
+                assign({
+                  keys: () => [
+                    { key: '5', type: 'SELECT' },
+                    { key: '10', type: 'SELECT' },
+                    { key: '15', type: 'SELECT' },
+                    null,
+                    null,
+                    { key: 'back', type: 'CANCEL' },
+                  ],
+                }),
                 'render',
               ],
               on: {
-                SELECT: 'recording',
+                SELECT: { target: 'recording', actions: 'selectRecordingLength' },
                 CANCEL: 'done',
               },
             },
@@ -120,7 +164,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               },
             },
             reviewing: {
-              entry: [assign({ keys: () => [null, null, null, null, null, { key: 'back', type: 'DONE' }] }), 'render'],
+              entry: [assign({ keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }] }), 'render'],
               after: {
                 15000: 'done',
               },
@@ -134,12 +178,6 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           },
           onDone: {
             target: 'main',
-          },
-        },
-        help: {
-          entry: [assign({ keys: () => [null, null, null, null, null, { key: 'back', type: 'DONE' }] }), 'render'],
-          on: {
-            DONE: 'main',
           },
         },
       },
@@ -156,8 +194,20 @@ export const makeMachine = (streamdeck: StreamDeck) =>
             }
 
             const bmpImg = await jimp.read(path.resolve(__dirname, images[key.key]));
-            const resized = await bmpImg.resize(streamdeck.ICON_SIZE, streamdeck.ICON_SIZE);
+            const resized = bmpImg.resize(streamdeck.ICON_SIZE, streamdeck.ICON_SIZE);
             streamdeck.fillKeyBuffer(i, resized.bitmap.data, { format: 'rgba' });
+          }
+        },
+
+        selectPhotoType: (context: Context, event: { key: string }) => {
+          if (event && typeof event.key === 'string') {
+            context.photoType = event.key;
+          }
+        },
+
+        selectRecordingLength: (context: Context, event: { key: string }) => {
+          if (event && typeof event.key === 'string') {
+            context.recLength = parseInt(event.key, 10);
           }
         },
       },

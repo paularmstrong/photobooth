@@ -17,7 +17,12 @@ export async function run() {
     if (!action) {
       return;
     }
-    service.send({ type: action.type });
+    service.send(action);
+  });
+
+  service.onTransition((state) => {
+    console.log(state.value);
+    console.log(state.context);
   });
 
   return deck;

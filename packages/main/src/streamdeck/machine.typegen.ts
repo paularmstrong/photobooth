@@ -3,7 +3,9 @@
 export interface Typegen0 {
   '@@xstate/typegen': true;
   eventsCausingActions: {
-    render: 'DONE' | 'done.state.streamdeck.photo' | 'done.state.streamdeck.video' | 'SELECT' | 'GET_HELP';
+    selectPhotoType: 'SELECT';
+    selectRecordingLength: 'SELECT';
+    render: 'done.state.streamdeck.photo' | 'done.state.streamdeck.video' | 'SELECT' | 'DONE';
   };
   internalEvents: {
     'xstate.init': { type: 'xstate.init' };
@@ -20,6 +22,8 @@ export interface Typegen0 {
   eventsCausingDelays: {};
   matchesStates:
     | 'main'
+    | 'main.normal'
+    | 'main.help'
     | 'photo'
     | 'photo.selecting'
     | 'photo.capturing'
@@ -30,8 +34,8 @@ export interface Typegen0 {
     | 'video.recording'
     | 'video.reviewing'
     | 'video.done'
-    | 'help'
     | {
+        main?: 'normal' | 'help';
         photo?: 'selecting' | 'capturing' | 'reviewing' | 'done';
         video?: 'selecting' | 'recording' | 'reviewing' | 'done';
       };
