@@ -1,6 +1,10 @@
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports.rules = [
+  {
+    test: /\.(png|jpg|svg|jpeg|gif)$/i,
+    type: 'asset/resource',
+  },
   // Add support for native node modules
   {
     // We're specifying native_modules in the test because the asset relocator loader generates a
@@ -20,7 +24,7 @@ module.exports.rules = [
   },
   {
     test: /\.tsx?$/,
-    // exclude: /(node_modules|\.webpack)/,
+    exclude: /(node_modules|\.webpack)/,
     use: {
       loader: 'ts-loader',
       options: {

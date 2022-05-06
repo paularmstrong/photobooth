@@ -2,6 +2,7 @@
   "name": "@gpp/main",
   "private": true,
   "dependencies": {
+    "@gpp/streamdeck": "workspace:packages/streamdeck",
     "electron-updater": "4.6.5"
   },
   "devDependencies": {

@@ -1,6 +1,11 @@
+import type { StreamDeck } from '@elgato-stream-deck/node';
 import { app, systemPreferences } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
+import { handleKeypress, registerShortcuts } from './shortcuts';
+import { run as runStreamdeck, stop as stopStreamdeck } from '@gpp/streamdeck';
+
+let streamdeck: StreamDeck;
 
 /**
  * Prevent multiple instances
@@ -26,6 +31,10 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.on('will-quit', async () => {
+  await stopStreamdeck(streamdeck);
+});
+
 /**
  * @see https://www.electronjs.org/docs/v14-x-y/api/app#event-activate-macos Event: 'activate'
  */
@@ -48,26 +57,16 @@ app
     }
   })
   .then(restoreOrCreateWindow)
+  .then(registerShortcuts)
+  .then(async () => {
+    streamdeck = await runStreamdeck(handleKeypress);
+  })
   .catch((e) => console.error('Failed create window:', e));
 
-/**
- * Install Vue.js or some other devtools in development mode only
- */
 if (process.env.DEV) {
   app.whenReady().then(() => import('electron-devtools-installer'));
-  // .then(({ default: installExtension, VUEJS3_DEVTOOLS }) =>
-  //   installExtension(VUEJS3_DEVTOOLS, {
-  //     loadExtensionOptions: {
-  //       allowFileAccess: true,
-  //     },
-  //   })
-  // )
-  // .catch((e) => console.error("Failed install extension:", e));
 }
 
-/**
- * Check new app version in production mode only
- */
 if (process.env.PROD) {
   app
     .whenReady()

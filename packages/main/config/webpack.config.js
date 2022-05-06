@@ -1,4 +1,3 @@
-
 const path = require('path');
 const { rules } = require('@gpp/webpack');
 
@@ -13,5 +12,8 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
+  },
+  node: {
+    __dirname: false,
   },
 };
