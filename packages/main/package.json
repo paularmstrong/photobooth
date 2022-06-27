@@ -5,6 +5,7 @@
     "@elgato-stream-deck/node": "^5.4.0-alpha.0",
     "electron-updater": "4.6.5",
     "jimp": "^0.16.1",
+    "node-fetch": "^3.2.6",
     "xstate": "^4.31.0"
   },
   "devDependencies": {

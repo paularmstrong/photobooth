@@ -10,9 +10,8 @@ import quadrytch from './img/quadrytch.png';
 import collage from './img/collage.png';
 import done from './img/done.png';
 import video from './img/video.png';
-import sec5 from './img/5.png';
-import sec10 from './img/10.png';
-import sec15 from './img/15.png';
+import rec from './img/record.png';
+import stop from './img/stop.png';
 import help from './img/help.png';
 import back from './img/back.png';
 
@@ -23,9 +22,8 @@ const images = {
   collage,
   done,
   video,
-  5: sec5,
-  10: sec10,
-  15: sec15,
+  rec,
+  stop,
   back,
   help,
 } as const;
@@ -52,12 +50,18 @@ const initialKeys = [
   null,
 ];
 
+const selectTimeoutMs = 30_000;
+const reviewTimeoutMs = 30_000;
+const helpTimeoutMs = 30_000;
+
+// https://stately.ai/viz/96da6066-02dc-448e-a9f9-7a8511767b31
+
 export const makeMachine = (streamdeck: StreamDeck) =>
   createMachine(
     {
       id: 'streamdeck',
       initial: 'main',
-      tsTypes: {} as Typegen0,
+      tsTypes: {} as import('./machine.typegen').Typegen0,
       schema: {
         context: {} as Context,
       },
@@ -80,7 +84,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
             normal: {},
             help: {
               after: {
-                20000: 'normal',
+                [helpTimeoutMs]: 'normal',
               },
             },
           },
@@ -112,6 +116,9 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 SELECT: { target: 'capturing', actions: 'selectPhotoType' },
                 CANCEL: 'done',
               },
+              after: {
+                [selectTimeoutMs]: 'done',
+              },
             },
             capturing: {
               entry: [
@@ -132,7 +139,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 'render',
               ],
               after: {
-                15000: 'done',
+                [reviewTimeoutMs]: 'done',
               },
               on: {
                 DONE: 'done',
@@ -153,26 +160,22 @@ export const makeMachine = (streamdeck: StreamDeck) =>
             selecting: {
               entry: [
                 assign({
-                  keys: () => [
-                    { key: '5', type: 'SELECT' },
-                    { key: '10', type: 'SELECT' },
-                    { key: '15', type: 'SELECT' },
-                    null,
-                    null,
-                    { key: 'back', type: 'CANCEL' },
-                  ],
+                  keys: () => [{ key: 'rec', type: 'SELECT' }, null, null, null, null, { key: 'back', type: 'CANCEL' }],
                 }),
                 'render',
               ],
               on: {
-                SELECT: { target: 'recording', actions: 'selectRecordingLength' },
+                SELECT: 'recording',
                 CANCEL: 'done',
+              },
+              after: {
+                [selectTimeoutMs]: 'done',
               },
             },
             recording: {
               entry: [
                 assign({
-                  keys: () => [null, null, null, null, null, { key: 'back', type: 'DONE' }],
+                  keys: () => [null, null, null, null, null, { key: 'stop', type: 'DONE' }],
                 }),
                 'render',
               ],
@@ -188,7 +191,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 'render',
               ],
               after: {
-                15000: 'done',
+                [reviewTimeoutMs]: 'done',
               },
               on: {
                 DONE: 'done',
@@ -224,12 +227,6 @@ export const makeMachine = (streamdeck: StreamDeck) =>
         selectPhotoType: (context: Context, event: { key: string }) => {
           if (event && typeof event.key === 'string') {
             context.photoType = event.key;
-          }
-        },
-
-        selectRecordingLength: (context: Context, event: { key: string }) => {
-          if (event && typeof event.key === 'string') {
-            context.recLength = parseInt(event.key, 10);
           }
         },
       },

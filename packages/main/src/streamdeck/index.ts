@@ -23,13 +23,17 @@ export async function run(webContents: WebContents) {
 
   service.onTransition((state) => {
     const { streamdeck, keys, ...meta } = state.context;
-    webContents.send('transition', { value: state.value, meta });
+    webContents.send('transition', { value: state.toStrings(), meta });
   });
 
   return deck;
 }
 
 export async function stop(deck: StreamDeck) {
-  await deck.clearPanel();
-  await deck.close();
+  try {
+    await deck.clearPanel();
+  } catch (e) {}
+  try {
+    await deck.close();
+  } catch (e) {}
 }

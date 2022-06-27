@@ -26,8 +26,9 @@ export function PhotoCapture({ imageCapture }: Props) {
   }, [imageCapture]);
 
   React.useEffect(() => {
-    const remove = window.api.addListener('transition', ({ value }) => {
-      if (value.photo === 'capturing') {
+    const remove = window.api.addListener('transition', ({ value, ...rest }) => {
+      console.log(value, rest);
+      if (value[value.length - 1] === 'photo.capturing') {
         setRunning(true);
         setImages({});
       }

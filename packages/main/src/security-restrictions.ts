@@ -1,4 +1,4 @@
-import { app, shell } from 'electron';
+import { app, session, shell } from 'electron';
 import { URL } from 'url';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;

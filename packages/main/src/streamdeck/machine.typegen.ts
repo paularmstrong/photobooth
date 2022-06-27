@@ -4,7 +4,6 @@ export interface Typegen0 {
   '@@xstate/typegen': true;
   eventsCausingActions: {
     selectPhotoType: 'SELECT';
-    selectRecordingLength: 'SELECT';
     render: 'done.state.streamdeck.photo' | 'done.state.streamdeck.video' | 'SELECT' | 'DONE';
   };
   internalEvents: {
