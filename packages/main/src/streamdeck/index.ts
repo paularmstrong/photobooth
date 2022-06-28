@@ -1,3 +1,4 @@
+import { ipcMain } from 'electron';
 import type { WebContents } from 'electron';
 import { interpret } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
@@ -24,6 +25,10 @@ export async function run(webContents: WebContents) {
   service.onTransition((state) => {
     const { streamdeck, keys, ...meta } = state.context;
     webContents.send('transition', { value: state.toStrings(), meta });
+  });
+
+  ipcMain.on('transition', (event, action) => {
+    service.send(action);
   });
 
   return deck;

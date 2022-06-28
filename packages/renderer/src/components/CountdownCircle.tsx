@@ -1,22 +1,23 @@
 import * as React from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import type { Props as CountdownProps } from 'react-countdown-circle-timer';
 import { Text } from './Text';
 
-interface Props {
-  seconds?: number;
-}
+type Props = Omit<CountdownProps, 'colors' | 'colorsTime'>;
 
-export function CountdownCircle({ seconds = 5 }: Props) {
+export function CountdownCircle(props: Props) {
   return (
     <CountdownCircleTimer
       isPlaying
-      duration={seconds}
-      colors="#3a57ab"
+      colors={['#78B159', '#DD2E44', '#DD2E44']}
+      colorsTime={[Math.round(props.duration / 2), Math.round(props.duration / 6), 0]}
       rotation="counterclockwise"
-      trailColor="#000000"
+      trailColor="#ffffff"
+      size={300}
       strokeWidth={20}
+      {...props}
     >
-      {({ remainingTime }) => <Text className="text-white text-9xl">{remainingTime}</Text>}
+      {({ remainingTime }) => <Text className="text-9xl">{remainingTime}</Text>}
     </CountdownCircleTimer>
   );
 }

@@ -10,7 +10,7 @@ interface Item {
 
 interface Props {
   title?: string;
-  description: string;
+  description?: string;
   items: Array<Item>;
   visible?: boolean;
 }
@@ -28,8 +28,8 @@ export function HelpCard({ description, items, title = defaultTitle, visible = f
       >
         <Card blur>
           <div className="flex flex-col gap-2">
-            <H2>{title}</H2>
-            <Text>{description}</Text>
+            {title ? <H2>{title}</H2> : null}
+            {description ? <Text>{description}</Text> : null}
             <div className="flex flex-row gap-8 justify-center">
               {items.map(({ icon, description }, i) => (
                 <div className="flex flex-row gap-2 items-center" key={i}>

@@ -61,7 +61,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
     {
       id: 'streamdeck',
       initial: 'main',
-      tsTypes: {} as import('./machine.typegen').Typegen0,
+      tsTypes: {} as Typegen0,
       schema: {
         context: {} as Context,
       },
@@ -165,11 +165,17 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 'render',
               ],
               on: {
-                SELECT: 'recording',
+                SELECT: 'readying',
                 CANCEL: 'done',
               },
               after: {
                 [selectTimeoutMs]: 'done',
+              },
+            },
+            readying: {
+              entry: [assign({ keys: () => [null, null, null, null, null, null] }), 'render'],
+              on: {
+                DONE: 'recording',
               },
             },
             recording: {

@@ -1,5 +1,4 @@
 export * from './ActivityIndicator';
-export * from './Button';
 export * from './Card';
 export * from './CountdownCircle';
 export * from './HelpCard';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useStreamdeck } from './streamdeck';
-import { Main, PhotoSelect, VideoRecord, VideoSelect } from './views';
+import { Main, PhotoSelect, VideoReadying, VideoRecord, VideoSelect } from './views';
 import { PreviewLayout } from './layouts/Preview';
 
 export function Router() {
@@ -20,6 +20,12 @@ export function Router() {
       return (
         <PreviewLayout>
           <VideoSelect />
+        </PreviewLayout>
+      );
+    case 'video.readying':
+      return (
+        <PreviewLayout>
+          <VideoReadying />
         </PreviewLayout>
       );
     case 'video.recording':
