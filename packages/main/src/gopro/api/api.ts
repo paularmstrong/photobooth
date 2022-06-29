@@ -15,6 +15,10 @@ export function getUrl(path: string, params?: Record<string, string>) {
 
 export async function request<T>(path: string, params?: Record<string, string>) {
   const url = getUrl(path, params);
+  console.log('[GOPRO]', url);
   const response = await fetch(url);
-  return (await response.json()) as T;
+  if (response.headers.get('content-length') !== '0') {
+    return (await response.json()) as T;
+  }
+  return {} as T;
 }

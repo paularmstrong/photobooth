@@ -1,11 +1,10 @@
-import type { StreamDeck } from '@elgato-stream-deck/node';
 import { app, systemPreferences } from 'electron';
 import type { BrowserWindow } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
-import { run as runStreamdeck, stop as stopStreamdeck } from './streamdeck';
+import { run as runStreamdeck } from './streamdeck';
 
-let streamdeck: StreamDeck;
+let stopStreamdeck: () => void;
 
 /**
  * Prevent multiple instances
@@ -25,20 +24,24 @@ app.disableHardwareAcceleration();
 /**
  * Shout down background process if all windows was closed
  */
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
+  await stopStreamdeck();
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
 app.on('will-quit', async () => {
-  await stopStreamdeck(streamdeck);
+  await stopStreamdeck();
 });
 
 /**
  * @see https://www.electronjs.org/docs/v14-x-y/api/app#event-activate-macos Event: 'activate'
  */
-app.on('activate', restoreOrCreateWindow);
+app.on('activate', async () => {
+  const window = await restoreOrCreateWindow();
+  stopStreamdeck = await runStreamdeck(window.webContents);
+});
 
 /**
  * Create app window when background process will be ready
@@ -58,7 +61,7 @@ app
   })
   .then(restoreOrCreateWindow)
   .then(async (window: BrowserWindow) => {
-    streamdeck = await runStreamdeck(window.webContents);
+    stopStreamdeck = await runStreamdeck(window.webContents);
   })
   .catch((e) => console.error('Failed create window:', e));
 

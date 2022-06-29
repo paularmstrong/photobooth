@@ -14,12 +14,13 @@ export function Main() {
     <>
       <div className="flex flex-col gap-6 justify-between h-full p-12">
         <h1
-          className={clsx('text-[256px] text-center text-white transition-[font-size] duration-500 font-semibold', {
+          className={clsx('text-center text-white transition-[font-size] duration-500 font-semibold', {
+            'text-[256px]': !showHelp,
             'animate-bounce-slow': !showHelp,
             'text-9xl': showHelp,
           })}
         >
-          <span className="block -rotate-12">
+          <span className={clsx('block', { '-rotate-12': !showHelp, '-rotate-6': showHelp })}>
             <span className="drop-shadow-lg">Photo</span>
             <span
               className={clsx(

@@ -31,7 +31,9 @@ export async function run(webContents: WebContents) {
     service.send(action);
   });
 
-  return deck;
+  return async function stopService() {
+    return await stop(deck);
+  };
 }
 
 export async function stop(deck: StreamDeck) {

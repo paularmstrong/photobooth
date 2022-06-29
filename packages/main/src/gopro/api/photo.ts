@@ -4,6 +4,6 @@ export async function setMode() {
   return request('camera/presets/set_group', { id: '1001' });
 }
 
-export async function takePhoto() {
+export async function take() {
   return request('camera/shutter/start');
 }

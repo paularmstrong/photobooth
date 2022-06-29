@@ -4,24 +4,26 @@ import { assign, createMachine } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
 import type { Typegen0 } from './machine.typegen';
 
-import photo from './img/photo.png';
+import { photo, usb, video, webcam } from '../gopro';
+
+import photoImg from './img/photo.png';
 import quad from './img/quad.png';
 import quadrytch from './img/quadrytch.png';
 import collage from './img/collage.png';
 import done from './img/done.png';
-import video from './img/video.png';
+import videoImg from './img/video.png';
 import rec from './img/record.png';
 import stop from './img/stop.png';
 import help from './img/help.png';
 import back from './img/back.png';
 
 const images = {
-  photo,
+  photo: photoImg,
   quad,
   quadrytch,
   collage,
   done,
-  video,
+  video: videoImg,
   rec,
   stop,
   back,
@@ -74,6 +76,12 @@ export const makeMachine = (streamdeck: StreamDeck) =>
       states: {
         main: {
           initial: 'normal',
+          invoke: {
+            src: async function swapToWebcamMode() {
+              await usb.releaseControl();
+              await webcam.start();
+            },
+          },
           entry: [
             assign({
               keys: () => initialKeys,
@@ -113,25 +121,88 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 'render',
               ],
               on: {
-                SELECT: { target: 'capturing', actions: 'selectPhotoType' },
+                SELECT: { target: 'readying', actions: 'selectPhotoType' },
                 CANCEL: 'done',
               },
               after: {
                 [selectTimeoutMs]: 'done',
               },
             },
-            capturing: {
+            readying: {
               entry: [
                 assign({
-                  keys: () => [null, null, null, null, null, { key: 'back', type: 'DONE' }],
+                  keys: () => [null, null, null, null, null, null],
                 }),
                 'render',
               ],
-              on: {
-                DONE: 'reviewing',
+              invoke: {
+                src: async function swapToPhotoMode() {
+                  await webcam.stop();
+                  await usb.takeControl();
+                  await photo.setMode();
+                },
+                onDone: 'capturing',
               },
             },
+            capturing: {
+              initial: 'zero',
+              states: {
+                zero: {
+                  on: {
+                    DONE: 'one',
+                  },
+                },
+                one: {
+                  invoke: {
+                    src: async function takePhoto() {
+                      await photo.take();
+                    },
+                  },
+                  on: {
+                    DONE: 'two',
+                  },
+                },
+                two: {
+                  invoke: {
+                    src: async function takePhoto() {
+                      await photo.take();
+                    },
+                  },
+                  on: {
+                    DONE: 'three',
+                  },
+                },
+                three: {
+                  invoke: {
+                    src: async function takePhoto() {
+                      await photo.take();
+                    },
+                  },
+                  on: {
+                    DONE: 'four',
+                  },
+                },
+                four: {
+                  invoke: {
+                    src: async function takePhoto() {
+                      await photo.take();
+                    },
+                  },
+                  type: 'final',
+                },
+                // finished: {
+                //   type: 'final',
+                // },
+              },
+              onDone: 'reviewing',
+            },
             reviewing: {
+              invoke: {
+                src: async function swapToWebcamMode() {
+                  await usb.releaseControl();
+                  await webcam.start();
+                },
+              },
               entry: [
                 assign({
                   keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }],
@@ -173,12 +244,24 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               },
             },
             readying: {
+              invoke: {
+                src: async function swapToVideoMode() {
+                  await webcam.stop();
+                  await usb.takeControl();
+                  await video.setMode();
+                },
+              },
               entry: [assign({ keys: () => [null, null, null, null, null, null] }), 'render'],
               on: {
                 DONE: 'recording',
               },
             },
             recording: {
+              invoke: {
+                src: async function record() {
+                  await video.startRecord();
+                },
+              },
               entry: [
                 assign({
                   keys: () => [null, null, null, null, null, { key: 'stop', type: 'DONE' }],
@@ -190,6 +273,13 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               },
             },
             reviewing: {
+              invoke: {
+                src: async function swapToWebcamMode() {
+                  await video.stopRecord();
+                  await usb.releaseControl();
+                  await webcam.start();
+                },
+              },
               entry: [
                 assign({
                   keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }],

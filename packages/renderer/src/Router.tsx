@@ -1,43 +1,68 @@
 import * as React from 'react';
 import { useStreamdeck } from './streamdeck';
-import { Main, PhotoSelect, VideoReadying, VideoRecord, VideoSelect } from './views';
+import { Main, PhotoCapture, PhotoSelect, VideoReadying, VideoRecord, VideoSelect } from './views';
 import { PreviewLayout } from './layouts/Preview';
 
 export function Router() {
-  const { state } = useStreamdeck();
-
-  switch (state) {
-    case 'photo.selecting':
-      return (
+  return (
+    <Switch>
+      <Route state="photo.selecting">
         <PreviewLayout>
           <PhotoSelect />
         </PreviewLayout>
-      );
-    case 'photo.capturing':
-    case 'photo.reviewing':
-      return null;
-    case 'video.selecting':
-      return (
+      </Route>
+
+      <Route state="photo.readying">{null}</Route>
+
+      <Route state="photo.capturing">
+        <PhotoCapture />
+      </Route>
+
+      <Route state="photo.reviewing">{null}</Route>
+
+      <Route state="video.selecting">
         <PreviewLayout>
           <VideoSelect />
         </PreviewLayout>
-      );
-    case 'video.readying':
-      return (
-        <PreviewLayout>
-          <VideoReadying />
-        </PreviewLayout>
-      );
-    case 'video.recording':
-      return <VideoRecord />;
-    case 'video.reviewing':
-      return null;
-    case 'main.normal':
-    default:
-      return (
+      </Route>
+
+      <Route state="video.readying">
+        <VideoReadying />
+      </Route>
+
+      <Route state="video.recording">
+        <VideoRecord />
+      </Route>
+
+      <Route state="video.reviewing">{null}</Route>
+
+      <Route>
         <PreviewLayout dim>
           <Main />
         </PreviewLayout>
-      );
-  }
+      </Route>
+    </Switch>
+  );
+}
+
+interface RouteProps {
+  children: React.ReactNode;
+  exact?: boolean;
+  state?: string;
+}
+
+function Route({ children }: RouteProps) {
+  return <>{children}</>;
+}
+
+function Switch({ children }: { children: Array<React.ReactElement<RouteProps>> }) {
+  const { state: currentState } = useStreamdeck();
+  return (
+    <>
+      {children.find((child) => {
+        const { exact, state } = child.props;
+        return !state || (exact && currentState === state) || currentState.startsWith(state);
+      })}
+    </>
+  );
 }
