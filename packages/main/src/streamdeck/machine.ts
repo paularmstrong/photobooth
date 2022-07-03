@@ -4,7 +4,7 @@ import { assign, createMachine } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
 import type { Typegen0 } from './machine.typegen';
 
-import { photo, usb, video, webcam } from '../gopro';
+import { media, photo, usb, video, wait, webcam } from '../gopro';
 
 import photoImg from './img/photo.png';
 import quad from './img/quad.png';
@@ -36,7 +36,8 @@ type KeyAction = { key: Key; type: string } | null;
 interface Context {
   keys: [KeyAction, KeyAction, KeyAction, KeyAction, KeyAction, KeyAction];
   photoType: string | void;
-  recLength: number | void;
+  images: Array<string> | void;
+  video: string | void;
   streamdeck: StreamDeck;
 }
 
@@ -70,7 +71,8 @@ export const makeMachine = (streamdeck: StreamDeck) =>
       context: {
         keys: initialKeys,
         photoType: undefined,
-        recLength: undefined,
+        images: undefined,
+        video: undefined,
         streamdeck,
       } as Context,
       states: {
@@ -78,7 +80,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           initial: 'normal',
           invoke: {
             src: async function swapToWebcamMode() {
-              await usb.releaseControl();
+              // await usb.takeControl();
               await webcam.start();
             },
           },
@@ -104,7 +106,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
         },
         photo: {
           initial: 'selecting',
-          exit: [assign({ photoType: undefined })],
+          exit: [assign({ photoType: undefined, images: undefined })],
           states: {
             selecting: {
               entry: [
@@ -136,9 +138,10 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 'render',
               ],
               invoke: {
+                // TODO: this needs to complete before <Readying /> is allowed to say DONE
                 src: async function swapToPhotoMode() {
                   await webcam.stop();
-                  await usb.takeControl();
+                  // await usb.takeControl();
                   await photo.setMode();
                 },
                 onDone: 'capturing',
@@ -187,20 +190,39 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                     src: async function takePhoto() {
                       await photo.take();
                     },
+                    onDone: 'done',
                   },
+                },
+                done: {
                   type: 'final',
                 },
-                // finished: {
-                //   type: 'final',
-                // },
               },
               onDone: 'reviewing',
             },
             reviewing: {
               invoke: {
-                src: async function swapToWebcamMode() {
-                  await usb.releaseControl();
+                src: async function downloadPhotos() {
+                  await wait(1_000);
+                  // await usb.releaseControl();
                   await webcam.start();
+
+                  const images = await media.getItems(-4);
+                  const imagePaths = [];
+                  for (const image of images) {
+                    imagePaths.push(await media.download(image));
+                  }
+
+                  return imagePaths;
+                },
+                onDone: {
+                  actions: [
+                    assign({
+                      images: (context, event) => {
+                        // @ts-ignore missing from types
+                        return event.data;
+                      },
+                    }),
+                  ],
                 },
               },
               entry: [
@@ -226,7 +248,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
         },
         video: {
           initial: 'selecting',
-          exit: [assign({ recLength: undefined })],
+          exit: [assign({ video: undefined })],
           states: {
             selecting: {
               entry: [
@@ -246,15 +268,15 @@ export const makeMachine = (streamdeck: StreamDeck) =>
             readying: {
               invoke: {
                 src: async function swapToVideoMode() {
-                  await webcam.stop();
-                  await usb.takeControl();
+                  try {
+                    await webcam.stop();
+                  } catch (e) {}
+                  // await usb.takeControl();
                   await video.setMode();
                 },
+                onDone: 'recording',
               },
               entry: [assign({ keys: () => [null, null, null, null, null, null] }), 'render'],
-              on: {
-                DONE: 'recording',
-              },
             },
             recording: {
               invoke: {
@@ -274,10 +296,24 @@ export const makeMachine = (streamdeck: StreamDeck) =>
             },
             reviewing: {
               invoke: {
-                src: async function swapToWebcamMode() {
+                src: async function downloadVideo() {
                   await video.stopRecord();
-                  await usb.releaseControl();
+                  await wait(1_000);
+                  // await usb.releaseControl();
                   await webcam.start();
+
+                  const videoPath = await media.getItems(-1);
+                  return await media.download(videoPath[0]);
+                },
+                onDone: {
+                  actions: [
+                    assign({
+                      video: (context, event) => {
+                        // @ts-ignore missing from types
+                        return event.data;
+                      },
+                    }),
+                  ],
                 },
               },
               entry: [

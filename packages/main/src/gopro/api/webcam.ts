@@ -1,9 +1,13 @@
-import { request } from './api';
+import { request, wait } from './api';
 
 export async function start() {
-  return request('webcam/start');
+  try {
+    return request('webcam/start', undefined, { busy: true });
+  } catch (e) {}
 }
 
 export async function stop() {
-  return request('webcam/stop');
+  try {
+    return request('webcam/stop', undefined, { busy: true });
+  } catch (e) {}
 }

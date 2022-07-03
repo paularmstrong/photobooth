@@ -1,6 +1,11 @@
 import * as React from 'react';
 
-const context = React.createContext({ state: '', meta: {} });
+interface Meta {
+  images?: Array<string>;
+  photoType?: string;
+}
+
+const context = React.createContext({ state: '', meta: {} as Meta });
 
 export function Provider({ children }: { children: React.ReactNode }) {
   const [state, setState] = React.useState({ state: '', meta: {} });

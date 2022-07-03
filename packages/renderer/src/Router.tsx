@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useStreamdeck } from './streamdeck';
-import { Main, PhotoCapture, PhotoSelect, VideoReadying, VideoRecord, VideoSelect } from './views';
+import { Main, PhotoCapture, PhotoReview, PhotoSelect, Readying, VideoRecord, VideoSelect } from './views';
 import { PreviewLayout } from './layouts/Preview';
 
 export function Router() {
@@ -12,13 +12,17 @@ export function Router() {
         </PreviewLayout>
       </Route>
 
-      <Route state="photo.readying">{null}</Route>
+      <Route state="photo.readying">
+        <Readying type="photo" />
+      </Route>
 
       <Route state="photo.capturing">
         <PhotoCapture />
       </Route>
 
-      <Route state="photo.reviewing">{null}</Route>
+      <Route state="photo.reviewing">
+        <PhotoReview />
+      </Route>
 
       <Route state="video.selecting">
         <PreviewLayout>
@@ -27,7 +31,7 @@ export function Router() {
       </Route>
 
       <Route state="video.readying">
-        <VideoReadying />
+        <Readying type="video" />
       </Route>
 
       <Route state="video.recording">
@@ -56,7 +60,8 @@ function Route({ children }: RouteProps) {
 }
 
 function Switch({ children }: { children: Array<React.ReactElement<RouteProps>> }) {
-  const { state: currentState } = useStreamdeck();
+  const { state: currentState, ...rest } = useStreamdeck();
+  console.log(currentState, rest);
   return (
     <>
       {children.find((child) => {

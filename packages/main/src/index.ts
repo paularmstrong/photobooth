@@ -1,10 +1,12 @@
-import { app, systemPreferences } from 'electron';
+import { app, protocol, systemPreferences } from 'electron';
 import type { BrowserWindow } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
 import { run as runStreamdeck } from './streamdeck';
+import { keepAlive, usb } from './gopro';
 
 let stopStreamdeck: () => void;
+let keepAliveTimeout: NodeJS.Timeout;
 
 /**
  * Prevent multiple instances
@@ -19,12 +21,13 @@ app.on('second-instance', restoreOrCreateWindow);
 /**
  * Disable Hardware Acceleration for more power-save
  */
-app.disableHardwareAcceleration();
+// app.disableHardwareAcceleration();
 
 /**
  * Shout down background process if all windows was closed
  */
 app.on('window-all-closed', async () => {
+  // await usb.releaseControl();
   await stopStreamdeck();
   if (process.platform !== 'darwin') {
     app.quit();
@@ -32,6 +35,8 @@ app.on('window-all-closed', async () => {
 });
 
 app.on('will-quit', async () => {
+  clearTimeout(keepAliveTimeout);
+  // await usb.releaseControl();
   await stopStreamdeck();
 });
 
@@ -41,7 +46,15 @@ app.on('will-quit', async () => {
 app.on('activate', async () => {
   const window = await restoreOrCreateWindow();
   stopStreamdeck = await runStreamdeck(window.webContents);
+  usb.takeControl();
 });
+
+async function periodicKeepAlive() {
+  await keepAlive();
+  keepAliveTimeout = setTimeout(async () => {
+    periodicKeepAlive();
+  }, 60_000);
+}
 
 /**
  * Create app window when background process will be ready
@@ -58,6 +71,15 @@ app
       await systemPreferences.askForMediaAccess('camera');
       await systemPreferences.askForMediaAccess('microphone');
     }
+  })
+  .then(async () => {
+    periodicKeepAlive();
+  })
+  .then(() => {
+    protocol.registerFileProtocol('gpp', (request, callback) => {
+      const url = request.url.substr(4);
+      callback({ path: url });
+    });
   })
   .then(restoreOrCreateWindow)
   .then(async (window: BrowserWindow) => {

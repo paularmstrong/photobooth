@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@gpp/webpack": "workspace:packages/webpack",
+    "@types/node": "^18.0.0",
     "@xstate/cli": "^0.1.7",
     "electron-devtools-installer": "^3.2.0"
   },

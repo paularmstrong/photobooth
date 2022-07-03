@@ -16,6 +16,7 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   ignorePatterns: ['node_modules/**', '**/dist/**'],
   rules: {
+    '@typescript-eslint/ban-ts-comment': 'off', // lol fuck you
     '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],

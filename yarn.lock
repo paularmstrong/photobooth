@@ -725,6 +725,7 @@ __metadata:
   dependencies:
     "@elgato-stream-deck/node": ^5.4.0-alpha.0
     "@gpp/webpack": "workspace:packages/webpack"
+    "@types/node": ^18.0.0
     "@xstate/cli": ^0.1.7
     electron-devtools-installer: ^3.2.0
     electron-updater: 4.6.5
@@ -1605,6 +1606,13 @@ __metadata:
   version: 16.11.32
   resolution: "@types/node@npm:16.11.32"
   checksum: 21f1bcd4f47a443f8a78a58b6ca3488dd9418c71b1185ba067d02222047fb194a3bfba244c32259bcb0cae4d55870b43a908b1f2832ec4aa4f31158f809625fe
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.0.0":
+  version: 18.0.0
+  resolution: "@types/node@npm:18.0.0"
+  checksum: aab2b325727a2599f6d25ebe0dedf58c40fb66a51ce4ca9c0226ceb70fcda2d3afccdca29db5942eb48b158ee8585a274a1e3750c718bbd5399d7f41d62dfdcc
   languageName: node
   linkType: hard
 

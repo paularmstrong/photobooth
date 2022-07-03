@@ -73,7 +73,7 @@ app.on('web-contents-created', (_, contents) => {
     const { protocol, origin } = new URL(webContents.getURL());
 
     // Allow local to access all
-    if (protocol === 'file:') {
+    if (protocol === 'file:' || protocol === 'gpp:') {
       return callback(true);
     }
 
