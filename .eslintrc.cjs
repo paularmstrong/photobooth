@@ -20,6 +20,8 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+    '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
     semi: ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
     'react-hooks/exhaustive-deps': 'off',

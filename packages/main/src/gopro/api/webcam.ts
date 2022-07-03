@@ -1,4 +1,4 @@
-import { request, wait } from './api';
+import { request } from './api';
 
 export async function start() {
   try {

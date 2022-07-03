@@ -1,4 +1,6 @@
-import { ipcMain } from 'electron';
+import { app, ipcMain } from 'electron';
+import path from 'path';
+import { mkdir, writeFile } from 'fs/promises';
 import type { WebContents } from 'electron';
 import { interpret } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
@@ -29,6 +31,13 @@ export async function run(webContents: WebContents) {
 
   ipcMain.on('transition', (event, action) => {
     service.send(action);
+  });
+
+  ipcMain.on('video', async (event, { data }) => {
+    const buffer = new Buffer(data);
+    const localPath = `${app.getPath('appData')}/gopro-photobooth/image_cache/video.webm`;
+    await mkdir(path.dirname(localPath), { recursive: true });
+    await writeFile(localPath, buffer, 'binary');
   });
 
   return async function stopService() {

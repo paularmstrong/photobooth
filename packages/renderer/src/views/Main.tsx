@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { HelpCard } from '../components';
-import { useStreamdeck } from '../streamdeck';
+import { HelpCard, Shutter } from '../components';
+import { useNavigation } from '../context';
 import clsx from 'clsx';
 import photoIcon from '../img/photo.svg';
 import videoIcon from '../img/video.svg';
 
 export function Main() {
-  const { state } = useStreamdeck();
+  const { state } = useNavigation();
 
   const showHelp = state === 'main.help';
 
@@ -52,6 +52,8 @@ export function Main() {
         description="Use the buttons below the screen to select photo or video and follow along as the options change:"
         visible={showHelp}
       />
+
+      <Shutter />
     </>
   );
 }

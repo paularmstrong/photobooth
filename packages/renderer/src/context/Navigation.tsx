@@ -5,9 +5,9 @@ interface Meta {
   photoType?: string;
 }
 
-const context = React.createContext({ state: '', meta: {} as Meta });
+const NavigationContext = React.createContext({ state: '', meta: {} as Meta });
 
-export function Provider({ children }: { children: React.ReactNode }) {
+export function NavigationProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = React.useState({ state: '', meta: {} });
 
   React.useEffect(() => {
@@ -18,9 +18,9 @@ export function Provider({ children }: { children: React.ReactNode }) {
     return remove;
   }, []);
 
-  return <context.Provider value={state}>{children}</context.Provider>;
+  return <NavigationContext.Provider value={state}>{children}</NavigationContext.Provider>;
 }
 
-export function useStreamdeck() {
-  return React.useContext(context);
+export function useNavigation() {
+  return React.useContext(NavigationContext);
 }

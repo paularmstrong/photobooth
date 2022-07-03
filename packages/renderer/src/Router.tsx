@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useStreamdeck } from './streamdeck';
+import { useNavigation } from './context';
 import { Main, PhotoCapture, PhotoReview, PhotoSelect, Readying, VideoRecord, VideoSelect } from './views';
 import { PreviewLayout } from './layouts/Preview';
 
@@ -60,7 +60,7 @@ function Route({ children }: RouteProps) {
 }
 
 function Switch({ children }: { children: Array<React.ReactElement<RouteProps>> }) {
-  const { state: currentState, ...rest } = useStreamdeck();
+  const { state: currentState, ...rest } = useNavigation();
   console.log(currentState, rest);
   return (
     <>

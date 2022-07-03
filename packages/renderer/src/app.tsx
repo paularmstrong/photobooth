@@ -1,13 +1,17 @@
 import * as React from 'react';
-import { Provider as DeckProvider } from './streamdeck';
+import { MediaStreamProvider, NavigationProvider, PhotoStoreProvider } from './context';
 import { Router } from './Router';
 
 export function App() {
   return (
-    <DeckProvider>
-      <div className="bg-black w-screen h-screen overflow-hidden">
-        <Router />
-      </div>
-    </DeckProvider>
+    <NavigationProvider>
+      <PhotoStoreProvider>
+        <MediaStreamProvider>
+          <div className="bg-black w-screen h-screen overflow-hidden">
+            <Router />
+          </div>
+        </MediaStreamProvider>
+      </PhotoStoreProvider>
+    </NavigationProvider>
   );
 }

@@ -28,7 +28,7 @@ export async function request<T>(path: string, params?: Record<string, string>, 
   const response = await fetch(url);
 
   // force wait a tick because the gopro can't handle too many requests
-  await wait(16);
+  // await wait(16);
 
   if (response.headers.get('content-length') !== '0') {
     return (await response.json()) as T;
@@ -37,6 +37,7 @@ export async function request<T>(path: string, params?: Record<string, string>, 
 }
 
 export function wait(timeout = 1_000) {
+  console.log('[GOPRO] waiting', timeout);
   return new Promise<void>((resolve) => {
     setTimeout(() => {
       resolve();
@@ -60,9 +61,10 @@ async function waitUntilReady(bypass: Bypass = {}, tries = 0): Promise<boolean> 
     console.error('[GOPRO] failed to become ready');
     return false;
   }
-  await wait(backoff[tries]);
+  backoff[tries] && (await wait(backoff[tries]));
   try {
     if (await isReady(bypass)) {
+      tries > 0 && console.log('[GOPRO] became ready');
       return true;
     }
   } catch (e) {}
@@ -72,8 +74,8 @@ async function waitUntilReady(bypass: Bypass = {}, tries = 0): Promise<boolean> 
 
 const backoff: Record<number, number> = {
   0: 0,
-  1: 100,
-  2: 500,
-  3: 1000,
-  4: 2000,
+  1: 500,
+  2: 1000,
+  3: 2000,
+  4: 4000,
 };
