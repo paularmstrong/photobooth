@@ -40,6 +40,13 @@ export async function run(webContents: WebContents) {
     await writeFile(localPath, buffer, 'binary');
   });
 
+  ipcMain.on('photo', async (event, { data }) => {
+    const buffer = new Buffer(data);
+    const localPath = `${app.getPath('appData')}/gopro-photobooth/image_cache/photo.jpg`;
+    await mkdir(path.dirname(localPath), { recursive: true });
+    await writeFile(localPath, buffer, 'binary');
+  });
+
   return async function stopService() {
     return await stop(deck);
   };

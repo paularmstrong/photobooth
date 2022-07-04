@@ -1,24 +1,13 @@
 import * as React from 'react';
 import { HelpCard } from '../components';
-import quadIcon from '../img/quad.svg';
-import quadtychIcon from '../img/quadrytch.svg';
-import collageIcon from '../img/collage.svg';
+import recordIcon from '../img/record.svg';
 
 export function PhotoSelect() {
   return (
     <>
-      <HelpCard
-        items={items}
-        title="Choose a photo display pattern"
-        description="Use the buttons below the screen to select photo or video and follow along as the options change:"
-        visible
-      />
+      <HelpCard items={items} title="Get ready to begin" description="Tap the start button below to begin." visible />
     </>
   );
 }
 
-const items = [
-  { icon: quadIcon, description: '4-square collage' },
-  { icon: quadtychIcon, description: 'Veritcal quadtych' },
-  { icon: collageIcon, description: 'Random collage pattern' },
-];
+const items = [{ icon: recordIcon, description: 'Begin' }];

@@ -17,7 +17,9 @@ export function Router() {
       </Route>
 
       <Route state="photo.capturing">
-        <PhotoCapture />
+        <PreviewLayout>
+          <PhotoCapture />
+        </PreviewLayout>
       </Route>
 
       <Route state="photo.reviewing">

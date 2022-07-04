@@ -19,17 +19,14 @@ export function VideoRecord() {
 
       recorder.addEventListener('dataavailable', (event) => {
         if (event.data.size > 0) {
-          console.log('got data', event.data.size);
           chunks.push(event.data);
         }
       });
 
       recorder.addEventListener('stop', async () => {
-        console.log('stopped');
         const blob = new Blob(chunks, { type: 'video/webm' });
         const result = await blob.arrayBuffer();
         window.api.send('video', { data: result });
-        console.log('leave');
       });
 
       recorder.start(chunkLengthMs);
@@ -48,7 +45,6 @@ export function VideoRecord() {
     }
 
     return () => {
-      console.log('unloading', stopFn);
       stopFn();
     };
   }, [mediaStream]);
@@ -58,7 +54,6 @@ export function VideoRecord() {
       <CountdownCircle
         duration={30}
         onComplete={function handleStop() {
-          console.log('DONE');
           stop();
           window.api.send('transition', { type: 'DONE' });
         }}

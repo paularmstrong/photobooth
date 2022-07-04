@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { HelpCard, Shutter } from '../components';
+import { HelpCard } from '../components';
 import { useNavigation } from '../context';
 import clsx from 'clsx';
 import photoIcon from '../img/photo.svg';
@@ -52,8 +52,6 @@ export function Main() {
         description="Use the buttons below the screen to select photo or video and follow along as the options change:"
         visible={showHelp}
       />
-
-      <Shutter />
     </>
   );
 }

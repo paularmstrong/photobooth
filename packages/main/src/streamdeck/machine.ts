@@ -2,13 +2,10 @@ import jimp from 'jimp';
 import path from 'path';
 import { assign, createMachine } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
-import type { Typegen0 } from './machine.typegen';
-
-import { webcam } from '../gopro';
 
 import photoImg from './img/photo.png';
 import quad from './img/quad.png';
-import quadrytch from './img/quadrytch.png';
+import quadtych from './img/quadtych.png';
 import collage from './img/collage.png';
 import done from './img/done.png';
 import videoImg from './img/video.png';
@@ -20,7 +17,7 @@ import back from './img/back.png';
 const images = {
   photo: photoImg,
   quad,
-  quadrytch,
+  quadtych,
   collage,
   done,
   video: videoImg,
@@ -36,8 +33,6 @@ type KeyAction = { key: Key; type: string } | null;
 interface Context {
   keys: [KeyAction, KeyAction, KeyAction, KeyAction, KeyAction, KeyAction];
   photoType: string | void;
-  images: Array<string> | void;
-  video: string | void;
   streamdeck: StreamDeck;
 }
 
@@ -54,7 +49,7 @@ const initialKeys = [
 ];
 
 const selectTimeoutMs = 30_000;
-const reviewTimeoutMs = 30_000;
+const reviewTimeoutMs = 45_000;
 const helpTimeoutMs = 30_000;
 
 // https://stately.ai/viz/96da6066-02dc-448e-a9f9-7a8511767b31
@@ -64,26 +59,19 @@ export const makeMachine = (streamdeck: StreamDeck) =>
     {
       id: 'streamdeck',
       initial: 'main',
-      tsTypes: {} as Typegen0,
+      // eslint-disable-next-line
+      tsTypes: {} as import('./machine.typegen').Typegen0,
       schema: {
         context: {} as Context,
       },
       context: {
         keys: initialKeys,
         photoType: undefined,
-        images: undefined,
-        video: undefined,
         streamdeck,
       } as Context,
       states: {
         main: {
           initial: 'normal',
-          invoke: {
-            src: async function swapToWebcamMode() {
-              // await usb.takeControl();
-              await webcam.start();
-            },
-          },
           entry: [
             assign({
               keys: () => initialKeys,
@@ -93,9 +81,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           states: {
             normal: {},
             help: {
-              after: {
-                [helpTimeoutMs]: 'normal',
-              },
+              after: { [helpTimeoutMs]: 'normal' },
             },
           },
           on: {
@@ -111,52 +97,36 @@ export const makeMachine = (streamdeck: StreamDeck) =>
             selecting: {
               entry: [
                 assign({
-                  keys: () => [
-                    { key: 'quad', type: 'SELECT' },
-                    { key: 'quadrytch', type: 'SELECT' },
-                    { key: 'collage', type: 'SELECT' },
-                    null,
-                    null,
-                    { key: 'back', type: 'CANCEL' },
-                  ],
+                  keys: () => [{ key: 'rec', type: 'SELECT' }, null, null, null, null, { key: 'back', type: 'CANCEL' }],
                 }),
                 'render',
               ],
               on: {
-                SELECT: { target: 'capturing', actions: 'selectPhotoType' },
+                SELECT: 'capturing',
                 CANCEL: 'done',
               },
-              after: {
-                [selectTimeoutMs]: 'done',
-              },
+              after: { [selectTimeoutMs]: 'done' },
             },
             capturing: {
               initial: 'zero',
+              entry: [
+                assign({
+                  keys: () => [null, null, null, null, null, null],
+                }),
+                'render',
+              ],
               states: {
                 zero: {
-                  on: {
-                    DONE: 'one',
-                  },
+                  on: { DONE: 'one' },
                 },
                 one: {
-                  on: {
-                    DONE: 'two',
-                  },
+                  on: { DONE: 'two' },
                 },
                 two: {
-                  on: {
-                    DONE: 'three',
-                  },
+                  on: { DONE: 'three' },
                 },
                 three: {
-                  on: {
-                    DONE: 'done',
-                  },
-                },
-                four: {
-                  on: {
-                    DONE: 'done',
-                  },
+                  on: { DONE: 'done' },
                 },
                 done: {
                   type: 'final',
@@ -165,26 +135,50 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               onDone: 'reviewing',
             },
             reviewing: {
-              entry: [
-                assign({
-                  keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }],
-                }),
-                'render',
-              ],
-              after: {
-                [reviewTimeoutMs]: 'done',
+              initial: 'selecting',
+              states: {
+                selecting: {
+                  entry: [
+                    assign({
+                      keys: () => [
+                        { key: 'quad', type: 'SELECT' },
+                        { key: 'quadtych', type: 'SELECT' },
+                        { key: 'collage', type: 'SELECT' },
+                        null,
+                        null,
+                        { key: 'done', type: 'DONE' },
+                      ],
+                    }),
+                    'render',
+                  ],
+                  on: {
+                    SELECT: { actions: 'selectPhotoType' },
+                    DONE: 'saving',
+                  },
+                  after: {
+                    [reviewTimeoutMs]: 'saving',
+                  },
+                },
+                saving: {
+                  entry: [
+                    assign({
+                      keys: () => [null, null, null, null, null, null],
+                    }),
+                    'render',
+                  ],
+                  on: { DONE: 'done' },
+                },
+                done: {
+                  type: 'final',
+                },
               },
-              on: {
-                DONE: 'done',
-              },
+              onDone: 'done',
             },
             done: {
               type: 'final',
             },
           },
-          onDone: {
-            target: 'main',
-          },
+          onDone: 'main',
         },
         video: {
           initial: 'selecting',
@@ -201,9 +195,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 SELECT: 'readying',
                 CANCEL: 'done',
               },
-              after: {
-                [selectTimeoutMs]: 'done',
-              },
+              after: { [selectTimeoutMs]: 'done' },
             },
             readying: {
               entry: [assign({ keys: () => [null, null, null, null, null, null] }), 'render'],
@@ -218,9 +210,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 }),
                 'render',
               ],
-              on: {
-                DONE: 'reviewing',
-              },
+              on: { DONE: 'reviewing' },
             },
             reviewing: {
               entry: [
@@ -229,20 +219,12 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 }),
                 'render',
               ],
-              after: {
-                [reviewTimeoutMs]: 'done',
-              },
-              on: {
-                DONE: 'done',
-              },
+              after: { [reviewTimeoutMs]: 'done' },
+              on: { DONE: 'done' },
             },
-            done: {
-              type: 'final',
-            },
+            done: { type: 'final' },
           },
-          onDone: {
-            target: 'main',
-          },
+          onDone: 'main',
         },
       },
     },
