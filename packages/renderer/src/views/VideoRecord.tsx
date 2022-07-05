@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CountdownCircle, HelpCard } from '../components';
+import { CountdownCircle, Card, HelpCard } from '../components';
 import { useMediaStream } from '../context';
 import stopIcon from '../img/stop.svg';
 
@@ -50,17 +50,19 @@ export function VideoRecord() {
   }, [mediaStream]);
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center bg-white">
-      <CountdownCircle
-        duration={30}
-        onComplete={function handleStop() {
-          stop();
-          window.api.send('transition', { type: 'DONE' });
-        }}
-      />
+    <div className="w-screen h-screen flex justify-center items-center">
+      <Card mode="more-transparent">
+        <CountdownCircle
+          duration={30}
+          onComplete={function handleStop() {
+            stop();
+            window.api.send('transition', { type: 'DONE' });
+          }}
+        />
+      </Card>
       <HelpCard
-        title="Recording now!"
-        items={[{ description: 'Press to finish recording early', icon: stopIcon }]}
+        title="Recording in progress"
+        items={[{ icon: stopIcon, description: 'Press to stop recording early' }]}
         visible
       />
     </div>

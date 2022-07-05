@@ -51,6 +51,7 @@ const initialKeys = [
 const selectTimeoutMs = 30_000;
 const reviewTimeoutMs = 45_000;
 const helpTimeoutMs = 30_000;
+const videoReviewTimeoutMs = 30_000;
 
 // https://stately.ai/viz/96da6066-02dc-448e-a9f9-7a8511767b31
 
@@ -219,7 +220,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 }),
                 'render',
               ],
-              after: { [reviewTimeoutMs]: 'done' },
+              after: { [videoReviewTimeoutMs]: 'done' },
               on: { DONE: 'done' },
             },
             done: { type: 'final' },

@@ -1,4 +1,4 @@
-import { app, session, shell } from 'electron';
+import { app, shell } from 'electron';
 import { URL } from 'url';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
@@ -73,7 +73,7 @@ app.on('web-contents-created', (_, contents) => {
     const { protocol, origin } = new URL(webContents.getURL());
 
     // Allow local to access all
-    if (protocol === 'file:' || protocol === 'gpp:') {
+    if (protocol === 'file:') {
       return callback(true);
     }
 

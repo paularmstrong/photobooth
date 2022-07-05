@@ -11,7 +11,7 @@ export function PhotoCapture() {
   return (
     <>
       <div className="w-screen h-screen flex justify-center items-center">
-        <Card blur>
+        <Card blur mode="more-transparent">
           <CountdownCircle
             key={state}
             duration={4}

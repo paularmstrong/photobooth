@@ -66,21 +66,16 @@ export function PhotoReview() {
       {state.endsWith('.saving') ? (
         <HelpCard items={[]} title="Saving" description="Just a moment…" visible />
       ) : (
-        <HelpCard
-          items={items}
-          title="Choose a photo display pattern"
-          description="Use the buttons below to change the layout of your photo:"
-          visible
-        />
+        <HelpCard items={items} title="Choose a layout" visible />
       )}
     </div>
   );
 }
 
 const items = [
-  { icon: quadIcon, description: '4-square collage' },
-  { icon: quadtychIcon, description: 'Veritcal quadtych' },
-  { icon: collageIcon, description: 'Random collage pattern' },
+  { icon: quadIcon, description: '' },
+  { icon: quadtychIcon, description: '' },
+  { icon: collageIcon, description: '' },
 ];
 
 interface LayoutArgs {

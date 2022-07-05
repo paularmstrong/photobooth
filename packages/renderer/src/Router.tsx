@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useNavigation } from './context';
-import { Main, PhotoCapture, PhotoReview, PhotoSelect, Readying, VideoRecord, VideoSelect } from './views';
+import { Main, PhotoCapture, PhotoReview, PhotoSelect, Readying, VideoRecord, VideoReview, VideoSelect } from './views';
 import { PreviewLayout } from './layouts/Preview';
 
 export function Router() {
@@ -33,14 +33,20 @@ export function Router() {
       </Route>
 
       <Route state="video.readying">
-        <Readying type="video" />
+        <PreviewLayout>
+          <Readying type="video" />
+        </PreviewLayout>
       </Route>
 
       <Route state="video.recording">
-        <VideoRecord />
+        <PreviewLayout>
+          <VideoRecord />
+        </PreviewLayout>
       </Route>
 
-      <Route state="video.reviewing">{null}</Route>
+      <Route state="video.reviewing">
+        <VideoReview />
+      </Route>
 
       <Route>
         <PreviewLayout dim>

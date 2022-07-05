@@ -12,7 +12,7 @@ export function CountdownCircle(props: Props) {
       colors={['#78B159', '#DD2E44', '#DD2E44']}
       colorsTime={[Math.round(props.duration / 2), Math.round(props.duration / 6), 0]}
       rotation="counterclockwise"
-      trailColor="#ffffff"
+      trailColor="rgba(0,0,0,0)"
       size={300}
       strokeWidth={20}
       {...props}
