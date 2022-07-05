@@ -1,4 +1,4 @@
-const { rules, plugins } = require('@gpp/webpack');
+const { rules, plugins } = require('@pb/webpack');
 
 rules.push({
   test: /\.css$/,

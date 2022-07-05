@@ -1,5 +1,5 @@
 {
-  "name": "@gpp/main",
+  "name": "@pb/main",
   "private": true,
   "dependencies": {
     "@elgato-stream-deck/node": "^5.4.0-alpha.0",
@@ -9,7 +9,7 @@
     "xstate": "^4.31.0"
   },
   "devDependencies": {
-    "@gpp/webpack": "workspace:packages/webpack",
+    "@pb/webpack": "workspace:packages/webpack",
     "@types/node": "^18.0.0",
     "@xstate/cli": "^0.1.7",
     "electron-devtools-installer": "^3.2.0"

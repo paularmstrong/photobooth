@@ -1,5 +1,5 @@
 {
-  "name": "@gpp/webpack",
+  "name": "@pb/webpack",
   "private": true,
   "main": "./src/index.js",
   "devDependencies": {

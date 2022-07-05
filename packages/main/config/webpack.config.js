@@ -1,5 +1,5 @@
 const path = require('path');
-const { rules } = require('@gpp/webpack');
+const { rules } = require('@pb/webpack');
 
 module.exports = {
   /**

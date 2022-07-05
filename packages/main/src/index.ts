@@ -3,7 +3,6 @@ import type { BrowserWindow } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
 import { run as runStreamdeck } from './streamdeck';
-// import { keepAlive } from './gopro';
 
 let stopStreamdeck: () => void;
 let keepAliveTimeout: NodeJS.Timeout;

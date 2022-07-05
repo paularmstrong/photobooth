@@ -719,54 +719,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gpp/main@workspace:packages/main":
-  version: 0.0.0-use.local
-  resolution: "@gpp/main@workspace:packages/main"
-  dependencies:
-    "@elgato-stream-deck/node": ^5.4.0-alpha.0
-    "@gpp/webpack": "workspace:packages/webpack"
-    "@types/node": ^18.0.0
-    "@xstate/cli": ^0.1.7
-    electron-devtools-installer: ^3.2.0
-    electron-updater: 4.6.5
-    jimp: ^0.16.1
-    node-fetch: ^3.2.6
-    xstate: ^4.31.0
-  languageName: unknown
-  linkType: soft
-
-"@gpp/renderer@workspace:packages/renderer":
-  version: 0.0.0-use.local
-  resolution: "@gpp/renderer@workspace:packages/renderer"
-  dependencies:
-    "@gpp/webpack": "workspace:packages/webpack"
-    "@types/react": ^17
-    "@types/react-dom": ^17
-    "@types/w3c-image-capture": ^1.0.5
-    autoprefixer: ^10.4.2
-    clsx: ^1.1.1
-    eslint-config-preact: ^1.3.0
-    postcss: ^8.4.8
-    postcss-loader: ^6.2.1
-    preact: ^10.6.6
-    react: ^17
-    react-countdown-circle-timer: ^3.0.9
-    react-dom: ^17
-    tailwindcss: ^3.0.23
-  languageName: unknown
-  linkType: soft
-
-"@gpp/webpack@workspace:packages/webpack":
-  version: 0.0.0-use.local
-  resolution: "@gpp/webpack@workspace:packages/webpack"
-  dependencies:
-    "@vercel/webpack-asset-relocator-loader": 1.7.0
-    fork-ts-checker-webpack-plugin: ^6.0.1
-    node-loader: ^2.0.0
-    ts-loader: ^9.2.2
-  languageName: unknown
-  linkType: soft
-
 "@humanwhocodes/config-array@npm:^0.9.2":
   version: 0.9.5
   resolution: "@humanwhocodes/config-array@npm:0.9.5"
@@ -1355,6 +1307,54 @@ __metadata:
   checksum: 1388777b507b0c592d53f41b9d182e1a8de7763bc625fc07999b8edbc22325f074e5b3ec90af79c89d6987fdb2325bc66d59f483258543c14a43661621f841b0
   languageName: node
   linkType: hard
+
+"@pb/main@workspace:packages/main":
+  version: 0.0.0-use.local
+  resolution: "@pb/main@workspace:packages/main"
+  dependencies:
+    "@elgato-stream-deck/node": ^5.4.0-alpha.0
+    "@pb/webpack": "workspace:packages/webpack"
+    "@types/node": ^18.0.0
+    "@xstate/cli": ^0.1.7
+    electron-devtools-installer: ^3.2.0
+    electron-updater: 4.6.5
+    jimp: ^0.16.1
+    node-fetch: ^3.2.6
+    xstate: ^4.31.0
+  languageName: unknown
+  linkType: soft
+
+"@pb/renderer@workspace:packages/renderer":
+  version: 0.0.0-use.local
+  resolution: "@pb/renderer@workspace:packages/renderer"
+  dependencies:
+    "@pb/webpack": "workspace:packages/webpack"
+    "@types/react": ^17
+    "@types/react-dom": ^17
+    "@types/w3c-image-capture": ^1.0.5
+    autoprefixer: ^10.4.2
+    clsx: ^1.1.1
+    eslint-config-preact: ^1.3.0
+    postcss: ^8.4.8
+    postcss-loader: ^6.2.1
+    preact: ^10.6.6
+    react: ^17
+    react-countdown-circle-timer: ^3.0.9
+    react-dom: ^17
+    tailwindcss: ^3.0.23
+  languageName: unknown
+  linkType: soft
+
+"@pb/webpack@workspace:packages/webpack":
+  version: 0.0.0-use.local
+  resolution: "@pb/webpack@workspace:packages/webpack"
+  dependencies:
+    "@vercel/webpack-asset-relocator-loader": 1.7.0
+    fork-ts-checker-webpack-plugin: ^6.0.1
+    node-loader: ^2.0.0
+    ts-loader: ^9.2.2
+  languageName: unknown
+  linkType: soft
 
 "@sindresorhus/is@npm:^0.14.0":
   version: 0.14.0
@@ -5449,29 +5449,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gopro-photobooth@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "gopro-photobooth@workspace:."
-  dependencies:
-    "@electron-forge/cli": ^6.0.0-beta.63
-    "@electron-forge/maker-deb": ^6.0.0-beta.63
-    "@electron-forge/maker-rpm": ^6.0.0-beta.63
-    "@electron-forge/maker-squirrel": ^6.0.0-beta.63
-    "@electron-forge/maker-zip": ^6.0.0-beta.63
-    "@electron-forge/plugin-webpack": 6.0.0-beta.63
-    "@types/prettier": ^2
-    "@typescript-eslint/eslint-plugin": ^5.0.0
-    "@typescript-eslint/parser": ^5.0.0
-    css-loader: ^6.0.0
-    electron: ^18.2.0
-    eslint: ^8.0.1
-    eslint-plugin-import: ^2.25.0
-    prettier: ^2.6.2
-    style-loader: ^3.0.0
-    typescript: ~4.5.4
-  languageName: unknown
-  linkType: soft
-
 "got@npm:^11.7.0":
   version: 11.8.3
   resolution: "got@npm:11.8.3"
@@ -8081,6 +8058,29 @@ __metadata:
   checksum: 7e2abd7be74a54eb7be92dccb1d7a019725c8adaa79ac22a38f25220f9a859393e654ea753a559d326aed7bbc966fadac88270cc8c39d78896f7784219560c47
   languageName: node
   linkType: hard
+
+"photobooth@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "photobooth@workspace:."
+  dependencies:
+    "@electron-forge/cli": ^6.0.0-beta.63
+    "@electron-forge/maker-deb": ^6.0.0-beta.63
+    "@electron-forge/maker-rpm": ^6.0.0-beta.63
+    "@electron-forge/maker-squirrel": ^6.0.0-beta.63
+    "@electron-forge/maker-zip": ^6.0.0-beta.63
+    "@electron-forge/plugin-webpack": 6.0.0-beta.63
+    "@types/prettier": ^2
+    "@typescript-eslint/eslint-plugin": ^5.0.0
+    "@typescript-eslint/parser": ^5.0.0
+    css-loader: ^6.0.0
+    electron: ^18.2.0
+    eslint: ^8.0.1
+    eslint-plugin-import: ^2.25.0
+    prettier: ^2.6.2
+    style-loader: ^3.0.0
+    typescript: ~4.5.4
+  languageName: unknown
+  linkType: soft
 
 "picocolors@npm:^1.0.0":
   version: 1.0.0

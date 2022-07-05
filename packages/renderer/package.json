@@ -1,5 +1,5 @@
 {
-  "name": "@gpp/renderer",
+  "name": "@pb/renderer",
   "private": true,
   "dependencies": {
     "clsx": "^1.1.1",
@@ -9,7 +9,7 @@
     "react-dom": "^17"
   },
   "devDependencies": {
-    "@gpp/webpack": "workspace:packages/webpack",
+    "@pb/webpack": "workspace:packages/webpack",
     "@types/react": "^17",
     "@types/react-dom": "^17",
     "@types/w3c-image-capture": "^1.0.5",

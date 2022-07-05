@@ -35,14 +35,14 @@ export async function run(webContents: WebContents) {
 
   ipcMain.on('video', async (event, { data }) => {
     const buffer = new Buffer(data);
-    const localPath = `${app.getPath('appData')}/gopro-photobooth/image_cache/video.webm`;
+    const localPath = `${app.getPath('appData')}/PhotoBooth/image_cache/video.webm`;
     await mkdir(path.dirname(localPath), { recursive: true });
     await writeFile(localPath, buffer, 'binary');
   });
 
   ipcMain.on('photo', async (event, { data }) => {
     const buffer = new Buffer(data);
-    const localPath = `${app.getPath('appData')}/gopro-photobooth/image_cache/photo.jpg`;
+    const localPath = `${app.getPath('appData')}/PhotoBooth/image_cache/photo.jpg`;
     await mkdir(path.dirname(localPath), { recursive: true });
     await writeFile(localPath, buffer, 'binary');
   });
