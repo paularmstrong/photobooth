@@ -1,3 +1,5 @@
+import { app } from 'electron';
+import { mkdir, writeFile } from 'fs/promises';
 import jimp from 'jimp';
 import path from 'path';
 import { assign, createMachine } from 'xstate';
@@ -52,6 +54,8 @@ const selectTimeoutMs = 30_000;
 const reviewTimeoutMs = 45_000;
 const helpTimeoutMs = 30_000;
 const videoReviewTimeoutMs = 30_000;
+
+const blankKeys = () => [null, null, null, null, null, null];
 
 // https://stately.ai/viz/96da6066-02dc-448e-a9f9-7a8511767b31
 
@@ -112,7 +116,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               initial: 'zero',
               entry: [
                 assign({
-                  keys: () => [null, null, null, null, null, null],
+                  keys: blankKeys,
                 }),
                 'render',
               ],
@@ -161,13 +165,10 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                   },
                 },
                 saving: {
-                  entry: [
-                    assign({
-                      keys: () => [null, null, null, null, null, null],
-                    }),
-                    'render',
-                  ],
-                  on: { DONE: 'done' },
+                  entry: [assign({ keys: blankKeys }), 'render'],
+                  on: {
+                    DONE: { target: 'done', actions: 'saveMedia' },
+                  },
                 },
                 done: {
                   type: 'final',
@@ -183,7 +184,6 @@ export const makeMachine = (streamdeck: StreamDeck) =>
         },
         video: {
           initial: 'selecting',
-          exit: [assign({ video: undefined })],
           states: {
             selecting: {
               entry: [
@@ -199,19 +199,32 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               after: { [selectTimeoutMs]: 'done' },
             },
             readying: {
-              entry: [assign({ keys: () => [null, null, null, null, null, null] }), 'render'],
+              entry: [assign({ keys: blankKeys }), 'render'],
               on: {
                 DONE: 'recording',
               },
             },
             recording: {
-              entry: [
-                assign({
-                  keys: () => [null, null, null, null, null, { key: 'stop', type: 'DONE' }],
-                }),
-                'render',
-              ],
-              on: { DONE: 'reviewing' },
+              initial: 'recording',
+              states: {
+                recording: {
+                  entry: [
+                    assign({
+                      keys: () => [null, null, null, null, null, { key: 'stop', type: 'DONE' }],
+                    }),
+                    'render',
+                  ],
+                  on: { DONE: 'saving' },
+                },
+                saving: {
+                  entry: [assign({ keys: blankKeys }), 'render'],
+                  on: {
+                    DONE: { target: 'done', actions: 'saveMedia' },
+                  },
+                },
+                done: { type: 'final' },
+              },
+              onDone: 'reviewing',
             },
             reviewing: {
               entry: [
@@ -250,6 +263,16 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           if (event && typeof event.key === 'string') {
             context.photoType = event.key;
           }
+        },
+
+        saveMedia: async (context: Context, event: { data: ArrayBuffer; filename: string }) => {
+          if (!event.data || !event.filename) {
+            throw new Error('No file to save');
+          }
+          const buffer = new Buffer(event.data);
+          const localPath = `${app.getPath('appData')}/PhotoBooth/image_cache/${event.filename}`;
+          await mkdir(path.dirname(localPath), { recursive: true });
+          await writeFile(localPath, buffer, 'binary');
         },
       },
     }

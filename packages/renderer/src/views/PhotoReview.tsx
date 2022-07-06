@@ -40,8 +40,7 @@ export function PhotoReview() {
             throw new Error('failed to get blob');
           }
           const data = await blob.arrayBuffer();
-          window.api.send('photo', { data });
-          window.api.send('transition', { type: 'DONE' });
+          window.api.send('transition', { type: 'DONE', data, filename: `${Date.now()}.jpg` });
         },
         'image/jpeg',
         1

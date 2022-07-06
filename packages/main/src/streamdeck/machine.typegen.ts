@@ -4,12 +4,14 @@ export interface Typegen0 {
   '@@xstate/typegen': true;
   eventsCausingActions: {
     selectPhotoType: 'SELECT';
+    saveMedia: 'DONE';
     render:
       | 'done.state.streamdeck.photo'
       | 'done.state.streamdeck.video'
       | 'SELECT'
       | 'DONE'
-      | 'xstate.after(45000)#streamdeck.photo.reviewing.selecting';
+      | 'xstate.after(45000)#streamdeck.photo.reviewing.selecting'
+      | 'done.state.streamdeck.video.recording';
   };
   internalEvents: {
     'xstate.after(45000)#streamdeck.photo.reviewing.selecting': {
@@ -48,6 +50,9 @@ export interface Typegen0 {
     | 'video.selecting'
     | 'video.readying'
     | 'video.recording'
+    | 'video.recording.recording'
+    | 'video.recording.saving'
+    | 'video.recording.done'
     | 'video.reviewing'
     | 'video.done'
     | {
@@ -58,7 +63,13 @@ export interface Typegen0 {
           | 'reviewing'
           | 'done'
           | { capturing?: 'zero' | 'one' | 'two' | 'three' | 'done'; reviewing?: 'selecting' | 'saving' | 'done' };
-        video?: 'selecting' | 'readying' | 'recording' | 'reviewing' | 'done';
+        video?:
+          | 'selecting'
+          | 'readying'
+          | 'recording'
+          | 'reviewing'
+          | 'done'
+          | { recording?: 'recording' | 'saving' | 'done' };
       };
   tags: never;
 }

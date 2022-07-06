@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { CountdownCircle, Card, HelpCard } from '../components';
-import { useMediaStream } from '../context';
+import { useMediaStream, useNavigation } from '../context';
 import stopIcon from '../img/stop.svg';
 
 const chunkLengthMs = 1_000;
 
 export function VideoRecord() {
   const mediaStream = useMediaStream();
+  const { state } = useNavigation();
   const [stop, setStop] = React.useState<() => void>(() => () => {});
+
+  const isSaving = state.endsWith('.saving');
 
   React.useEffect(() => {
     let stopFn = stop;
@@ -26,7 +29,7 @@ export function VideoRecord() {
       recorder.addEventListener('stop', async () => {
         const blob = new Blob(chunks, { type: 'video/webm' });
         const result = await blob.arrayBuffer();
-        window.api.send('video', { data: result });
+        window.api.send('transition', { type: 'DONE', data: result, filename: `${Date.now()}.webm` });
       });
 
       recorder.start(chunkLengthMs);
@@ -49,20 +52,30 @@ export function VideoRecord() {
     };
   }, [mediaStream]);
 
+  React.useEffect(() => {
+    if (isSaving) {
+      stop();
+    }
+  }, [stop, isSaving]);
+
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      <Card mode="more-transparent">
-        <CountdownCircle
-          duration={30}
-          onComplete={function handleStop() {
-            stop();
-            window.api.send('transition', { type: 'DONE' });
-          }}
-        />
-      </Card>
+      {!isSaving ? (
+        <Card mode="more-transparent">
+          <CountdownCircle
+            duration={30}
+            onComplete={function handleStop() {
+              if (!isSaving) {
+                window.api.send('transition', { type: 'DONE' });
+              }
+            }}
+          />
+        </Card>
+      ) : null}
+
       <HelpCard
-        title="Recording in progress"
-        items={[{ icon: stopIcon, description: 'Press to stop recording early' }]}
+        title={isSaving ? 'Saving…' : 'Recording in progress'}
+        items={isSaving ? [] : [{ icon: stopIcon, description: 'Press to stop recording early' }]}
         visible
       />
     </div>
