@@ -1,3 +1,3 @@
-# Photobooth
+# PhotoBooth
 
-Nothing to see here yet
+Take photos and videos using any webcam and a 6-button Elgato Streamdeck.

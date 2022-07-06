@@ -5,7 +5,7 @@ import type { StreamDeck } from '@elgato-stream-deck/node';
 import { openStreamDeck } from '@elgato-stream-deck/node';
 import { makeMachine } from './machine';
 
-export async function run(webContents: WebContents) {
+export async function setup(webContents: WebContents) {
   const deck = await openStreamDeck();
 
   deck.clearPanel();

@@ -2,7 +2,7 @@ import { app, protocol, systemPreferences } from 'electron';
 import type { BrowserWindow } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
-import { run as runStreamdeck } from './streamdeck';
+import { setup as setupState } from './state';
 
 let stopStreamdeck: () => void;
 let keepAliveTimeout: NodeJS.Timeout;
@@ -42,7 +42,7 @@ app.on('will-quit', async () => {
  */
 app.on('activate', async () => {
   const window = await restoreOrCreateWindow();
-  stopStreamdeck = await runStreamdeck(window.webContents);
+  stopStreamdeck = await setupState(window.webContents);
 });
 
 // async function periodicKeepAlive() {
@@ -79,7 +79,7 @@ app
   })
   .then(restoreOrCreateWindow)
   .then(async (window: BrowserWindow) => {
-    stopStreamdeck = await runStreamdeck(window.webContents);
+    stopStreamdeck = await setupState(window.webContents);
   })
   .catch((e) => console.error('Failed create window:', e));
 
