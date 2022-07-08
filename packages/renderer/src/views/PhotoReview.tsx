@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { HelpCard } from '../components';
+import { getFilename } from '../modules';
 import quadIcon from '../img/quad.svg';
 import quadtychIcon from '../img/quadtych.svg';
 import collageIcon from '../img/collage.svg';
@@ -40,7 +41,11 @@ export function PhotoReview() {
             throw new Error('failed to get blob');
           }
           const data = await blob.arrayBuffer();
-          window.api.send('transition', { type: 'DONE', data, filename: `${Date.now()}.jpg` });
+          window.api.send('transition', {
+            type: 'DONE',
+            data,
+            filename: `${getFilename()}.jpg`,
+          });
         },
         'image/jpeg',
         1

@@ -270,7 +270,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
             throw new Error('No file to save');
           }
           const buffer = new Buffer(event.data);
-          const localPath = `${app.getPath('appData')}/PhotoBooth/image_cache/${event.filename}`;
+          const localPath = `${app.getPath('home')}/Photos/PhotoBooth/${event.filename}`;
           await mkdir(path.dirname(localPath), { recursive: true });
           await writeFile(localPath, buffer, 'binary');
         },

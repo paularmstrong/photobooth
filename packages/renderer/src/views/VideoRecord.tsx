@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { CountdownCircle, Card, HelpCard } from '../components';
 import { useMediaStream, useNavigation } from '../context';
+import { getFilename } from '../modules';
 import stopIcon from '../img/stop.svg';
 
 const chunkLengthMs = 1_000;
@@ -29,7 +30,11 @@ export function VideoRecord() {
       recorder.addEventListener('stop', async () => {
         const blob = new Blob(chunks, { type: 'video/webm' });
         const result = await blob.arrayBuffer();
-        window.api.send('transition', { type: 'DONE', data: result, filename: `${Date.now()}.webm` });
+        window.api.send('transition', {
+          type: 'DONE',
+          data: result,
+          filename: `${getFilename()}.webm`,
+        });
       });
 
       recorder.start(chunkLengthMs);
