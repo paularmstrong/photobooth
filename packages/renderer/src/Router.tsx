@@ -1,19 +1,24 @@
 import * as React from 'react';
 import { useNavigation } from './context';
-import { Main, PhotoCapture, PhotoReview, PhotoSelect, Readying, VideoRecord, VideoReview, VideoSelect } from './views';
+import {
+  Main,
+  PhotoCapture,
+  PhotoReview,
+  PhotoConfirm,
+  Readying,
+  VideoRecord,
+  VideoReview,
+  VideoSelect,
+} from './views';
 import { PreviewLayout } from './layouts/Preview';
 
 export function Router() {
   return (
     <Switch>
-      <Route state="photo.selecting">
+      <Route state="photo.confirming">
         <PreviewLayout>
-          <PhotoSelect />
+          <PhotoConfirm />
         </PreviewLayout>
-      </Route>
-
-      <Route state="photo.readying">
-        <Readying type="photo" />
       </Route>
 
       <Route state="photo.capturing">
@@ -26,13 +31,13 @@ export function Router() {
         <PhotoReview />
       </Route>
 
-      <Route state="video.selecting">
+      <Route state="video.confirming">
         <PreviewLayout>
           <VideoSelect />
         </PreviewLayout>
       </Route>
 
-      <Route state="video.readying">
+      <Route state="video.recording.readying">
         <PreviewLayout>
           <Readying type="video" />
         </PreviewLayout>

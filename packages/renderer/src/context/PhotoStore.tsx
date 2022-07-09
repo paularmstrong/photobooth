@@ -12,7 +12,6 @@ export function PhotoStoreProvider({ children }: { children: React.ReactNode }) 
   const [photos, setPhotos] = React.useState<Array<ImageBitmap>>([]);
 
   const addPhoto = (photo: ImageBitmap) => {
-    console.log('adding photo', photo);
     setPhotos((photos) => {
       return [...photos, photo];
     });

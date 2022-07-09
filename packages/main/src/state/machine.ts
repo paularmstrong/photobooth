@@ -39,10 +39,7 @@ interface Context {
 }
 
 const initialKeys = [
-  {
-    key: 'photo',
-    type: 'TAKE_PHOTOS',
-  },
+  { key: 'photo', type: 'TAKE_PHOTOS' },
   null,
   { key: 'video', type: 'REC_VIDEO' },
   null,
@@ -96,48 +93,39 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           },
         },
         photo: {
-          initial: 'selecting',
+          initial: 'confirming',
           exit: [assign({ photoType: undefined, images: undefined })],
           states: {
-            selecting: {
+            confirming: {
               entry: [
                 assign({
-                  keys: () => [{ key: 'rec', type: 'SELECT' }, null, null, null, null, { key: 'back', type: 'CANCEL' }],
+                  keys: () => [
+                    { key: 'rec', type: 'CONFIRM' },
+                    null,
+                    null,
+                    null,
+                    null,
+                    { key: 'back', type: 'CANCEL' },
+                  ],
                 }),
                 'render',
               ],
               on: {
-                SELECT: 'capturing',
+                CONFIRM: 'capturing',
                 CANCEL: 'done',
               },
               after: { [selectTimeoutMs]: 'done' },
             },
             capturing: {
-              initial: 'zero',
               entry: [
                 assign({
                   keys: blankKeys,
                 }),
                 'render',
               ],
-              states: {
-                zero: {
-                  on: { DONE: 'one' },
-                },
-                one: {
-                  on: { DONE: 'two' },
-                },
-                two: {
-                  on: { DONE: 'three' },
-                },
-                three: {
-                  on: { DONE: 'done' },
-                },
-                done: {
-                  type: 'final',
-                },
+              on: {
+                DONE: 'reviewing',
               },
-              onDone: 'reviewing',
             },
             reviewing: {
               initial: 'selecting',
@@ -183,30 +171,37 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           onDone: 'main',
         },
         video: {
-          initial: 'selecting',
+          initial: 'confirming',
           states: {
-            selecting: {
+            confirming: {
               entry: [
                 assign({
-                  keys: () => [{ key: 'rec', type: 'SELECT' }, null, null, null, null, { key: 'back', type: 'CANCEL' }],
+                  keys: () => [
+                    { key: 'rec', type: 'CONFIRM' },
+                    null,
+                    null,
+                    null,
+                    null,
+                    { key: 'back', type: 'CANCEL' },
+                  ],
                 }),
                 'render',
               ],
               on: {
-                SELECT: 'readying',
+                CONFIRM: 'recording',
                 CANCEL: 'done',
               },
               after: { [selectTimeoutMs]: 'done' },
             },
-            readying: {
-              entry: [assign({ keys: blankKeys }), 'render'],
-              on: {
-                DONE: 'recording',
-              },
-            },
             recording: {
-              initial: 'recording',
+              initial: 'readying',
               states: {
+                readying: {
+                  entry: [assign({ keys: blankKeys }), 'render'],
+                  on: {
+                    DONE: 'recording',
+                  },
+                },
                 recording: {
                   entry: [
                     assign({
