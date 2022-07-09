@@ -8,8 +8,8 @@ export function VideoConfirm() {
     <>
       <HelpCard
         items={items}
-        title="Get ready to record"
-        description="Use the buttons below the screen to start and stop recording. You’ll have up to 20 seconds once you start recording!"
+        title="Leave a video message"
+        description="Think of it like a video guest book! You’ll have up to 30 seconds once you start recording!"
         visible
       />
     </>

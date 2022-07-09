@@ -11,23 +11,23 @@ export function H1({ children, className }: Props) {
 }
 
 export function H2({ children, className }: Props) {
-  return <h2 className={clsx('text-4xl font-semibold', className)}>{children}</h2>;
+  return <h2 className={clsx('text-6xl font-semibold', className)}>{children}</h2>;
 }
 
 export function H3({ children, className }: Props) {
-  return <h3 className={clsx('text-2xl font-semibold', className)}>{children}</h3>;
+  return <h3 className={clsx('text-4xl font-semibold', className)}>{children}</h3>;
 }
 
 export function H4({ children, className }: Props) {
-  return <h4 className={clsx('text-xl font-semibold', className)}>{children}</h4>;
+  return <h4 className={clsx('text-2xl font-semibold', className)}>{children}</h4>;
 }
 
 export function H5({ children, className }: Props) {
-  return <h5 className={clsx('text-lg font-semibold', className)}>{children}</h5>;
+  return <h5 className={clsx('text-xl font-semibold', className)}>{children}</h5>;
 }
 
 export function H6({ children, className }: Props) {
-  return <h6 className={clsx('text-base', className)}>{children}</h6>;
+  return <h6 className={clsx('text-lg', className)}>{children}</h6>;
 }
 
 export function Text({ children, className }: Props) {

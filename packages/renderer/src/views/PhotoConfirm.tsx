@@ -5,7 +5,12 @@ import recordIcon from '../img/record.svg';
 export function PhotoConfirm() {
   return (
     <>
-      <HelpCard items={items} title="Get ready to begin" description="Tap the start button below to begin." visible />
+      <HelpCard
+        items={items}
+        title="Say cheese!"
+        description="Tap the start button below to begin taking photos."
+        visible
+      />
     </>
   );
 }

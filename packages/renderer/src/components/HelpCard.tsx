@@ -29,7 +29,7 @@ export function HelpCard({ description, items, title = defaultTitle, visible = f
         <Card blur>
           <div className="flex flex-col gap-2">
             {title ? <H2>{title}</H2> : null}
-            {description ? <Text>{description}</Text> : null}
+            {description ? <Text className="text-3xl">{description}</Text> : null}
             <div className="flex flex-row gap-8 justify-center">
               {items.map(({ icon, description }, i) => (
                 <div className="flex flex-row gap-2 items-center" key={i}>

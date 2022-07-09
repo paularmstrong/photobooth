@@ -49,7 +49,7 @@ export function Main() {
 
       <HelpCard
         items={items}
-        description="Use the buttons below the screen to select photo or video and follow along as the options change:"
+        description="Use the buttons below the screen to take photobooth photos or leave a video message for the bride and groom"
         visible={showHelp}
       />
     </>
@@ -58,5 +58,5 @@ export function Main() {
 
 const items = [
   { icon: photoIcon, description: 'Take photos' },
-  { icon: videoIcon, description: 'Record a video' },
+  { icon: videoIcon, description: 'Leave a video message' },
 ];

@@ -59,7 +59,7 @@ const blankKeys = () => [null, null, null, null, null, null];
 export const makeMachine = (streamdeck: StreamDeck) =>
   createMachine(
     {
-      id: 'streamdeck',
+      id: 'photobooth',
       initial: 'main',
       // eslint-disable-next-line
       tsTypes: {} as import('./machine.typegen').Typegen0,
@@ -94,7 +94,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
         },
         photo: {
           initial: 'confirming',
-          exit: [assign({ photoType: undefined, images: undefined })],
+          exit: [assign({ photoType: undefined })],
           states: {
             confirming: {
               entry: [
