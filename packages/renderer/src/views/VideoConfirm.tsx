@@ -3,7 +3,7 @@ import { HelpCard } from '../components';
 import recordIcon from '../img/record.svg';
 import stopIcon from '../img/stop.svg';
 
-export function VideoSelect() {
+export function VideoConfirm() {
   return (
     <>
       <HelpCard

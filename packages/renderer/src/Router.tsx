@@ -8,7 +8,7 @@ import {
   Readying,
   VideoRecord,
   VideoReview,
-  VideoSelect,
+  VideoConfirm,
 } from './views';
 import { PreviewLayout } from './layouts/Preview';
 
@@ -33,7 +33,7 @@ export function Router() {
 
       <Route state="video.confirming">
         <PreviewLayout>
-          <VideoSelect />
+          <VideoConfirm />
         </PreviewLayout>
       </Route>
 

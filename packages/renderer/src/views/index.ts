@@ -5,4 +5,4 @@ export * from './PhotoConfirm';
 export * from './Readying';
 export * from './VideoRecord';
 export * from './VideoReview';
-export * from './VideoSelect';
+export * from './VideoConfirm';

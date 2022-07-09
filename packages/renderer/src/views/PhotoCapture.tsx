@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { useMediaStream, usePhotos } from '../context';
 import { Card, CountdownCircle, Shutter } from '../components';
+import cameraShutterSound from '../sounds/camera-shutter.mp3';
+import toneSound from '../sounds/tone.wav';
 
 export function PhotoCapture() {
   const [taking, setTaking] = React.useState(false);
   const { addPhoto, photos } = usePhotos();
   const mediaStream = useMediaStream();
+
+  const shutter = React.useMemo(() => new Audio(cameraShutterSound), []);
+  const tone = React.useMemo(() => new Audio(toneSound), []);
 
   React.useEffect(() => {
     if (photos.length >= 4) {
@@ -21,7 +26,13 @@ export function PhotoCapture() {
             <CountdownCircle
               key={photos.length}
               duration={4}
+              onUpdate={(remainingTime) => {
+                if (remainingTime) {
+                  tone.play();
+                }
+              }}
               onComplete={() => {
+                shutter.play();
                 if (!mediaStream) {
                   throw new Error('no canvas');
                 }

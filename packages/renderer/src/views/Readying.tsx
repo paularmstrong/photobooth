@@ -1,16 +1,24 @@
 import * as React from 'react';
 import { Card, CountdownCircle, HelpCard } from '../components';
+import toneSound from '../sounds/tone.wav';
 
 interface Props {
   type: 'video' | 'photo';
 }
 
 export function Readying({ type }: Props) {
+  const tone = React.useMemo(() => new Audio(toneSound), []);
+
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <Card mode="more-transparent">
         <CountdownCircle
           duration={3}
+          onUpdate={(remainingTime) => {
+            if (remainingTime) {
+              tone.play();
+            }
+          }}
           onComplete={() => {
             window.api.send('transition', { type: 'DONE' });
           }}
