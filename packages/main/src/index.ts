@@ -1,8 +1,10 @@
 import { app, protocol, systemPreferences } from 'electron';
+import path from 'path';
 import type { BrowserWindow } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
 import { setup as setupState } from './state';
+import { MEDIA_PATH } from './constants';
 
 let stopStreamdeck: () => void;
 let keepAliveTimeout: NodeJS.Timeout;
@@ -45,13 +47,6 @@ app.on('activate', async () => {
   stopStreamdeck = await setupState(window.webContents);
 });
 
-// async function periodicKeepAlive() {
-//   await keepAlive();
-//   keepAliveTimeout = setTimeout(async () => {
-//     periodicKeepAlive();
-//   }, 60_000);
-// }
-
 /**
  * Create app window when background process will be ready
  */
@@ -68,13 +63,10 @@ app
       await systemPreferences.askForMediaAccess('microphone');
     }
   })
-  // .then(async () => {
-  //   periodicKeepAlive();
-  // })
   .then(() => {
-    protocol.registerFileProtocol('gpp', (request, callback) => {
-      const url = request.url.substr(4);
-      callback({ path: url });
+    protocol.registerFileProtocol('pb', (request, callback) => {
+      const file = request.url.substr(3);
+      callback({ path: path.join(MEDIA_PATH, file) });
     });
   })
   .then(restoreOrCreateWindow)

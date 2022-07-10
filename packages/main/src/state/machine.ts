@@ -1,9 +1,9 @@
-import { app } from 'electron';
 import { mkdir, writeFile } from 'fs/promises';
 import jimp from 'jimp';
 import path from 'path';
 import { assign, createMachine } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
+import { MEDIA_PATH } from '../constants';
 
 import photoImg from './img/photo.png';
 import quad from './img/quad.png';
@@ -35,6 +35,7 @@ type KeyAction = { key: Key; type: string } | null;
 interface Context {
   keys: [KeyAction, KeyAction, KeyAction, KeyAction, KeyAction, KeyAction];
   photoType: string | void;
+  photos: Array<string>;
   streamdeck: StreamDeck;
 }
 
@@ -69,6 +70,16 @@ export const makeMachine = (streamdeck: StreamDeck) =>
       context: {
         keys: initialKeys,
         photoType: undefined,
+        photos: [
+          '2022-07-09-234414.jpg',
+          '2022-07-09-234555.jpg',
+          '2022-07-09-234936.jpg',
+          '2022-07-09-235524.jpg',
+          '2022-07-10-144120.jpg',
+          '2022-07-10-162215.jpg',
+          '2022-07-10-162238.jpg',
+          '2022-07-10-162304.jpg',
+        ] as Array<string>,
         streamdeck,
       } as Context,
       states: {
@@ -265,7 +276,10 @@ export const makeMachine = (streamdeck: StreamDeck) =>
             throw new Error('No file to save');
           }
           const buffer = new Buffer(event.data);
-          const localPath = `${app.getPath('home')}/Photos/PhotoBooth/${event.filename}`;
+          const localPath = path.join(MEDIA_PATH, event.filename);
+          if (localPath.endsWith('.jpg')) {
+            context.photos.push(event.filename);
+          }
           await mkdir(path.dirname(localPath), { recursive: true });
           await writeFile(localPath, buffer, 'binary');
         },

@@ -29,7 +29,7 @@ module.exports = {
         mainConfig: './packages/main/config/webpack.config.js',
 
         devContentSecurityPolicy:
-          "default-src * self blob: data:; style-src * self 'unsafe-inline' blob: data:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data:; object-src * 'self' blob: data:; img-src * self gpp: 'unsafe-inline' blob: data:; connect-src self * 'unsafe-inline' blob: data:; frame-src * self blob: data:;",
+          "default-src * self blob: data:; style-src * self 'unsafe-inline' blob: data:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data:; object-src * 'self' blob: data:; img-src * self pb: 'unsafe-inline' blob: data:; connect-src self * 'unsafe-inline' blob: data:; frame-src * self blob: data:;",
 
         renderer: {
           config: './packages/renderer/config/webpack.config.js',

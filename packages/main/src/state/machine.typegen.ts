@@ -6,16 +6,16 @@ export interface Typegen0 {
     selectPhotoType: 'SELECT';
     saveMedia: 'DONE';
     render:
-      | 'done.state.streamdeck.photo'
-      | 'done.state.streamdeck.video'
-      | 'SELECT'
+      | 'done.state.photobooth.photo'
+      | 'done.state.photobooth.video'
+      | 'CONFIRM'
       | 'DONE'
-      | 'xstate.after(45000)#streamdeck.photo.reviewing.selecting'
-      | 'done.state.streamdeck.video.recording';
+      | 'xstate.after(45000)#photobooth.photo.reviewing.selecting'
+      | 'done.state.photobooth.video.recording';
   };
   internalEvents: {
-    'xstate.after(45000)#streamdeck.photo.reviewing.selecting': {
-      type: 'xstate.after(45000)#streamdeck.photo.reviewing.selecting';
+    'xstate.after(45000)#photobooth.photo.reviewing.selecting': {
+      type: 'xstate.after(45000)#photobooth.photo.reviewing.selecting';
     };
     'xstate.init': { type: 'xstate.init' };
   };
@@ -34,22 +34,17 @@ export interface Typegen0 {
     | 'main.normal'
     | 'main.help'
     | 'photo'
-    | 'photo.selecting'
+    | 'photo.confirming'
     | 'photo.capturing'
-    | 'photo.capturing.zero'
-    | 'photo.capturing.one'
-    | 'photo.capturing.two'
-    | 'photo.capturing.three'
-    | 'photo.capturing.done'
     | 'photo.reviewing'
     | 'photo.reviewing.selecting'
     | 'photo.reviewing.saving'
     | 'photo.reviewing.done'
     | 'photo.done'
     | 'video'
-    | 'video.selecting'
-    | 'video.readying'
+    | 'video.confirming'
     | 'video.recording'
+    | 'video.recording.readying'
     | 'video.recording.recording'
     | 'video.recording.saving'
     | 'video.recording.done'
@@ -57,19 +52,13 @@ export interface Typegen0 {
     | 'video.done'
     | {
         main?: 'normal' | 'help';
-        photo?:
-          | 'selecting'
-          | 'capturing'
-          | 'reviewing'
-          | 'done'
-          | { capturing?: 'zero' | 'one' | 'two' | 'three' | 'done'; reviewing?: 'selecting' | 'saving' | 'done' };
+        photo?: 'confirming' | 'capturing' | 'reviewing' | 'done' | { reviewing?: 'selecting' | 'saving' | 'done' };
         video?:
-          | 'selecting'
-          | 'readying'
+          | 'confirming'
           | 'recording'
           | 'reviewing'
           | 'done'
-          | { recording?: 'recording' | 'saving' | 'done' };
+          | { recording?: 'readying' | 'recording' | 'saving' | 'done' };
       };
   tags: never;
 }

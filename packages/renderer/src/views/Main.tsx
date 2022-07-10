@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { HelpCard } from '../components';
+import { HelpCard, PhotoCarousel } from '../components';
 import { useNavigation } from '../context';
 import clsx from 'clsx';
 import photoIcon from '../img/photo.svg';
@@ -35,6 +35,7 @@ export function Main() {
             </span>
           </span>
         </h1>
+        {!showHelp ? <PhotoCarousel /> : null}
         {!showHelp ? (
           <div className="flex justify-around">
             <div className="absolute drop-shadow-lg aspect-square rounded-full text-white bg-lime-600 p-4 text-4xl overflow-hidden animate-ping">
