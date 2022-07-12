@@ -4,6 +4,7 @@ import {
   Main,
   PhotoCapture,
   PhotoReview,
+  PhotoSave,
   PhotoConfirm,
   Readying,
   VideoRecord,
@@ -27,8 +28,12 @@ export function Router() {
         </PreviewLayout>
       </Route>
 
-      <Route state="photo.reviewing">
+      <Route state="photo.reviewing.reviewing" exact>
         <PhotoReview />
+      </Route>
+
+      <Route state="photo.reviewing">
+        <PhotoSave />
       </Route>
 
       <Route state="video.confirming">

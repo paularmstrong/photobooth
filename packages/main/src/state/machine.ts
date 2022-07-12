@@ -49,7 +49,8 @@ const initialKeys = [
 ];
 
 const selectTimeoutMs = 30_000;
-const reviewTimeoutMs = 45_000;
+const saveTimeoutMs = 45_000;
+const reviewTimeoutMs = 30_000;
 const helpTimeoutMs = 30_000;
 const videoReviewTimeoutMs = 30_000;
 
@@ -156,28 +157,52 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                     'render',
                   ],
                   on: {
-                    SELECT: { actions: 'selectPhotoType' },
+                    SELECT: {
+                      actions: [
+                        assign({
+                          photoType: (context: Context, event) => {
+                            // @ts-ignore don't worry about it
+                            if (event && typeof event.key === 'string') {
+                              // @ts-ignore don't worry about it
+                              return event.key;
+                            }
+                            return context.photoType;
+                          },
+                        }),
+                      ],
+                    },
                     DONE: 'saving',
                   },
-                  after: {
-                    [reviewTimeoutMs]: 'saving',
-                  },
+                  after: { [saveTimeoutMs]: 'saving' },
                 },
                 saving: {
                   entry: [assign({ keys: blankKeys }), 'render'],
                   on: {
-                    DONE: { target: 'done', actions: 'saveMedia' },
+                    DONE: {
+                      target: 'reviewing',
+                      actions: [
+                        'saveMedia',
+                        assign({
+                          photos: (context: Context, event) => [
+                            ...context.photos,
+                            // @ts-ignore don't worry about it
+                            event.filename,
+                          ],
+                        }),
+                      ],
+                    },
                   },
                 },
-                done: {
-                  type: 'final',
+                reviewing: {
+                  entry: [assign({ keys: [null, null, null, null, null, { key: 'done', type: 'DONE' }] }), 'render'],
+                  on: { DONE: 'done' },
+                  after: { [reviewTimeoutMs]: 'done' },
                 },
+                done: { type: 'final' },
               },
               onDone: 'done',
             },
-            done: {
-              type: 'final',
-            },
+            done: { type: 'final' },
           },
           onDone: 'main',
         },
@@ -225,7 +250,10 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 saving: {
                   entry: [assign({ keys: blankKeys }), 'render'],
                   on: {
-                    DONE: { target: 'done', actions: 'saveMedia' },
+                    DONE: {
+                      target: 'done',
+                      actions: ['saveMedia'],
+                    },
                   },
                 },
                 done: { type: 'final' },
@@ -265,21 +293,12 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           }
         },
 
-        selectPhotoType: (context: Context, event: { key: string }) => {
-          if (event && typeof event.key === 'string') {
-            context.photoType = event.key;
-          }
-        },
-
         saveMedia: async (context: Context, event: { data: ArrayBuffer; filename: string }) => {
           if (!event.data || !event.filename) {
             throw new Error('No file to save');
           }
           const buffer = new Buffer(event.data);
           const localPath = path.join(MEDIA_PATH, event.filename);
-          if (localPath.endsWith('.jpg')) {
-            context.photos.push(event.filename);
-          }
           await mkdir(path.dirname(localPath), { recursive: true });
           await writeFile(localPath, buffer, 'binary');
         },

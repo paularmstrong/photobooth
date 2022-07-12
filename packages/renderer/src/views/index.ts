@@ -1,6 +1,7 @@
 export * from './Main';
 export * from './PhotoCapture';
 export * from './PhotoReview';
+export * from './PhotoSave';
 export * from './PhotoConfirm';
 export * from './Readying';
 export * from './VideoRecord';

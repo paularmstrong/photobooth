@@ -3,7 +3,6 @@
 export interface Typegen0 {
   '@@xstate/typegen': true;
   eventsCausingActions: {
-    selectPhotoType: 'SELECT';
     saveMedia: 'DONE';
     render:
       | 'done.state.photobooth.photo'
@@ -39,6 +38,7 @@ export interface Typegen0 {
     | 'photo.reviewing'
     | 'photo.reviewing.selecting'
     | 'photo.reviewing.saving'
+    | 'photo.reviewing.reviewing'
     | 'photo.reviewing.done'
     | 'photo.done'
     | 'video'
@@ -52,7 +52,12 @@ export interface Typegen0 {
     | 'video.done'
     | {
         main?: 'normal' | 'help';
-        photo?: 'confirming' | 'capturing' | 'reviewing' | 'done' | { reviewing?: 'selecting' | 'saving' | 'done' };
+        photo?:
+          | 'confirming'
+          | 'capturing'
+          | 'reviewing'
+          | 'done'
+          | { reviewing?: 'selecting' | 'saving' | 'reviewing' | 'done' };
         video?:
           | 'confirming'
           | 'recording'
