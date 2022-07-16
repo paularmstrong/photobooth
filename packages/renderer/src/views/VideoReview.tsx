@@ -1,15 +1,29 @@
 import * as React from 'react';
-import { HelpCard } from '../components';
+import { ReviewLayout } from '../layouts';
+import { useNavigation } from '../context';
+import { H2, Text } from '../components';
 
 export function VideoReview() {
+  const {
+    meta: { lastVideo },
+  } = useNavigation();
   return (
-    <div className="w-screen h-screen bg-black">
-      <HelpCard
-        items={[]}
-        title="Thank you!"
-        description="Your video has been saved and sent off to the bride & groom."
-        visible
-      />
-    </div>
+    <ReviewLayout
+      card={
+        <>
+          <H2 className="text-teal-700">Saved!</H2>
+          <Text className="text-2xl">
+            Your video has been saved to our guestbook. We look forward to watching it soon!
+          </Text>
+        </>
+      }
+      title="Thanks for the memories!"
+    >
+      <div className="p-3 bg-white -rotate-2 shadow-2xl aspect-[16/10]">
+        <video autoPlay loop muted playsInline className="w-full">
+          <source src={`pb:${lastVideo}`} type="video/webm" />
+        </video>
+      </div>
+    </ReviewLayout>
   );
 }

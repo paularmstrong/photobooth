@@ -11,7 +11,7 @@ import {
   VideoReview,
   VideoConfirm,
 } from './views';
-import { PreviewLayout } from './layouts/Preview';
+import { PreviewLayout } from './layouts';
 
 export function Router() {
   return (
@@ -28,12 +28,16 @@ export function Router() {
         </PreviewLayout>
       </Route>
 
-      <Route state="photo.reviewing.reviewing" exact>
-        <PhotoReview />
-      </Route>
-
       <Route state="photo.reviewing">
         <PhotoSave />
+      </Route>
+
+      <Route state="photo.saving">
+        <PreviewLayout>{null}</PreviewLayout>
+      </Route>
+
+      <Route state="photo.complete">
+        <PhotoReview />
       </Route>
 
       <Route state="video.confirming">
@@ -52,6 +56,10 @@ export function Router() {
         <PreviewLayout>
           <VideoRecord />
         </PreviewLayout>
+      </Route>
+
+      <Route state="video.saving">
+        <PreviewLayout>{null}</PreviewLayout>
       </Route>
 
       <Route state="video.reviewing">

@@ -7,7 +7,7 @@ interface Props {
 export function Photo({ src }: Props) {
   return (
     <div className="">
-      <img src={src} alt="" />
+      <img src={src} alt="" className="aspect-[16/10]" />
     </div>
   );
 }

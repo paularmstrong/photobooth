@@ -20,7 +20,7 @@ export function PhotoCapture() {
 
   return (
     <>
-      <div className="w-screen h-screen flex justify-center items-center">
+      <div className="w-screen h-screen p-12 flex justify-end items-end">
         <Card blur mode="more-transparent">
           {photos.length < 4 ? (
             <CountdownCircle

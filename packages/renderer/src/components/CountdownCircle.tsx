@@ -14,7 +14,7 @@ export function CountdownCircle(props: Props) {
       rotation="counterclockwise"
       trailColor="rgba(0,0,0,0)"
       size={300}
-      strokeWidth={20}
+      strokeWidth={30}
       {...props}
     >
       {({ remainingTime }) => <Text className="text-9xl">{remainingTime}</Text>}

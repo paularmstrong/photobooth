@@ -64,7 +64,7 @@ export function VideoRecord() {
   }, [stop, isSaving]);
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
+    <div className="w-screen h-screen p-12 flex justify-end items-end">
       {!isSaving ? (
         <Card mode="more-transparent">
           <CountdownCircle
@@ -79,7 +79,7 @@ export function VideoRecord() {
       ) : null}
 
       <HelpCard
-        title={isSaving ? 'Saving…' : 'Recording in progress'}
+        title={isSaving ? 'Saving…' : ''}
         items={isSaving ? [] : [{ icon: stopIcon, description: 'Press to stop recording early' }]}
         visible
       />

@@ -34,6 +34,7 @@ type KeyAction = { key: Key; type: string } | null;
 
 interface Context {
   keys: [KeyAction, KeyAction, KeyAction, KeyAction, KeyAction, KeyAction];
+  lastVideo: string | void;
   photoType: string | void;
   photos: Array<string>;
   streamdeck: StreamDeck;
@@ -70,6 +71,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
       },
       context: {
         keys: initialKeys,
+        lastVideo: undefined,
         photoType: undefined,
         photos: [
           '2022-07-09-234414.jpg',
@@ -89,8 +91,9 @@ export const makeMachine = (streamdeck: StreamDeck) =>
           entry: [
             assign({
               keys: () => initialKeys,
+              lastVideo: () => undefined,
             }),
-            'render',
+            'renderKeys',
           ],
           states: {
             normal: {},
@@ -120,7 +123,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                     { key: 'back', type: 'CANCEL' },
                   ],
                 }),
-                'render',
+                'renderKeys',
               ],
               on: {
                 CONFIRM: 'capturing',
@@ -133,7 +136,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                 assign({
                   keys: blankKeys,
                 }),
-                'render',
+                'renderKeys',
               ],
               on: {
                 DONE: 'reviewing',
@@ -154,7 +157,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                         { key: 'done', type: 'DONE' },
                       ],
                     }),
-                    'render',
+                    'renderKeys',
                   ],
                   on: {
                     SELECT: {
@@ -171,36 +174,44 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                         }),
                       ],
                     },
-                    DONE: 'saving',
+                    DONE: {
+                      target: 'saving',
+                    },
                   },
                   after: { [saveTimeoutMs]: 'saving' },
                 },
                 saving: {
-                  entry: [assign({ keys: blankKeys }), 'render'],
+                  entry: [assign({ keys: blankKeys }), 'renderKeys'],
                   on: {
                     DONE: {
-                      target: 'reviewing',
-                      actions: [
-                        'saveMedia',
-                        assign({
-                          photos: (context: Context, event) => [
-                            ...context.photos,
-                            // @ts-ignore don't worry about it
-                            event.filename,
-                          ],
-                        }),
-                      ],
+                      target: '#photobooth.photo.saving',
                     },
                   },
                 },
-                reviewing: {
-                  entry: [assign({ keys: [null, null, null, null, null, { key: 'done', type: 'DONE' }] }), 'render'],
-                  on: { DONE: 'done' },
-                  after: { [reviewTimeoutMs]: 'done' },
-                },
-                done: { type: 'final' },
               },
-              onDone: 'done',
+            },
+            saving: {
+              entry: [
+                assign({
+                  // @ts-ignore
+                  keys: blankKeys,
+                  photos: (context: Context, event) => [
+                    ...context.photos,
+                    // @ts-ignore
+                    event.filename,
+                  ],
+                }),
+                'renderKeys',
+              ],
+              invoke: {
+                src: 'saveMedia',
+                onDone: 'complete',
+              },
+            },
+            complete: {
+              entry: [assign({ keys: [null, null, null, null, null, { key: 'done', type: 'DONE' }] }), 'renderKeys'],
+              on: { DONE: 'done' },
+              after: { [reviewTimeoutMs]: 'done' },
             },
             done: { type: 'final' },
           },
@@ -221,7 +232,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                     { key: 'back', type: 'CANCEL' },
                   ],
                 }),
-                'render',
+                'renderKeys',
               ],
               on: {
                 CONFIRM: 'recording',
@@ -233,7 +244,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
               initial: 'readying',
               states: {
                 readying: {
-                  entry: [assign({ keys: blankKeys }), 'render'],
+                  entry: [assign({ keys: blankKeys }), 'renderKeys'],
                   on: {
                     DONE: 'recording',
                   },
@@ -243,29 +254,46 @@ export const makeMachine = (streamdeck: StreamDeck) =>
                     assign({
                       keys: () => [null, null, null, null, null, { key: 'stop', type: 'DONE' }],
                     }),
-                    'render',
+                    'renderKeys',
                   ],
                   on: { DONE: 'saving' },
                 },
                 saving: {
-                  entry: [assign({ keys: blankKeys }), 'render'],
+                  entry: [
+                    assign({
+                      keys: blankKeys,
+                    }),
+                    'renderKeys',
+                  ],
                   on: {
                     DONE: {
-                      target: 'done',
-                      actions: ['saveMedia'],
+                      target: '#photobooth.video.saving',
                     },
                   },
                 },
-                done: { type: 'final' },
               },
-              onDone: 'reviewing',
+            },
+            saving: {
+              entry: [
+                assign({
+                  keys: blankKeys,
+                  lastVideo: (context, event) =>
+                    // @ts-ignore
+                    event.filename,
+                }),
+                'renderKeys',
+              ],
+              invoke: {
+                src: 'saveMedia',
+                onDone: 'reviewing',
+              },
             },
             reviewing: {
               entry: [
                 assign({
                   keys: () => [null, null, null, null, null, { key: 'done', type: 'DONE' }],
                 }),
-                'render',
+                'renderKeys',
               ],
               after: { [videoReviewTimeoutMs]: 'done' },
               on: { DONE: 'done' },
@@ -278,7 +306,7 @@ export const makeMachine = (streamdeck: StreamDeck) =>
     },
     {
       actions: {
-        render: async (context) => {
+        renderKeys: async (context) => {
           const { keys, streamdeck } = context;
           for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
@@ -292,7 +320,8 @@ export const makeMachine = (streamdeck: StreamDeck) =>
             streamdeck.fillKeyBuffer(i, resized.bitmap.data, { format: 'rgba' });
           }
         },
-
+      },
+      services: {
         saveMedia: async (context: Context, event: { data: ArrayBuffer; filename: string }) => {
           if (!event.data || !event.filename) {
             throw new Error('No file to save');

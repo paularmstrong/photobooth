@@ -3,29 +3,45 @@
 export interface Typegen0 {
   '@@xstate/typegen': true;
   eventsCausingActions: {
-    saveMedia: 'DONE';
-    render:
+    renderKeys:
       | 'done.state.photobooth.photo'
       | 'done.state.photobooth.video'
       | 'CONFIRM'
       | 'DONE'
       | 'xstate.after(45000)#photobooth.photo.reviewing.selecting'
-      | 'done.state.photobooth.video.recording';
+      | 'done.invoke.photobooth.photo.saving:invocation[0]'
+      | 'done.invoke.photobooth.video.saving:invocation[0]';
   };
   internalEvents: {
     'xstate.after(45000)#photobooth.photo.reviewing.selecting': {
       type: 'xstate.after(45000)#photobooth.photo.reviewing.selecting';
     };
+    'done.invoke.photobooth.photo.saving:invocation[0]': {
+      type: 'done.invoke.photobooth.photo.saving:invocation[0]';
+      data: unknown;
+      __tip: 'See the XState TS docs to learn how to strongly type this.';
+    };
+    'done.invoke.photobooth.video.saving:invocation[0]': {
+      type: 'done.invoke.photobooth.video.saving:invocation[0]';
+      data: unknown;
+      __tip: 'See the XState TS docs to learn how to strongly type this.';
+    };
     'xstate.init': { type: 'xstate.init' };
   };
-  invokeSrcNameMap: {};
+  invokeSrcNameMap: {
+    saveMedia:
+      | 'done.invoke.photobooth.photo.saving:invocation[0]'
+      | 'done.invoke.photobooth.video.saving:invocation[0]';
+  };
   missingImplementations: {
     actions: never;
     services: never;
     guards: never;
     delays: never;
   };
-  eventsCausingServices: {};
+  eventsCausingServices: {
+    saveMedia: 'DONE';
+  };
   eventsCausingGuards: {};
   eventsCausingDelays: {};
   matchesStates:
@@ -38,8 +54,8 @@ export interface Typegen0 {
     | 'photo.reviewing'
     | 'photo.reviewing.selecting'
     | 'photo.reviewing.saving'
-    | 'photo.reviewing.reviewing'
-    | 'photo.reviewing.done'
+    | 'photo.saving'
+    | 'photo.complete'
     | 'photo.done'
     | 'video'
     | 'video.confirming'
@@ -47,7 +63,7 @@ export interface Typegen0 {
     | 'video.recording.readying'
     | 'video.recording.recording'
     | 'video.recording.saving'
-    | 'video.recording.done'
+    | 'video.saving'
     | 'video.reviewing'
     | 'video.done'
     | {
@@ -56,14 +72,17 @@ export interface Typegen0 {
           | 'confirming'
           | 'capturing'
           | 'reviewing'
+          | 'saving'
+          | 'complete'
           | 'done'
-          | { reviewing?: 'selecting' | 'saving' | 'reviewing' | 'done' };
+          | { reviewing?: 'selecting' | 'saving' };
         video?:
           | 'confirming'
           | 'recording'
+          | 'saving'
           | 'reviewing'
           | 'done'
-          | { recording?: 'readying' | 'recording' | 'saving' | 'done' };
+          | { recording?: 'readying' | 'recording' | 'saving' };
       };
   tags: never;
 }
