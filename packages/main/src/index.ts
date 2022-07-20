@@ -5,8 +5,9 @@ import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
 import { setup as setupState } from './state';
 import { MEDIA_PATH } from './constants';
+import { initMenu } from './menu';
 
-let stopStreamdeck: () => void;
+let stopStateMachine: () => void;
 let keepAliveTimeout: NodeJS.Timeout;
 
 /**
@@ -28,7 +29,7 @@ app.on('second-instance', restoreOrCreateWindow);
  * Shout down background process if all windows was closed
  */
 app.on('window-all-closed', async () => {
-  await stopStreamdeck();
+  await stopStateMachine();
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -36,7 +37,7 @@ app.on('window-all-closed', async () => {
 
 app.on('will-quit', async () => {
   clearTimeout(keepAliveTimeout);
-  await stopStreamdeck();
+  await stopStateMachine();
 });
 
 /**
@@ -44,7 +45,9 @@ app.on('will-quit', async () => {
  */
 app.on('activate', async () => {
   const window = await restoreOrCreateWindow();
-  stopStreamdeck = await setupState(window.webContents);
+  const { service, stop } = await setupState(window.webContents);
+  stopStateMachine = stop;
+  initMenu(service);
 });
 
 /**
@@ -71,7 +74,9 @@ app
   })
   .then(restoreOrCreateWindow)
   .then(async (window: BrowserWindow) => {
-    stopStreamdeck = await setupState(window.webContents);
+    const { stop, service } = await setupState(window.webContents);
+    initMenu(service);
+    stopStateMachine = stop;
   })
   .catch((e) => console.error('Failed create window:', e));
 

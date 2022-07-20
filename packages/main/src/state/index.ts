@@ -1,18 +1,21 @@
 import { ipcMain } from 'electron';
 import type { WebContents } from 'electron';
 import { interpret } from 'xstate';
+import type { InterpreterFrom } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
 import { openStreamDeck } from '@elgato-stream-deck/node';
-import { makeMachine } from './machine';
+import { machine } from './machine';
+
+export type Service = InterpreterFrom<typeof machine>;
 
 export async function setup(webContents: WebContents) {
   const deck = await openStreamDeck();
 
   deck.clearPanel();
 
-  const machine = makeMachine(deck);
   const service = interpret(machine);
   service.start();
+  service.send({ type: 'INIT', data: deck });
 
   deck.on('up', (keyIndex: number) => {
     const action = service.state.context.keys[keyIndex];
@@ -31,8 +34,11 @@ export async function setup(webContents: WebContents) {
     service.send(action);
   });
 
-  return async function stopService() {
-    return await stop(deck);
+  return {
+    service,
+    stop: async function stopService() {
+      return await stop(deck);
+    },
   };
 }
 

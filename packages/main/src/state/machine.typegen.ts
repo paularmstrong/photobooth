@@ -4,15 +4,16 @@ export interface Typegen0 {
   '@@xstate/typegen': true;
   eventsCausingActions: {
     renderKeys:
-      | 'done.state.photobooth.photo'
-      | 'done.state.photobooth.video'
-      | 'CONFIRM'
+      | 'xstate.after(30000)#photobooth.main.help'
       | 'DONE'
+      | 'PREFERENCES'
+      | 'CONFIRM'
       | 'xstate.after(45000)#photobooth.photo.reviewing.selecting'
       | 'done.invoke.photobooth.photo.saving:invocation[0]'
       | 'done.invoke.photobooth.video.saving:invocation[0]';
   };
   internalEvents: {
+    'xstate.after(30000)#photobooth.main.help': { type: 'xstate.after(30000)#photobooth.main.help' };
     'xstate.after(45000)#photobooth.photo.reviewing.selecting': {
       type: 'xstate.after(45000)#photobooth.photo.reviewing.selecting';
     };
@@ -45,9 +46,11 @@ export interface Typegen0 {
   eventsCausingGuards: {};
   eventsCausingDelays: {};
   matchesStates:
+    | 'setup'
     | 'main'
     | 'main.normal'
     | 'main.help'
+    | 'main.preferences'
     | 'photo'
     | 'photo.confirming'
     | 'photo.capturing'
@@ -67,7 +70,7 @@ export interface Typegen0 {
     | 'video.reviewing'
     | 'video.done'
     | {
-        main?: 'normal' | 'help';
+        main?: 'normal' | 'help' | 'preferences';
         photo?:
           | 'confirming'
           | 'capturing'

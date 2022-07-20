@@ -12,7 +12,7 @@ function checkReceivable(eventName: string) {
 
 contextBridge.exposeInMainWorld('api', {
   send: (channel: string, data: Record<string, unknown>) => {
-    const validChannels = ['transition', 'video', 'photo'];
+    const validChannels = ['transition'];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
     }

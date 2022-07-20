@@ -3,7 +3,7 @@ export type Data = { value: Array<string>; meta: { photoType?: string; photos: A
 
 export interface Api {
   addListener: (channel: ReceivableEvent, evt: (data: Data) => void) => () => void;
-  send: (channel: 'video' | 'photo' | 'transition', data: Record<string, unknown>) => void;
+  send: (channel: 'transition', data: Record<string, unknown>) => void;
 }
 
 declare global {

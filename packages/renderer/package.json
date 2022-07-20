@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "clsx": "^1.1.1",
+    "electron-store": "^8.0.2",
     "preact": "^10.6.6",
     "react": "^17",
     "react-countdown-circle-timer": "^3.0.9",
