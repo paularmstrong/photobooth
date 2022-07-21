@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import type { IpcRendererEvent } from 'electron';
 import type { Api, Data, ReceivableEvent } from './api';
 
-const receivableEvents = ['transition'];
+const receivableEvents = ['transition', 'preferences'];
 
 function checkReceivable(eventName: string) {
   if (!receivableEvents.includes(eventName)) {
@@ -12,7 +12,7 @@ function checkReceivable(eventName: string) {
 
 contextBridge.exposeInMainWorld('api', {
   send: (channel: string, data: Record<string, unknown>) => {
-    const validChannels = ['transition'];
+    const validChannels = ['transition', 'preferences'];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
     }

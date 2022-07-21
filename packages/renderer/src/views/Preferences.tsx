@@ -1,13 +1,20 @@
 import * as React from 'react';
 import { CSSTransition } from 'react-transition-group';
-import { H2 } from '../components';
+import { useDebouncedCallback } from 'use-debounce';
+import { H1, TextField } from '../components';
 import clsx from 'clsx';
+import { usePreference } from '../context';
 
 interface Props {
   show?: boolean;
 }
 
 export function Preferences({ show = false }: Props) {
+  const [url, _setUrl] = usePreference('photoboothUrl');
+  const setUrl = useDebouncedCallback((value: string) => {
+    _setUrl(value);
+  }, 900);
+
   return (
     <CSSTransition appear in={show} classNames={transitionClassnames} timeout={300} unmountOnExit={true}>
       <div className="absolute top-0 left-0 p-6 lg:p-12 w-full h-full">
@@ -19,7 +26,22 @@ export function Preferences({ show = false }: Props) {
           >
             close
           </button>
-          <H2>Preferences</H2>
+          <div className="flex flex-col gap-6">
+            <H1 className="text-2xl">Preferences</H1>
+
+            <TextField
+              label="Online photo gallery URL"
+              helpText="Displayed along with a QR code after a photo is saved."
+              onChangeText={(url) => setUrl(url)}
+              value={typeof url === 'string' ? url : ''}
+            />
+
+            <TextField
+              label="Video saved message"
+              placeholder="Your video has been saved to our guestbook. We look forward to watching it soon!"
+              helpText="Displayed after a recorded video has been saved."
+            />
+          </div>
         </div>
       </div>
     </CSSTransition>

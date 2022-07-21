@@ -7,3 +7,4 @@ export * from './PhotoCarousel';
 export * from './Preview';
 export * from './Shutter';
 export * from './Text';
+export * from './TextField';

@@ -6,6 +6,7 @@ import { restoreOrCreateWindow } from './main-window';
 import { setup as setupState } from './state';
 import { MEDIA_PATH } from './constants';
 import { initMenu } from './menu';
+import { initStore } from './store';
 
 let stopStateMachine: () => void;
 let keepAliveTimeout: NodeJS.Timeout;
@@ -74,6 +75,7 @@ app
   })
   .then(restoreOrCreateWindow)
   .then(async (window: BrowserWindow) => {
+    initStore(window.webContents);
     const { stop, service } = await setupState(window.webContents);
     initMenu(service);
     stopStateMachine = stop;

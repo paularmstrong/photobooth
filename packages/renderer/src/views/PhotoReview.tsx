@@ -3,21 +3,34 @@ import clsx from 'clsx';
 import { CSSTransition } from 'react-transition-group';
 import { ReviewLayout } from '../layouts';
 import { H2, Photo, Text } from '../components';
-import { useNavigation } from '../context';
-import qrCode from '../img/qr.svg';
+import { useNavigation, usePreference } from '../context';
+import { toCanvas } from 'qrcode';
 
 export function PhotoReview() {
   const {
     meta: { photos },
   } = useNavigation();
+  const [url] = usePreference('photoboothUrl');
+  const canvas = React.useRef<HTMLCanvasElement>(null);
+
+  React.useLayoutEffect(() => {
+    if (!url || typeof url !== 'string' || !canvas.current) {
+      return;
+    }
+    toCanvas(canvas.current, url, {
+      width: canvas.current.width,
+      margin: 0,
+      color: { light: '#ffffff00', dark: '#0f766e' },
+    });
+  }, [url, canvas]);
 
   return (
     <ReviewLayout
       card={
         <>
-          <img src={qrCode} alt="" className="w-96 h-96" />
+          <canvas ref={canvas} className="w-full h-full aspect-1 mx-auto" />
           <H2>Download yours at:</H2>
-          <Text className="text-4xl underline text-teal-700">***REMOVED***</Text>
+          <Text className="underline text-teal-700 text-4xl">{`${url || ''}`}</Text>
         </>
       }
       title={titles[photos.length % titles.length]}
