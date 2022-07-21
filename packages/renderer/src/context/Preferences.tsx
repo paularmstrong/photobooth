@@ -1,23 +1,25 @@
 import * as React from 'react';
 import produce from 'immer';
+import type { Preferences } from '@pb/main';
 
 interface Context {
-  getValue: (key: string) => unknown;
-  setValue: (key: string, value: unknown) => void;
+  getValue: <K extends keyof Preferences>(key: K) => Preferences[K];
+  setValue: <K extends keyof Preferences>(key: K, value: Preferences[K]) => void;
 }
 
 const PreferencesContext = React.createContext<Context>({ getValue: () => '', setValue: () => {} });
 
 export function PreferencesProvider({ children }: { children: React.ReactNode }) {
-  const [preferences, setPreferences] = React.useState<Record<string, unknown>>({});
+  const [preferences, setPreferences] = React.useState<Preferences>({ photoboothUrl: '', videoSaveMessage: '' });
 
   React.useEffect(() => {
-    const removeListener = window.api.addListener('preferences', (newState: Record<string, unknown>) => {
+    const removeListener = window.api.addListener('preferences', (newState: Preferences) => {
       setPreferences(
         produce((draft) => {
-          Object.keys(newState).forEach((key) => {
+          for (const key in Object.keys(newState)) {
+            // @ts-ignore
             draft[key] = newState[key];
-          });
+          }
         })
       );
     });
@@ -32,8 +34,8 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
   return (
     <PreferencesContext.Provider
       value={{
-        getValue: (key: string) => preferences[key],
-        setValue: (key: string, value: unknown) => {
+        getValue: (key: keyof Preferences) => preferences[key],
+        setValue: <K extends keyof Preferences>(key: K, value: Preferences[K]) => {
           window.api.send('preferences', { [key]: value });
         },
       }}
@@ -43,7 +45,7 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
   );
 }
 
-export function usePreference(key: string): [unknown, (value: unknown) => void] {
+export function usePreference<K extends keyof Preferences>(key: K): [Preferences[K], (value: Preferences[K]) => void] {
   const { getValue, setValue } = React.useContext(PreferencesContext);
-  return [getValue(key), (value: unknown) => setValue(key, value)];
+  return [getValue(key), (value: Preferences[K]) => setValue(key, value)];
 }

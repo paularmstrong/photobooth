@@ -14,7 +14,7 @@ export function PhotoReview() {
   const canvas = React.useRef<HTMLCanvasElement>(null);
 
   React.useLayoutEffect(() => {
-    if (!url || typeof url !== 'string' || !canvas.current) {
+    if (!canvas.current) {
       return;
     }
     toCanvas(canvas.current, url, {
@@ -30,7 +30,7 @@ export function PhotoReview() {
         <>
           <H2>Scan to download:</H2>
           <canvas ref={canvas} className="w-full h-full aspect-1 mx-auto" />
-          <Text className="underline text-teal-700 text-4xl">{`${url || ''}`}</Text>
+          <Text className="underline text-teal-700 text-4xl">{url}</Text>
         </>
       }
       title={titles[photos.length % titles.length]}

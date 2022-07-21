@@ -2,8 +2,13 @@ import { ipcMain } from 'electron';
 import type { WebContents } from 'electron';
 import Store from 'electron-store';
 
+export interface Preferences {
+  photoboothUrl: string;
+  videoSaveMessage: string;
+}
+
 export function initStore(webContents: WebContents) {
-  const store = new Store({
+  const store = new Store<Preferences>({
     defaults: {
       photoboothUrl: 'https://example.com',
       videoSaveMessage: 'Your video has been saved to our guestbook. We look forward to watching it soon!',

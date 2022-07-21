@@ -8,6 +8,8 @@ import { MEDIA_PATH } from './constants';
 import { initMenu } from './menu';
 import { initStore } from './store';
 
+export { Preferences } from './store';
+
 let stopStateMachine: () => void;
 let keepAliveTimeout: NodeJS.Timeout;
 

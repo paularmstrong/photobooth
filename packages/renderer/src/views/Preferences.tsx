@@ -37,14 +37,14 @@ export function Preferences({ show = false }: Props) {
               label="Online photo gallery URL"
               helpText="Displayed along with a QR code after a photo is saved."
               onChangeText={(url) => setUrl(url)}
-              value={typeof url === 'string' ? url : ''}
+              value={url}
             />
 
             <TextField
               label="Video saved message"
               helpText="Displayed after a recorded video has been saved."
               onChangeText={(msg) => setSaveMessage(msg)}
-              value={typeof saveMessage === 'string' ? saveMessage : ''}
+              value={saveMessage}
             />
           </div>
         </div>

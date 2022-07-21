@@ -14,7 +14,7 @@ export function VideoReview() {
       card={
         <>
           <H2 className="text-teal-700">Saved!</H2>
-          <Text className="text-2xl">{`${saveMessage || ''}`}</Text>
+          <Text className="text-2xl">{saveMessage}</Text>
         </>
       }
       title="Thanks for the memories!"
