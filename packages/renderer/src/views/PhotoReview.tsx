@@ -28,8 +28,8 @@ export function PhotoReview() {
     <ReviewLayout
       card={
         <>
+          <H2>Scan to download:</H2>
           <canvas ref={canvas} className="w-full h-full aspect-1 mx-auto" />
-          <H2>Download yours at:</H2>
           <Text className="underline text-teal-700 text-4xl">{`${url || ''}`}</Text>
         </>
       }

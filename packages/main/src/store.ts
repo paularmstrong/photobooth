@@ -4,6 +4,10 @@ import Store from 'electron-store';
 
 export function initStore(webContents: WebContents) {
   const store = new Store({
+    defaults: {
+      photoboothUrl: 'https://example.com',
+      videoSaveMessage: 'Your video has been saved to our guestbook. We look forward to watching it soon!',
+    },
     schema: {
       photoboothUrl: {
         type: 'string',

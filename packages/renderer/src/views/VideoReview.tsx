@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { ReviewLayout } from '../layouts';
-import { useNavigation } from '../context';
+import { useNavigation, usePreference } from '../context';
 import { H2, Text } from '../components';
 
 export function VideoReview() {
   const {
     meta: { lastVideo },
   } = useNavigation();
+  const [saveMessage] = usePreference('videoSaveMessage');
+
   return (
     <ReviewLayout
       card={
         <>
           <H2 className="text-teal-700">Saved!</H2>
-          <Text className="text-2xl">
-            Your video has been saved to our guestbook. We look forward to watching it soon!
-          </Text>
+          <Text className="text-2xl">{`${saveMessage || ''}`}</Text>
         </>
       }
       title="Thanks for the memories!"

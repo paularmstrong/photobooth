@@ -34,7 +34,6 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
       value={{
         getValue: (key: string) => preferences[key],
         setValue: (key: string, value: unknown) => {
-          console.log('sending prefs', { [key]: value });
           window.api.send('preferences', { [key]: value });
         },
       }}

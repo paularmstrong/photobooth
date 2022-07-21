@@ -11,9 +11,13 @@ interface Props {
 
 export function Preferences({ show = false }: Props) {
   const [url, _setUrl] = usePreference('photoboothUrl');
+  const [saveMessage, _setSaveMessage] = usePreference('videoSaveMessage');
   const setUrl = useDebouncedCallback((value: string) => {
     _setUrl(value);
   }, 900);
+  const setSaveMessage = useDebouncedCallback((value: string) => {
+    _setSaveMessage(value);
+  }, 500);
 
   return (
     <CSSTransition appear in={show} classNames={transitionClassnames} timeout={300} unmountOnExit={true}>
@@ -38,8 +42,9 @@ export function Preferences({ show = false }: Props) {
 
             <TextField
               label="Video saved message"
-              placeholder="Your video has been saved to our guestbook. We look forward to watching it soon!"
               helpText="Displayed after a recorded video has been saved."
+              onChangeText={(msg) => setSaveMessage(msg)}
+              value={typeof saveMessage === 'string' ? saveMessage : ''}
             />
           </div>
         </div>
