@@ -4,20 +4,24 @@ import clsx from 'clsx';
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   disabled?: boolean;
   helpText?: React.ReactNode;
+  leadingIcon?: React.ReactNode;
   label: string;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onChangeText?: (text: string) => void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  trailingIcon?: React.ReactNode;
   value?: string;
 }
 
 export function TextField({
   disabled = false,
   helpText,
+  leadingIcon,
   label,
   onBlur,
   onChangeText,
   onFocus,
+  trailingIcon,
   value: propValue = '',
   ...props
 }: Props) {
@@ -66,6 +70,8 @@ export function TextField({
         })}
       >
         <label className="flex space-x-2 grow items-center">
+          {leadingIcon ? <div className="w-6 h-full">{leadingIcon}</div> : null}
+
           <div className="flex items-center justify-items-stretch relative grow">
             <input
               className="h-8 mt-4 grow bg-transparent font-normal focus:outline-none focus:ring-0"
@@ -87,6 +93,8 @@ export function TextField({
               {label}
             </div>
           </div>
+
+          {trailingIcon ? <div className="w-6 h-full">{trailingIcon}</div> : null}
         </label>
       </div>
       {helpText ? <div className="text-s pl-3 pt-1">{helpText}</div> : null}

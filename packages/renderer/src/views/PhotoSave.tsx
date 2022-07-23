@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { HelpCard } from '../components';
 import { getFilename } from '../modules';
-import quadIcon from '../img/quad.svg';
-import quadtychIcon from '../img/quadtych.svg';
-import collageIcon from '../img/collage.svg';
+import QuadIcon from '../img/quad.svg';
+import QuadtychIcon from '../img/quadtych.svg';
+import CollageIcon from '../img/collage.svg';
 import { useNavigation, usePhotos } from '../context';
 
 // 5.8 megapixel
@@ -77,9 +77,9 @@ export function PhotoSave() {
 }
 
 const items = [
-  { icon: quadIcon, description: '' },
-  { icon: quadtychIcon, description: '' },
-  { icon: collageIcon, description: '' },
+  { icon: QuadIcon, description: '' },
+  { icon: QuadtychIcon, description: '' },
+  { icon: CollageIcon, description: '' },
 ];
 
 interface LayoutArgs {

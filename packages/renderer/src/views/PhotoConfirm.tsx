@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { HelpCard } from '../components';
-import recordIcon from '../img/record.svg';
+import RecordIcon from '../img/record.svg';
 
 export function PhotoConfirm() {
   return (
@@ -15,4 +15,4 @@ export function PhotoConfirm() {
   );
 }
 
-const items = [{ icon: recordIcon, description: 'Begin' }];
+const items = [{ icon: RecordIcon, description: 'Begin' }];

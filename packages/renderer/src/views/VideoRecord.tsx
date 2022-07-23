@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CountdownCircle, Card, HelpCard } from '../components';
 import { useMediaStream, useNavigation } from '../context';
 import { getFilename } from '../modules';
-import stopIcon from '../img/stop.svg';
+import StopIcon from '../img/stop.svg';
 
 const chunkLengthMs = 1_000;
 
@@ -80,7 +80,7 @@ export function VideoRecord() {
 
       <HelpCard
         title={isSaving ? 'Saving…' : ''}
-        items={isSaving ? [] : [{ icon: stopIcon, description: 'Press to stop recording early' }]}
+        items={isSaving ? [] : [{ icon: StopIcon, description: 'Press to stop recording early' }]}
         visible
       />
     </div>

@@ -2,7 +2,11 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports.rules = [
   {
-    test: /\.(png|jpg|svg|jpeg|gif|mp3|wav)$/i,
+    test: /\.(svg)$/,
+    use: ['@svgr/webpack'],
+  },
+  {
+    test: /\.(png|jpg|jpeg|gif|mp3|wav)$/i,
     type: 'asset/resource',
   },
   // Add support for native node modules

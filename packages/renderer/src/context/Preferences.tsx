@@ -15,10 +15,9 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
   React.useEffect(() => {
     const removeListener = window.api.addListener('preferences', (newState: Preferences) => {
       setPreferences(
-        produce((draft) => {
-          for (const key in Object.keys(newState)) {
-            // @ts-ignore
-            draft[key] = newState[key];
+        produce<Preferences>((draft) => {
+          for (const key of Object.keys(newState)) {
+            draft[key as keyof Preferences] = newState[key as keyof Preferences];
           }
         })
       );

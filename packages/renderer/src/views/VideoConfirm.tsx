@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { HelpCard } from '../components';
-import recordIcon from '../img/record.svg';
-import stopIcon from '../img/stop.svg';
+import RecordIcon from '../img/record.svg';
+import StopIcon from '../img/stop.svg';
 
 export function VideoConfirm() {
   return (
@@ -17,6 +17,6 @@ export function VideoConfirm() {
 }
 
 const items = [
-  { icon: recordIcon, description: 'Start recording' },
-  { icon: stopIcon, description: 'Stop recording' },
+  { icon: RecordIcon, description: 'Start recording' },
+  { icon: StopIcon, description: 'Stop recording' },
 ];

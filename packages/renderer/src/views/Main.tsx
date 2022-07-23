@@ -3,8 +3,8 @@ import { HelpCard, PhotoCarousel } from '../components';
 import { Preferences } from './Preferences';
 import { useNavigation } from '../context';
 import clsx from 'clsx';
-import photoIcon from '../img/photo.svg';
-import videoIcon from '../img/video.svg';
+import PhotoIcon from '../img/photo.svg';
+import VideoIcon from '../img/video.svg';
 
 export function Main() {
   const { state } = useNavigation();
@@ -64,6 +64,6 @@ export function Main() {
 }
 
 const items = [
-  { icon: photoIcon, description: 'Take photos' },
-  { icon: videoIcon, description: 'Leave a video message' },
+  { icon: PhotoIcon, description: 'Take photos' },
+  { icon: VideoIcon, description: 'Leave a video message' },
 ];

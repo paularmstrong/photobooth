@@ -1,9 +1,25 @@
-import { app, Menu } from 'electron';
+import { app, Menu, shell } from 'electron';
 import type { MenuItem, MenuItemConstructorOptions } from 'electron';
 import type { Service } from './state';
 
 export function initMenu(service: Service) {
-  const template: Array<MenuItemConstructorOptions | MenuItem> = [];
+  const template: Array<MenuItemConstructorOptions | MenuItem> = [
+    {
+      label: 'View',
+      submenu: [{ role: 'togglefullscreen' }],
+    },
+    {
+      role: 'help',
+      submenu: [
+        {
+          label: 'Learn more',
+          click: async () => {
+            shell.openExternal('https://paularmstrong.dev');
+          },
+        },
+      ],
+    },
+  ];
 
   if (process.platform === 'darwin') {
     template.unshift({

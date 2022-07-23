@@ -4,7 +4,7 @@ import { H2, Text } from './Text';
 import clsx from 'clsx';
 
 interface Item {
-  icon: string;
+  icon: React.StatelessComponent<React.SVGAttributes<SVGElement>>;
   description: string;
 }
 
@@ -31,10 +31,10 @@ export function HelpCard({ description, items, title = defaultTitle, visible = f
             {title ? <H2>{title}</H2> : null}
             {description ? <Text className="text-3xl">{description}</Text> : null}
             <div className="flex flex-row gap-8 justify-center">
-              {items.map(({ icon, description }, i) => (
+              {items.map(({ icon: Icon, description }, i) => (
                 <div className="flex flex-row gap-2 items-center" key={i}>
                   <span className="rounded-xl p-2 bg-black/80">
-                    <img src={icon} />
+                    <Icon />
                   </span>
                   <span className="text-2xl">{description}</span>
                 </div>
