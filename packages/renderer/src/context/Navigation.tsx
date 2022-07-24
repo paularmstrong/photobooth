@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useLocation as useRRLocation, useNavigate } from 'react-router-dom';
 
 interface Meta {
   lastVideo?: string;
@@ -6,24 +7,21 @@ interface Meta {
   photoType?: string;
 }
 
-const emptyArray: Array<string> = [];
-
-const NavigationContext = React.createContext({ state: '', meta: { photos: emptyArray } as Meta });
-
 export function NavigationProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = React.useState({ state: '', meta: { photos: emptyArray } });
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const remove = window.api.addListener('transition', ({ value, meta }) => {
-      setState({ state: value[value.length - 1], meta });
+      navigate({ pathname: `/${value[value.length - 1].replace(/\./g, '/')}` }, { state: meta });
     });
 
     return remove;
   }, []);
 
-  return <NavigationContext.Provider value={state}>{children}</NavigationContext.Provider>;
+  return <>{children}</>;
 }
 
-export function useNavigation() {
-  return React.useContext(NavigationContext);
+export function useLocation() {
+  const { state, ...location } = useRRLocation();
+  return { state: state as Meta, ...location };
 }

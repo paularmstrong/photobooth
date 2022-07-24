@@ -3,13 +3,13 @@ import clsx from 'clsx';
 import { CSSTransition } from 'react-transition-group';
 import { ReviewLayout } from '../layouts';
 import { H2, Photo, Text } from '../components';
-import { useNavigation, usePreference } from '../context';
+import { useLocation, usePreference } from '../context';
 import { toCanvas } from 'qrcode';
 
 export function PhotoReview() {
   const {
-    meta: { photos },
-  } = useNavigation();
+    state: { photos },
+  } = useLocation();
   const [url] = usePreference('photoboothUrl');
   const canvas = React.useRef<HTMLCanvasElement>(null);
 
@@ -35,7 +35,7 @@ export function PhotoReview() {
       }
       title={titles[photos.length % titles.length]}
     >
-      <CSSTransition in appear classNames={transitionClassnames()} timeout={250}>
+      <CSSTransition in appear classNames={transitionClassnames()} timeout={150}>
         <Photo src={`pb:${photos[photos.length - 1]}`} />
       </CSSTransition>
     </ReviewLayout>

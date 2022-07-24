@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CountdownCircle, Card, HelpCard } from '../components';
-import { useMediaStream, useNavigation } from '../context';
+import { useLocation, useMediaStream } from '../context';
 import { getFilename } from '../modules';
 import StopIcon from '../img/stop.svg';
 
@@ -8,10 +8,10 @@ const chunkLengthMs = 1_000;
 
 export function VideoRecord() {
   const mediaStream = useMediaStream();
-  const { state } = useNavigation();
+  const { pathname } = useLocation();
   const [stop, setStop] = React.useState<() => void>(() => () => {});
 
-  const isSaving = state.endsWith('.saving');
+  const isSaving = pathname.endsWith('/saving');
 
   React.useEffect(() => {
     let stopFn = stop;

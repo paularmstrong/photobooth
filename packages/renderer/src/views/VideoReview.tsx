@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { ReviewLayout } from '../layouts';
-import { useNavigation, usePreference } from '../context';
+import { useLocation, usePreference } from '../context';
 import { H2, Text } from '../components';
 
 export function VideoReview() {
   const {
-    meta: { lastVideo },
-  } = useNavigation();
+    state: { lastVideo },
+  } = useLocation();
   const [saveMessage] = usePreference('videoSaveMessage');
 
   return (

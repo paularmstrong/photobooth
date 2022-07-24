@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigation } from './context';
+import { Routes, Route } from 'react-router-dom';
 import {
   Main,
   PhotoCapture,
@@ -15,85 +15,64 @@ import { PreviewLayout } from './layouts';
 
 export function Router() {
   return (
-    <Switch>
-      <Route state="photo.confirming">
-        <PreviewLayout dim>
-          <PhotoConfirm />
-        </PreviewLayout>
-      </Route>
+    <Routes>
+      <Route
+        path="photo/confirming"
+        element={
+          <PreviewLayout dim>
+            <PhotoConfirm />
+          </PreviewLayout>
+        }
+      />
 
-      <Route state="photo.capturing">
-        <PreviewLayout>
-          <PhotoCapture />
-        </PreviewLayout>
-      </Route>
+      <Route
+        path="photo/capturing"
+        element={
+          <PreviewLayout>
+            <PhotoCapture />
+          </PreviewLayout>
+        }
+      />
 
-      <Route state="photo.reviewing">
-        <PhotoSave />
-      </Route>
+      <Route path="photo/reviewing/*" element={<PhotoSave />} />
+      <Route path="photo/saving" element={<PreviewLayout>{null}</PreviewLayout>} />
+      <Route path="photo/complete" element={<PhotoReview />} />
 
-      <Route state="photo.saving">
-        <PreviewLayout>{null}</PreviewLayout>
-      </Route>
+      <Route
+        path="video/confirming"
+        element={
+          <PreviewLayout dim>
+            <VideoConfirm />
+          </PreviewLayout>
+        }
+      />
+      <Route
+        path="video/recording/readying"
+        element={
+          <PreviewLayout dim>
+            <Readying type="video" />
+          </PreviewLayout>
+        }
+      />
+      <Route
+        path="video/recording/*"
+        element={
+          <PreviewLayout>
+            <VideoRecord />
+          </PreviewLayout>
+        }
+      />
+      <Route path="video/saving" element={<PreviewLayout>{null}</PreviewLayout>} />
+      <Route path="video/reviewing" element={<VideoReview />} />
 
-      <Route state="photo.complete">
-        <PhotoReview />
-      </Route>
-
-      <Route state="video.confirming">
-        <PreviewLayout dim>
-          <VideoConfirm />
-        </PreviewLayout>
-      </Route>
-
-      <Route state="video.recording.readying">
-        <PreviewLayout dim>
-          <Readying type="video" />
-        </PreviewLayout>
-      </Route>
-
-      <Route state="video.recording">
-        <PreviewLayout>
-          <VideoRecord />
-        </PreviewLayout>
-      </Route>
-
-      <Route state="video.saving">
-        <PreviewLayout>{null}</PreviewLayout>
-      </Route>
-
-      <Route state="video.reviewing">
-        <VideoReview />
-      </Route>
-
-      <Route>
-        <PreviewLayout dim>
-          <Main />
-        </PreviewLayout>
-      </Route>
-    </Switch>
-  );
-}
-
-interface RouteProps {
-  children: React.ReactNode;
-  exact?: boolean;
-  state?: string;
-}
-
-function Route({ children }: RouteProps) {
-  return <>{children}</>;
-}
-
-function Switch({ children }: { children: Array<React.ReactElement<RouteProps>> }) {
-  const { state: currentState, ...rest } = useNavigation();
-  console.log(currentState, rest);
-  return (
-    <>
-      {children.find((child) => {
-        const { exact, state } = child.props;
-        return !state || (exact && currentState === state) || currentState.startsWith(state);
-      })}
-    </>
+      <Route
+        path="*"
+        element={
+          <PreviewLayout dim>
+            <Main />
+          </PreviewLayout>
+        }
+      />
+    </Routes>
   );
 }

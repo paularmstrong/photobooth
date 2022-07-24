@@ -1,13 +1,13 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { useLocation } from '../context';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { useNavigation } from '../context';
 import { Photo } from './Photo';
 
 export function PhotoCarousel() {
   const {
-    meta: { photos },
-  } = useNavigation();
+    state: { photos },
+  } = useLocation();
   const photoBuckets = React.useMemo(
     () =>
       photos.reduce(

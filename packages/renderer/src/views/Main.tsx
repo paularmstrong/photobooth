@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { HelpCard, PhotoCarousel } from '../components';
+import { useLocation } from '../context';
 import { Preferences } from './Preferences';
-import { useNavigation } from '../context';
 import clsx from 'clsx';
 import PhotoIcon from '../img/photo.svg';
 import VideoIcon from '../img/video.svg';
 
 export function Main() {
-  const { state } = useNavigation();
+  const { pathname } = useLocation();
 
-  const showHelp = state === 'main.help';
-  const showPrefs = state === 'main.preferences';
+  const showHelp = pathname === '/main/help';
+  const showPrefs = pathname === '/main/preferences';
 
   return (
     <>

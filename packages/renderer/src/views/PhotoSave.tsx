@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { useLocation } from '../context';
 import { HelpCard } from '../components';
 import { getFilename } from '../modules';
 import QuadIcon from '../img/quad.svg';
 import QuadtychIcon from '../img/quadtych.svg';
 import CollageIcon from '../img/collage.svg';
-import { useNavigation, usePhotos } from '../context';
+import { usePhotos } from '../context';
 
 // 5.8 megapixel
 const TargetSize = {
@@ -15,7 +16,10 @@ const TargetSize = {
 const photoPaddingRatio = 0.005;
 
 export function PhotoSave() {
-  const { state, meta } = useNavigation();
+  const {
+    pathname,
+    state: { photoType },
+  } = useLocation();
   const { clear, photos } = usePhotos();
   const canvas = React.useRef<HTMLCanvasElement>(null);
   const actualCanvas = React.useRef<HTMLCanvasElement>(null);
@@ -28,13 +32,13 @@ export function PhotoSave() {
 
   React.useEffect(() => {
     if (photos.length && canvas.current) {
-      drawImages(canvas.current, photos, meta?.photoType);
+      drawImages(canvas.current, photos, photoType);
     }
-  }, [canvas, photos, meta]);
+  }, [canvas, photos, photoType]);
 
   React.useEffect(() => {
-    if (state.endsWith('.saving') && actualCanvas.current) {
-      drawImages(actualCanvas.current, photos, meta?.photoType);
+    if (pathname.endsWith('/saving') && actualCanvas.current) {
+      drawImages(actualCanvas.current, photos, photoType);
       actualCanvas.current.toBlob(
         async (blob: Blob | null) => {
           if (!blob) {
@@ -51,7 +55,7 @@ export function PhotoSave() {
         1
       );
     }
-  }, [state, meta, actualCanvas]);
+  }, [pathname, photoType, actualCanvas]);
 
   return (
     <div className="bg-black">
@@ -67,7 +71,7 @@ export function PhotoSave() {
         width={window.innerWidth}
         height={window.innerHeight}
       />
-      {state.endsWith('.saving') ? (
+      {pathname.endsWith('/saving') ? (
         <HelpCard items={[]} title="Saving" description="Just a moment…" visible />
       ) : (
         <HelpCard items={items} title="Choose a layout" visible />
