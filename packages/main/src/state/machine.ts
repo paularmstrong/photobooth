@@ -93,7 +93,7 @@ export const machine = createMachine(
           assign({
             streamdeck: (context, event) =>
               // @ts-ignore don't worry about it
-              event.data,
+              event.data || context.streamdeck,
           }),
         ],
       },
@@ -105,6 +105,9 @@ export const machine = createMachine(
           },
           help: {
             after: { [helpTimeoutMs]: 'normal' },
+            on: {
+              GET_HELP: { target: 'normal' },
+            },
           },
           preferences: {
             entry: [assign({ keys: blankKeys() }), 'renderKeys'],

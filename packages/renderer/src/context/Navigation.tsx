@@ -12,6 +12,7 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
 
   React.useEffect(() => {
     const remove = window.api.addListener('transition', ({ value, meta }) => {
+      console.log('new location', value);
       navigate({ pathname: `/${value[value.length - 1].replace(/\./g, '/')}` }, { state: meta });
     });
 

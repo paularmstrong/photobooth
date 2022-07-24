@@ -8,3 +8,4 @@ export * from './Preview';
 export * from './Shutter';
 export * from './Text';
 export * from './TextField';
+export * from './Title';

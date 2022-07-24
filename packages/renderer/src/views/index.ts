@@ -5,6 +5,7 @@ export * from './PhotoSave';
 export * from './PhotoConfirm';
 export * from './Preferences';
 export * from './Readying';
+export * from './Startup';
 export * from './VideoRecord';
 export * from './VideoReview';
 export * from './VideoConfirm';
