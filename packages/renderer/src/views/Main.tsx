@@ -11,11 +11,10 @@ export function Main() {
 
   const showHelp = state === 'main.help';
   const showPrefs = state === 'main.preferences';
-  const showNormal = state === 'main.normal';
 
   return (
     <>
-      {showNormal ? (
+      {!showPrefs ? (
         <div className="flex flex-col gap-6 justify-between h-full p-12">
           <h1
             className={clsx('text-center text-white transition-[font-size] duration-500 font-semibold', {
@@ -39,9 +38,10 @@ export function Main() {
               </span>
             </span>
           </h1>
+
           <PhotoCarousel />
 
-          <div className="flex justify-around">
+          <div className="flex justify-around relative">
             <div className="absolute drop-shadow-lg aspect-square rounded-full text-white bg-lime-600 p-4 text-4xl overflow-hidden animate-ping">
               ⬇
             </div>

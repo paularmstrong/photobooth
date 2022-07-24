@@ -17,7 +17,7 @@ export function Router() {
   return (
     <Switch>
       <Route state="photo.confirming">
-        <PreviewLayout>
+        <PreviewLayout dim>
           <PhotoConfirm />
         </PreviewLayout>
       </Route>
@@ -41,13 +41,13 @@ export function Router() {
       </Route>
 
       <Route state="video.confirming">
-        <PreviewLayout>
+        <PreviewLayout dim>
           <VideoConfirm />
         </PreviewLayout>
       </Route>
 
       <Route state="video.recording.readying">
-        <PreviewLayout>
+        <PreviewLayout dim>
           <Readying type="video" />
         </PreviewLayout>
       </Route>

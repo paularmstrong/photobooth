@@ -27,19 +27,31 @@ export function Preferences({ show = false }: Props) {
     setMessageSaved(true);
   }, 500);
 
+  function handleDone() {
+    window.api.send('transition', { type: 'DONE' });
+  }
+
+  React.useEffect(() => {
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        handleDone();
+      }
+    }
+
+    window.addEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
+
   return (
     <CSSTransition appear in={show} classNames={transitionClassnames} timeout={300} unmountOnExit={true}>
-      <div className="absolute top-0 left-0 p-6 lg:p-12 w-full h-full">
+      <div role="dialog" className="absolute top-0 left-0 p-6 lg:p-12 w-full h-full">
         <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 max-h-full overflow-y-auto">
           <div className="flex flex-col gap-6">
             <div className="flex flex-row gap-6 justify-between items-start">
               <H2>Preferences</H2>
-              <button
-                className="inline-flex gap-2 flex-row p-2 hover:bg-white/80 rounded"
-                onClick={() => {
-                  window.api.send('transition', { type: 'DONE' });
-                }}
-              >
+              <button className="inline-flex gap-2 flex-row p-2 hover:bg-white/80 rounded" onClick={handleDone}>
                 <TimesCircleIcon className="grow h-6 w-6" /> Close
               </button>
             </div>
