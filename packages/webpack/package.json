@@ -3,7 +3,7 @@
   "private": true,
   "main": "./src/index.js",
   "devDependencies": {
-    "@vercel/webpack-asset-relocator-loader": "1.7.0",
+    "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "fork-ts-checker-webpack-plugin": "^6.0.1",
     "node-loader": "^2.0.0",
     "ts-loader": "^9.2.2"
