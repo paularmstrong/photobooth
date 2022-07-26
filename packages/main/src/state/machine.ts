@@ -1,5 +1,5 @@
 import { mkdir, writeFile } from 'fs/promises';
-import jimp from 'jimp';
+import sharp from 'sharp';
 import path from 'path';
 import { assign, createMachine } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
@@ -56,6 +56,8 @@ const helpTimeoutMs = 30_000;
 const videoReviewTimeoutMs = 30_000;
 
 const blankKeys = () => [null, null, null, null, null, null];
+
+const keyCache = new Map<Key, Buffer>();
 
 // https://stately.ai/viz/96da6066-02dc-448e-a9f9-7a8511767b31
 
@@ -317,15 +319,22 @@ export const machine = createMachine(
         }
 
         for (let i = 0; i < keys.length; i++) {
-          const key = keys[i];
+          const { key } = keys[i] || {};
           if (!key) {
             streamdeck.clearKey(i);
             continue;
           }
 
-          const bmpImg = await jimp.read(path.resolve(__dirname, images[key.key]));
-          const resized = bmpImg.resize(streamdeck.ICON_SIZE, streamdeck.ICON_SIZE);
-          streamdeck.fillKeyBuffer(i, resized.bitmap.data, { format: 'rgba' });
+          if (!keyCache.has(key)) {
+            const buffer = await sharp(path.resolve(__dirname, images[key]))
+              .flatten()
+              .resize(streamdeck.ICON_SIZE, streamdeck.ICON_SIZE)
+              .raw()
+              .toBuffer();
+            keyCache.set(key, buffer);
+          }
+
+          streamdeck.fillKeyBuffer(i, keyCache.get(key)!);
         }
       },
     },
