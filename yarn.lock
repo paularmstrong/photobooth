@@ -2249,11 +2249,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pb/images@workspace:packages/images":
+  version: 0.0.0-use.local
+  resolution: "@pb/images@workspace:packages/images"
+  languageName: unknown
+  linkType: soft
+
 "@pb/main@workspace:packages/main":
   version: 0.0.0-use.local
   resolution: "@pb/main@workspace:packages/main"
   dependencies:
     "@elgato-stream-deck/node": ^5.4.0-alpha.0
+    "@pb/images": "workspace:packages/images"
     "@pb/webpack": "workspace:packages/webpack"
     "@types/node": ^18.0.0
     "@types/qrcode": ^1
@@ -2273,6 +2280,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@pb/renderer@workspace:packages/renderer"
   dependencies:
+    "@pb/images": "workspace:packages/images"
     "@pb/main": "workspace:packages/main"
     "@pb/webpack": "workspace:packages/webpack"
     "@svgr/webpack": ^6.3.1

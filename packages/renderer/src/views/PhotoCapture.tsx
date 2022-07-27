@@ -67,7 +67,7 @@ export function PhotoCapture() {
       </div>
 
       <div className="absolute inset-0 flex flex-row justify-center items-center">
-        <CSSTransition in={showLastPhoto} classNames={transitionClassnames} timeout={300}>
+        <CSSTransition in={showLastPhoto} classNames={transitionClassnames()} timeout={300}>
           <canvas ref={canvas} className={clsx('w-1/2 aspect-[16/10]', { 'opacity-0': !showLastPhoto })} />
         </CSSTransition>
       </div>
@@ -77,14 +77,20 @@ export function PhotoCapture() {
   );
 }
 
-const allClasses = 'p-3 bg-white drop-shadow-2xl transition-all ease-in-out duration-150 delay-150';
-const startClasses = 'scale-90 -rotate-6 opacity-0';
-const showClasses = 'scale-100 rotate-6 opacity-1';
-const transitionClassnames = {
-  enter: clsx(allClasses, startClasses),
-  enterActive: clsx(allClasses, startClasses),
-  enterDone: clsx(allClasses, showClasses),
-  exit: clsx(allClasses, showClasses),
-  exitActive: clsx(allClasses, showClasses),
-  exitDone: clsx(allClasses, startClasses),
-};
+const allClasses = 'p-1 bg-white drop-shadow-2xl transition-all ease-in-out duration-150 delay-150';
+const startClasses = 'scale-90 opacity-0';
+const showClasses = 'scale-100 opacity-1';
+function transitionClassnames() {
+  const startRotation = rotations[Math.floor(Math.random() * rotations.length)];
+  const endRotation = rotations[Math.floor(Math.random() * rotations.length)];
+  return {
+    enter: clsx(allClasses, startClasses, startRotation),
+    enterActive: clsx(allClasses, startClasses, startRotation),
+    enterDone: clsx(allClasses, showClasses, endRotation),
+    exit: clsx(allClasses, showClasses, endRotation),
+    exitActive: clsx(allClasses, showClasses, endRotation),
+    exitDone: clsx(allClasses, startClasses, startRotation),
+  };
+}
+
+const rotations = ['-rotate-6', 'rotate-6', '-rotate-3', 'rotate-3', 'rotate-2', '-rotate-2'];

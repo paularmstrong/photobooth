@@ -2,9 +2,10 @@ import * as React from 'react';
 import { useLocation } from '../context';
 import { HelpCard } from '../components';
 import { getFilename } from '../modules';
-import QuadIcon from '../img/quad.svg';
-import QuadtychIcon from '../img/quadtych.svg';
-import CollageIcon from '../img/collage.svg';
+import QuadIcon from '@pb/images/quad.svg';
+import QuadtychIcon from '@pb/images/quadtych.svg';
+import CollageIcon from '@pb/images/collage.svg';
+import RandomIcon from '@pb/images/random.svg';
 import { usePhotos } from '../context';
 
 // 5.8 megapixel
@@ -84,62 +85,79 @@ const items = [
   { icon: QuadIcon, description: '' },
   { icon: QuadtychIcon, description: '' },
   { icon: CollageIcon, description: '' },
+  { icon: RandomIcon, description: '' },
 ];
 
 interface LayoutArgs {
-  pWidth: number;
-  pHeight: number;
+  photo: ImageBitmap;
   cWidth: number;
   cHeight: number;
   index: number;
+  ctx: CanvasRenderingContext2D;
 }
 
-type LayoutResponse = [
-  sx: number,
-  sy: number,
-  sWidth: number,
-  sHeight: number,
-  dx: number,
-  dy: number,
-  dWidth: number,
-  dHeight: number
-];
-
-function drawImages(canvas: HTMLCanvasElement, photos: Array<ImageBitmap>, layoutType: keyof typeof layout = 'quad') {
+function drawImages(
+  canvas: HTMLCanvasElement,
+  photos: Array<ImageBitmap>,
+  layoutType: keyof typeof drawImage = 'quad'
+) {
   const ctx = canvas.getContext('2d')!;
   const { width, height } = canvas;
 
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = bgColors[layoutType]();
   ctx.rect(0, 0, width, height);
   ctx.fill();
 
-  const padding = Math.round(width * photoPaddingRatio);
-
   photos.forEach((photo, index) => {
-    const fn = layout[layoutType];
-    const [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight] = fn({
-      pWidth: photo.width,
-      pHeight: photo.height,
+    const draw = drawImage[layoutType];
+    draw({
+      photo,
       cWidth: width,
       cHeight: height,
       index,
+      ctx,
     });
-    ctx.drawImage(photo, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-    ctx.strokeStyle = 'white';
-    ctx.lineWidth = padding;
-    ctx.strokeRect(dx + padding / 2, dy + padding / 2, dWidth - padding / 2, dHeight - padding / 2);
   });
 }
 
-const layout: Record<string, (args: LayoutArgs) => LayoutResponse> = {
-  quad: ({ pWidth, pHeight, cWidth, cHeight, index }: LayoutArgs): LayoutResponse => {
-    return [0, 0, pWidth, pHeight, (index % 2) * (cWidth / 2), index < 2 ? 0 : cHeight / 2, cWidth / 2, cHeight / 2];
+const drawImage: Record<string, (args: LayoutArgs) => void> = {
+  quad: ({ photo, cWidth, cHeight, index, ctx }: LayoutArgs) => {
+    const { width: pWidth, height: pHeight } = photo;
+    const padding = Math.round(cWidth * photoPaddingRatio);
+    const halfPadding = padding / 2;
+    ctx.drawImage(
+      photo,
+      0,
+      0,
+      pWidth,
+      pHeight,
+      halfPadding + (index % 2) * (cWidth / 2),
+      halfPadding + (index < 2 ? 0 : cHeight / 2),
+      cWidth / 2 - padding,
+      cHeight / 2 - padding
+    );
   },
-  quadtych: ({ pWidth, pHeight, cWidth, cHeight, index }: LayoutArgs): LayoutResponse => {
-    return [3 * (pWidth / 8), 0, pWidth / 4, pHeight, (index % 4) * (cWidth / 4), 0, cWidth / 4, cHeight];
+  quadtych: ({ photo, cWidth, cHeight, index, ctx }: LayoutArgs) => {
+    const { width: pWidth, height: pHeight } = photo;
+    const padding = Math.round(cWidth * photoPaddingRatio);
+    const halfPadding = padding / 2;
+    ctx.drawImage(
+      photo,
+      3 * (pWidth / 8),
+      0,
+      pWidth / 4,
+      pHeight,
+      halfPadding + (index % 4) * (cWidth / 4),
+      halfPadding,
+      cWidth / 4 - padding,
+      cHeight - padding
+    );
   },
-  collage: ({ pWidth, pHeight, cWidth, cHeight, index }: LayoutArgs): LayoutResponse => {
-    // const ratio = pWidth / pHeight;
+  collage: ({ photo, cWidth, cHeight, index, ctx }: LayoutArgs) => {
+    const { width: pWidth, height: pHeight } = photo;
+    const padding = Math.round(cWidth * photoPaddingRatio);
+    const halfPadding = padding / 2;
+
     switch (index) {
       case 0: {
         const dWidth = cWidth * 0.5;
@@ -148,7 +166,8 @@ const layout: Record<string, (args: LayoutArgs) => LayoutResponse> = {
         const sy = 0;
         const sx = pWidth / 2 - (pHeight * ratio) / 2;
         const sWidth = pHeight * ratio;
-        return [sx, sy, sWidth, pHeight, 0, 0, dWidth, dHeight];
+        ctx.drawImage(photo, sx, sy, sWidth, pHeight, halfPadding, halfPadding, dWidth - padding, dHeight - padding);
+        return;
       }
       case 1: {
         const dWidth = cWidth * 0.5;
@@ -157,7 +176,18 @@ const layout: Record<string, (args: LayoutArgs) => LayoutResponse> = {
         const sy = pHeight / 2 - pWidth / ratio / 2;
         const sx = 0;
         const sHeight = pWidth / ratio;
-        return [sx, sy, pWidth, sHeight, cWidth / 2, 0, dWidth, dHeight];
+        ctx.drawImage(
+          photo,
+          sx,
+          sy,
+          pWidth,
+          sHeight,
+          cWidth / 2 + halfPadding,
+          halfPadding,
+          dWidth - padding,
+          dHeight - padding
+        );
+        return;
       }
       case 2: {
         const dWidth = cWidth * 0.5;
@@ -166,7 +196,18 @@ const layout: Record<string, (args: LayoutArgs) => LayoutResponse> = {
         const sy = pHeight / 2 - pWidth / ratio / 2;
         const sx = 0;
         const sHeight = pWidth / ratio;
-        return [sx, sy, pWidth, sHeight, 0, cHeight * 0.6, dWidth, dHeight];
+        ctx.drawImage(
+          photo,
+          sx,
+          sy,
+          pWidth,
+          sHeight,
+          halfPadding,
+          cHeight * 0.6 + halfPadding,
+          dWidth - padding,
+          dHeight - padding
+        );
+        return;
       }
       case 3: {
         const dWidth = cWidth * 0.5;
@@ -177,7 +218,18 @@ const layout: Record<string, (args: LayoutArgs) => LayoutResponse> = {
         const sWidth = pHeight * ratio;
         const dx = dWidth;
         const dy = cHeight - dHeight;
-        return [sx, sy, sWidth, pHeight, dx, dy, dWidth, dHeight];
+        ctx.drawImage(
+          photo,
+          sx,
+          sy,
+          sWidth,
+          pHeight,
+          dx + halfPadding,
+          dy + halfPadding,
+          dWidth - padding,
+          dHeight - padding
+        );
+        return;
       }
 
       default: {
@@ -185,4 +237,42 @@ const layout: Record<string, (args: LayoutArgs) => LayoutResponse> = {
       }
     }
   },
+  random: ({ photo, cWidth, cHeight, index, ctx }: LayoutArgs) => {
+    const { width: pWidth, height: pHeight } = photo;
+    const padding = Math.round(cWidth * photoPaddingRatio);
+    const halfPadding = padding / 2;
+
+    const x0 = (index % 2) * (cWidth / 2);
+    const y0 = index < 2 ? 0 : cHeight / 2;
+    const centerX = x0 + (index % 2 ? -cWidth / 40 : cWidth / 40);
+    const centerY = y0 + (index < 2 ? cHeight / 40 : -cHeight / 40);
+    const rotation = rotations()[index];
+
+    ctx.translate(centerX, centerY);
+    ctx.rotate(rotation);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.shadowColor = 'rgba(0,0,0,0.25)';
+    ctx.shadowBlur = 10;
+    ctx.fillRect(-halfPadding, -halfPadding, cWidth / 2 + padding, cHeight / 2 + padding);
+    ctx.shadowColor = 'transparent';
+
+    ctx.drawImage(photo, 0, 0, pWidth, pHeight, 0, 0, cWidth / 2, cHeight / 2);
+
+    ctx.rotate(rotation * -1);
+    ctx.translate(-centerX, -centerY);
+  },
 };
+
+const bgColors: Record<keyof typeof drawImage, () => string> = {
+  quad: () => '#FFFFFF',
+  quadtych: () => '#FFFFFF',
+  collage: () => '#FFFFFF',
+  random: () => ['#f1f5f9', '#f0fdfa', '#f0f9ff', '#faf5ff'][Math.floor(rand(0, 4))],
+};
+
+const rotations = () => [rand(-0.12, -0.02), rand(0.02, 0.12), rand(0.02, 0.12), rand(-0.12, -0.02)];
+
+function rand(min: number, max: number) {
+  return Math.random() * (max - min) + min;
+}

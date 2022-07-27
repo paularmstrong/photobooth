@@ -12,7 +12,7 @@
   right: 50%;
   background: #fff;
   transform-origin: bottom right;
-  border: 1px solid rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 .flap0 {
   transform: rotate(-180deg) rotate(0) skewX(30deg) translateX(-100%) translateY(90%);

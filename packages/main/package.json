@@ -4,6 +4,7 @@
   "module": "src/index.ts",
   "dependencies": {
     "@elgato-stream-deck/node": "^5.4.0-alpha.0",
+    "@pb/images": "workspace:packages/images",
     "electron-store": "^8.0.2",
     "electron-updater": "4.6.5",
     "node-fetch": "^3.2.6",

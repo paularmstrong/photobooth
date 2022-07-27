@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { HelpCard } from '../components';
-import RecordIcon from '../img/record.svg';
-import StopIcon from '../img/stop.svg';
+import RecordIcon from '@pb/images/record.svg';
+import StopIcon from '@pb/images/stop.svg';
 
 export function VideoConfirm() {
   return (

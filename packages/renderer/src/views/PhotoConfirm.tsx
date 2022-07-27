@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { HelpCard } from '../components';
-import RecordIcon from '../img/record.svg';
+import RecordIcon from '@pb/images/record.svg';
 
 export function PhotoConfirm() {
   return (

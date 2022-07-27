@@ -5,22 +5,24 @@ import { assign, createMachine } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
 import { MEDIA_PATH } from '../constants';
 
-import photoImg from './img/photo.png';
-import quad from './img/quad.png';
-import quadtych from './img/quadtych.png';
-import collage from './img/collage.png';
-import done from './img/done.png';
-import videoImg from './img/video.png';
-import rec from './img/record.png';
-import stop from './img/stop.png';
-import help from './img/help.png';
-import back from './img/back.png';
+import photoImg from '@pb/images/photo.png';
+import quad from '@pb/images/quad.png';
+import quadtych from '@pb/images/quadtych.png';
+import collage from '@pb/images/collage.png';
+import randomCollage from '@pb/images/random.png';
+import done from '@pb/images/done.png';
+import videoImg from '@pb/images/video.png';
+import rec from '@pb/images/record.png';
+import stop from '@pb/images/stop.png';
+import help from '@pb/images/help.png';
+import back from '@pb/images/back.png';
 
 const images = {
   photo: photoImg,
   quad,
   quadtych,
   collage,
+  random: randomCollage,
   done,
   video: videoImg,
   rec,
@@ -162,7 +164,7 @@ export const machine = createMachine(
                       { key: 'quad', type: 'SELECT' },
                       { key: 'quadtych', type: 'SELECT' },
                       { key: 'collage', type: 'SELECT' },
-                      null,
+                      { key: 'random', type: 'SELECT' },
                       null,
                       { key: 'done', type: 'DONE' },
                     ],
@@ -325,16 +327,20 @@ export const machine = createMachine(
             continue;
           }
 
-          if (!keyCache.has(key)) {
-            const buffer = await sharp(path.resolve(__dirname, images[key]))
-              .flatten()
-              .resize(streamdeck.ICON_SIZE, streamdeck.ICON_SIZE)
-              .raw()
-              .toBuffer();
-            keyCache.set(key, buffer);
-          }
+          try {
+            if (!keyCache.has(key)) {
+              const buffer = await sharp(path.resolve(__dirname, images[key]))
+                .flatten()
+                .resize(streamdeck.ICON_SIZE, streamdeck.ICON_SIZE)
+                .raw()
+                .toBuffer();
+              keyCache.set(key, buffer);
+            }
 
-          streamdeck.fillKeyBuffer(i, keyCache.get(key)!);
+            streamdeck.fillKeyBuffer(i, keyCache.get(key)!);
+          } catch (e) {
+            streamdeck.clearKey(i);
+          }
         }
       },
     },

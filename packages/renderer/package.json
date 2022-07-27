@@ -2,6 +2,7 @@
   "name": "@pb/renderer",
   "private": true,
   "dependencies": {
+    "@pb/images": "workspace:packages/images",
     "clsx": "^1.1.1",
     "electron-store": "^8.0.2",
     "humbleicons": "^1.8.0",

@@ -2,8 +2,8 @@ import * as React from 'react';
 import { HelpCard, PhotoCarousel, Title } from '../components';
 import { useLocation } from '../context';
 import { Preferences } from './Preferences';
-import PhotoIcon from '../img/photo.svg';
-import VideoIcon from '../img/video.svg';
+import PhotoIcon from '@pb/images/photo.svg';
+import VideoIcon from '@pb/images/video.svg';
 
 export function Main() {
   const { pathname } = useLocation();

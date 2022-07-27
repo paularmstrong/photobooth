@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CountdownCircle, Card, HelpCard } from '../components';
 import { useLocation, useMediaStream } from '../context';
 import { getFilename } from '../modules';
-import StopIcon from '../img/stop.svg';
+import StopIcon from '@pb/images/stop.svg';
 
 const chunkLengthMs = 1_000;
 
