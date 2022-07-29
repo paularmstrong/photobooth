@@ -42,7 +42,7 @@ export function PhotoCarousel() {
   }, [photos]);
 
   return (
-    <div className="flex flex-row gap-6 max-w-screen-2xl self-center">
+    <div className="flex flex-row gap-6 max-w-screen-2xl self-center justify-center">
       {photoBuckets.map((bucket, i) => {
         if (!bucket.length) {
           return null;
@@ -54,7 +54,12 @@ export function PhotoCarousel() {
         }
         return (
           <SwitchTransition key={i} mode="out-in">
-            <CSSTransition appear key={visible.index} classNames={transitionClassnames(visible.rotation)} timeout={300}>
+            <CSSTransition
+              appear
+              key={visible.index}
+              classNames={transitionClassnames('shadow-2xl basis-1/3', visible.rotation)}
+              timeout={300}
+            >
               <Photo src={`pb:${visible.photo}`} />
             </CSSTransition>
           </SwitchTransition>
@@ -75,7 +80,7 @@ function isVisible(sliceStart: number, count: number, index: number, total: numb
 
 const MAX_PHOTOS = 3;
 
-function transitionClassnames(rotation: string) {
+function transitionClassnames(allClasses: string, rotation: string) {
   return {
     appear: clsx(allClasses, initial),
     appearActive: clsx(allClasses, initial),
@@ -90,7 +95,6 @@ function transitionClassnames(rotation: string) {
 }
 
 const initial = 'opacity-0 rotate-90 scale-125';
-const allClasses = 'shadow-2xl';
 
 const rotations = [
   'rotate-6',

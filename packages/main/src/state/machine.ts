@@ -76,16 +76,7 @@ export const machine = createMachine(
       keys: initialKeys,
       lastVideo: undefined,
       photoType: undefined,
-      photos: [
-        '2022-07-09-234414.jpg',
-        '2022-07-09-234555.jpg',
-        '2022-07-09-234936.jpg',
-        '2022-07-09-235524.jpg',
-        '2022-07-10-144120.jpg',
-        '2022-07-10-162215.jpg',
-        '2022-07-10-162238.jpg',
-        '2022-07-10-162304.jpg',
-      ] as Array<string>,
+      photos: [] as Array<string>,
       streamdeck: null,
     } as Context,
     states: {
