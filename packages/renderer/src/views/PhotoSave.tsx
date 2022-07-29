@@ -1,4 +1,5 @@
 import * as React from 'react';
+import type { Props } from './props';
 import { useLocation } from '../context';
 import { HelpCard } from '../components';
 import { getFilename } from '../modules';
@@ -16,7 +17,7 @@ const TargetSize = {
 
 const photoPaddingRatio = 0.005;
 
-export function PhotoSave() {
+export function PhotoSave({ status }: Props) {
   const {
     pathname,
     state: { photoType },
@@ -26,19 +27,13 @@ export function PhotoSave() {
   const actualCanvas = React.useRef<HTMLCanvasElement>(null);
 
   React.useEffect(() => {
-    return () => {
-      clear();
-    };
-  }, []);
-
-  React.useEffect(() => {
     if (photos.length && canvas.current) {
       drawImages(canvas.current, photos, photoType);
     }
   }, [canvas, photos, photoType]);
 
   React.useEffect(() => {
-    if (pathname.endsWith('/saving') && actualCanvas.current) {
+    if (pathname.endsWith('/saving') && actualCanvas.current && photos.length) {
       drawImages(actualCanvas.current, photos, photoType);
       actualCanvas.current.toBlob(
         async (blob: Blob | null) => {
@@ -46,6 +41,7 @@ export function PhotoSave() {
             throw new Error('failed to get blob');
           }
           const data = await blob.arrayBuffer();
+          clear();
           window.api.send('transition', {
             type: 'DONE',
             data,
@@ -56,7 +52,7 @@ export function PhotoSave() {
         1
       );
     }
-  }, [pathname, photoType, actualCanvas]);
+  }, [pathname, photos, photoType, actualCanvas]);
 
   return (
     <div className="bg-black">
@@ -73,9 +69,9 @@ export function PhotoSave() {
         height={window.innerHeight}
       />
       {pathname.endsWith('/saving') ? (
-        <HelpCard items={[]} title="Saving" description="Just a moment…" visible />
+        <HelpCard items={[]} title="Saving" description="Just a moment…" status={status} />
       ) : (
-        <HelpCard items={items} title="Choose a layout" visible />
+        <HelpCard items={items} title="Choose a layout" status={status} />
       )}
     </div>
   );

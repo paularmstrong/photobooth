@@ -1,4 +1,5 @@
 export * from './Main';
+export * from './MainHelp';
 export * from './PhotoCapture';
 export * from './PhotoReview';
 export * from './PhotoSave';
@@ -7,5 +8,7 @@ export * from './Preferences';
 export * from './Readying';
 export * from './Startup';
 export * from './VideoRecord';
+export * from './VideoRecordRecord';
+export * from './VideoRecordSaving';
 export * from './VideoReview';
 export * from './VideoConfirm';

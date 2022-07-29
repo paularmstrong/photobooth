@@ -1,12 +1,16 @@
 import * as React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { matchRoutes } from 'react-router-dom';
 import { useLocation } from './context';
+import type { Props } from './views/props';
 import {
   Main,
+  MainHelp,
   PhotoCapture,
   PhotoReview,
   PhotoSave,
   PhotoConfirm,
+  Preferences,
   Readying,
   Startup,
   VideoRecord,
@@ -17,20 +21,41 @@ import {
 export function Router() {
   const location = useLocation();
 
+  const match = React.useMemo(() => {
+    const matched = matchRoutes(routes, location);
+    return !matched ? null : matched[0].route;
+  }, [location]);
+
   return (
-    <Routes location={location}>
-      <Route path="/photo/confirming" element={<PhotoConfirm />} />
-      <Route path="/photo/capturing" element={<PhotoCapture />} />
-      <Route path="/photo/reviewing/*" element={<PhotoSave />} />
-      <Route path="/photo/saving" element={null} />
-      <Route path="/photo/complete" element={<PhotoReview />} />
-      <Route path="/video/confirming" element={<VideoConfirm />} />
-      <Route path="/video/recording/readying" element={<Readying type="video" />} />
-      <Route path="/video/recording/*" element={<VideoRecord />} />
-      <Route path="/video/saving" element={null} />
-      <Route path="/video/reviewing" element={<VideoReview />} />
-      <Route path="/main/*" element={<Main />} />
-      <Route path="*" element={<Startup />} />
-    </Routes>
+    <SwitchTransition>
+      <CSSTransition timeout={match?.path ? 250 : 0} key={match?.path || ''}>
+        {(status) => {
+          if (!match || !match.path) {
+            return null;
+          }
+          const Component = routeMap[match.path];
+          return <Component status={status} />;
+        }}
+      </CSSTransition>
+    </SwitchTransition>
   );
 }
+
+const routeMap: Record<string, React.FunctionComponent<Props>> = {
+  '/photo/confirming': PhotoConfirm,
+  '/photo/capturing': PhotoCapture,
+  '/photo/reviewing/*': PhotoSave,
+  // '/photo/saving': PhotoSave,
+  '/photo/complete': PhotoReview,
+  '/video/confirming': VideoConfirm,
+  '/video/recording/readying': Readying,
+  '/video/recording/*': VideoRecord,
+  // '/video/saving': null,
+  '/video/reviewing': VideoReview,
+  '/main/preferences': Preferences,
+  '/main/help': MainHelp,
+  '/main/*': Main,
+  '/setup': Startup,
+};
+
+const routes = Object.keys(routeMap).map((path) => ({ path }));

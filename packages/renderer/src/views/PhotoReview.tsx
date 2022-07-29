@@ -1,12 +1,13 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { CSSTransition } from 'react-transition-group';
+import type { Props } from './props';
 import { ReviewLayout } from '../layouts';
 import { H2, Photo, Text } from '../components';
 import { useLocation, usePreference } from '../context';
 import { toCanvas } from 'qrcode';
 
-export function PhotoReview() {
+export function PhotoReview({ status }: Props) {
   const {
     state: { photos },
   } = useLocation();

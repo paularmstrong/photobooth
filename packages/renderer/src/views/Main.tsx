@@ -1,47 +1,32 @@
 import * as React from 'react';
-import { HelpCard, PhotoCarousel, Title } from '../components';
-import { useLocation } from '../context';
-import { Preferences } from './Preferences';
-import PhotoIcon from '@pb/images/photo.svg';
-import VideoIcon from '@pb/images/video.svg';
+import clsx from 'clsx';
+import { PhotoCarousel, Title } from '../components';
+import { transition } from '../modules';
+import type { Props } from './props';
 
-export function Main() {
-  const { pathname } = useLocation();
-
-  const showHelp = pathname === '/main/help';
-  const showPrefs = pathname === '/main/preferences';
-
+export function Main({ status }: Props) {
   return (
-    <div className="absolute inset-0 bg-slate-700/30 backdrop-blur-sm">
-      {!showPrefs ? (
-        <div className="flex flex-col gap-6 justify-between h-full p-12">
-          <Title animated={!showHelp} />
+    <>
+      <div className={clsx('absolute inset-0 bg-slate-700/30 backdrop-blur-sm', transition(status, 'fade'))} />
 
+      <div className="flex flex-col gap-6 justify-between h-full p-12">
+        <div className={transition(status, 'slideDown')}>
+          <Title animated />
+        </div>
+
+        <div className={transition(status, 'zoom')}>
           <PhotoCarousel />
+        </div>
 
-          <div className="flex justify-around relative">
-            <div className="absolute drop-shadow-lg aspect-square rounded-full text-white bg-lime-600 p-4 text-4xl overflow-hidden animate-ping">
-              ⬇
-            </div>
-            <div className="relative drop-shadow-lg aspect-square rounded-full text-white bg-lime-600 p-4 text-4xl overflow-hidden">
-              ⬇
-            </div>
+        <div className={clsx('flex justify-around relative', transition(status, 'slideUp'))}>
+          <div className="absolute drop-shadow-lg aspect-square rounded-full text-white bg-lime-600 p-4 text-4xl overflow-hidden animate-ping">
+            ⬇
+          </div>
+          <div className="relative drop-shadow-lg aspect-square rounded-full text-white bg-lime-600 p-4 text-4xl overflow-hidden">
+            ⬇
           </div>
         </div>
-      ) : null}
-
-      <HelpCard
-        items={items}
-        description="Use the buttons below the screen to take photobooth photos or leave a video message for the bride and groom"
-        visible={showHelp}
-      />
-
-      <Preferences show={showPrefs} />
-    </div>
+      </div>
+    </>
   );
 }
-
-const items = [
-  { icon: PhotoIcon, description: 'Take photos' },
-  { icon: VideoIcon, description: 'Leave a video message' },
-];

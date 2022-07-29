@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { CountdownCircle, Card, HelpCard } from '../components';
+import StopIcon from '@pb/images/stop.svg';
+import type { Props } from './props';
+import { CountdownCircle, HelpCard } from '../components';
 import { useLocation, useMediaStream } from '../context';
 import { getFilename } from '../modules';
-import StopIcon from '@pb/images/stop.svg';
 
 const chunkLengthMs = 1_000;
 
-export function VideoRecord() {
+export function VideoRecord({ status }: Props) {
   const mediaStream = useMediaStream();
   const { pathname } = useLocation();
   const [stop, setStop] = React.useState<() => void>(() => () => {});
@@ -40,10 +41,12 @@ export function VideoRecord() {
       recorder.start(chunkLengthMs);
 
       stopFn = () => {
-        // Stop after 1.1x the chunk length to ensure we capture everything
-        setTimeout(() => {
-          recorder.stop();
-        }, chunkLengthMs * 1.1);
+        if (recorder.state !== 'inactive') {
+          // Stop after 1.1x the chunk length to ensure we capture everything
+          setTimeout(() => {
+            recorder.stop();
+          }, chunkLengthMs * 1.1);
+        }
       };
       setStop(() => stopFn);
     }
@@ -64,9 +67,9 @@ export function VideoRecord() {
   }, [stop, isSaving]);
 
   return (
-    <div className="w-screen h-screen p-12 flex justify-end items-end">
+    <div className="rw-screen h-screen p-12 flex justify-end items-end">
       {!isSaving ? (
-        <Card mode="more-transparent">
+        <>
           <CountdownCircle
             duration={30}
             onComplete={function handleStop() {
@@ -74,15 +77,18 @@ export function VideoRecord() {
                 window.api.send('transition', { type: 'DONE' });
               }
             }}
+            status={status}
           />
-        </Card>
-      ) : null}
 
-      <HelpCard
-        title={isSaving ? 'Saving…' : ''}
-        items={isSaving ? [] : [{ icon: StopIcon, description: 'Press to stop recording early' }]}
-        visible
-      />
+          <HelpCard
+            title={''}
+            items={[{ icon: StopIcon, description: 'Press to stop recording early' }]}
+            status={status}
+          />
+        </>
+      ) : (
+        <HelpCard title="Saving…" items={[]} status={status} />
+      )}
     </div>
   );
 }
