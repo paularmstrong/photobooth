@@ -1,9 +1,10 @@
 import * as React from 'react';
+import type { Props } from './props';
 import { ReviewLayout } from '../layouts';
 import { useLocation, usePreference } from '../context';
 import { H2, Text } from '../components';
 
-export function VideoReview() {
+export function VideoReview({ status }: Props) {
   const {
     state: { lastVideo },
   } = useLocation();

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { CSSTransition } from 'react-transition-group';
+import type { Props } from './props';
 import { useMediaStream, usePhotos } from '../context';
-import { Card, CountdownCircle, Shutter } from '../components';
+import { CountdownCircle, Shutter } from '../components';
 import cameraShutterSound from '../sounds/camera-shutter.mp3';
 import toneSound from '../sounds/tone.wav';
 
-export function PhotoCapture() {
+export function PhotoCapture({ status }: Props) {
   const [taking, setTaking] = React.useState(false);
   const { addPhoto, photos } = usePhotos();
   const [showLastPhoto, setShowLastPhoto] = React.useState(false);
@@ -35,35 +36,34 @@ export function PhotoCapture() {
   return (
     <>
       <div className="w-screen h-screen p-12 flex justify-end items-end">
-        <Card blur mode="more-transparent">
-          {photos.length < 4 ? (
-            <CountdownCircle
-              key={photos.length}
-              duration={4}
-              onUpdate={(remainingTime) => {
-                if (remainingTime) {
-                  tone.play();
-                }
-              }}
-              onComplete={() => {
-                shutter.play();
-                if (!mediaStream) {
-                  throw new Error('no canvas');
-                }
-                setTaking(true);
-                const track = mediaStream.getVideoTracks()[0];
-                const imageCapture = new ImageCapture(track);
-                const start = Date.now();
-                imageCapture.grabFrame().then((bitmap) => {
-                  addPhoto(bitmap);
-                  setTimeout(() => {
-                    setTaking(false);
-                  }, Math.min(500, 500 - (Date.now() - start)));
-                });
-              }}
-            />
-          ) : null}
-        </Card>
+        {photos.length < 4 ? (
+          <CountdownCircle
+            key={photos.length}
+            duration={4}
+            onUpdate={(remainingTime) => {
+              if (remainingTime) {
+                tone.play();
+              }
+            }}
+            onComplete={() => {
+              shutter.play();
+              if (!mediaStream) {
+                throw new Error('no canvas');
+              }
+              setTaking(true);
+              const track = mediaStream.getVideoTracks()[0];
+              const imageCapture = new ImageCapture(track);
+              const start = Date.now();
+              imageCapture.grabFrame().then((bitmap) => {
+                addPhoto(bitmap);
+                setTimeout(() => {
+                  setTaking(false);
+                }, Math.min(500, 500 - (Date.now() - start)));
+              });
+            }}
+            status={status}
+          />
+        ) : null}
       </div>
 
       <div className="absolute inset-0 flex flex-row justify-center items-center">
