@@ -10,6 +10,7 @@ import TimesCircleIcon from 'humbleicons/icons/times-circle.svg';
 import { transition } from '../modules';
 
 export function Preferences({ status }: MainProps) {
+  const [mediaPath] = usePreference('mediaPath');
   const [url, _setUrl] = usePreference('photoboothUrl');
   const [urlSaved, setUrlSaved] = React.useState(false);
   const [saveMessage, _setSaveMessage] = usePreference('videoSaveMessage');
@@ -78,6 +79,15 @@ export function Preferences({ status }: MainProps) {
                   setSaveMessage(msg);
                 }}
                 value={saveMessage}
+              />
+
+              <TextField
+                label="Photo save location"
+                value={mediaPath}
+                readOnly
+                onFocus={() => {
+                  window.api.send('selectMediaPath');
+                }}
               />
             </div>
           </div>

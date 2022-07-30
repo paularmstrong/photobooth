@@ -4,7 +4,7 @@ import type { Api, Data } from './api';
 import type { Preferences } from '@pb/main';
 
 const receivableEvents = ['transition', 'preferences'];
-
+const sendableChannels = ['transition', 'preferences', 'selectMediaPath'];
 function checkReceivable(eventName: string) {
   if (!receivableEvents.includes(eventName)) {
     throw new Error(`Invalid event name "${eventName}"`);
@@ -12,9 +12,8 @@ function checkReceivable(eventName: string) {
 }
 
 contextBridge.exposeInMainWorld('api', {
-  send: (channel: 'transition' | 'preferences', data: Record<string, unknown>) => {
-    const validChannels = ['transition', 'preferences'];
-    if (validChannels.includes(channel)) {
+  send: (channel: 'transition' | 'preferences' | 'selectMediaPath', data?: Record<string, unknown>) => {
+    if (sendableChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
     }
   },

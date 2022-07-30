@@ -1,4 +1,5 @@
 import { mkdir, writeFile } from 'fs/promises';
+import glob from 'glob';
 import sharp from 'sharp';
 import path from 'path';
 import { assign, createMachine } from 'xstate';
@@ -39,6 +40,7 @@ export interface Context {
   lastVideo: string | void;
   photoType: string | void;
   photos: Array<string>;
+  mediaPath: string;
   streamdeck: StreamDeck | null;
 }
 
@@ -61,6 +63,11 @@ const blankKeys = () => [null, null, null, null, null, null];
 
 const keyCache = new Map<Key, Buffer>();
 
+function getPhotos(mediaPath: string) {
+  const images = glob.sync(path.join(mediaPath, '*.jpg'));
+  return images.map((filepath) => path.basename(filepath));
+}
+
 // https://stately.ai/viz/96da6066-02dc-448e-a9f9-7a8511767b31
 
 export const machine = createMachine(
@@ -77,6 +84,7 @@ export const machine = createMachine(
       lastVideo: undefined,
       photoType: undefined,
       photos: [] as Array<string>,
+      mediaPath: MEDIA_PATH,
       streamdeck: null,
     } as Context,
     states: {
@@ -86,9 +94,17 @@ export const machine = createMachine(
         },
         exit: [
           assign({
-            streamdeck: (context, event) =>
+            mediaPath: (context: Context, event) =>
               // @ts-ignore don't worry about it
-              event.data || context.streamdeck,
+              event.data?.mediaPath || context.mediaPath,
+            photos: (context: Context, event) => {
+              // @ts-ignore don't worry about it
+              const mediaPath = event.data?.mediaPath || context.mediaPath;
+              return getPhotos(mediaPath);
+            },
+            streamdeck: (context: Context, event) =>
+              // @ts-ignore don't worry about it
+              event.data?.streamdeck || context.streamdeck,
           }),
         ],
       },
@@ -301,6 +317,20 @@ export const machine = createMachine(
     },
     on: {
       PREFERENCES: { target: '#photobooth.main.preferences' },
+      SET_CONTEXT: {
+        actions: [
+          assign({
+            mediaPath: (context, event) =>
+              // @ts-ignore
+              event.data.mediaPath || context.mediaPath,
+            photos: (context: Context, event) => {
+              // @ts-ignore don't worry about it
+              const mediaPath = event.data?.mediaPath || context.mediaPath;
+              return getPhotos(mediaPath);
+            },
+          }),
+        ],
+      },
     },
   },
   {
@@ -341,7 +371,7 @@ export const machine = createMachine(
           throw new Error('No file to save');
         }
         const buffer = new Buffer(event.data);
-        const localPath = path.join(MEDIA_PATH, event.filename);
+        const localPath = path.join(context.mediaPath, event.filename);
         await mkdir(path.dirname(localPath), { recursive: true });
         await writeFile(localPath, buffer, 'binary');
       },

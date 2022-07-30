@@ -1,16 +1,17 @@
-import { app, protocol, systemPreferences } from 'electron';
+import { app, systemPreferences } from 'electron';
 import path from 'path';
 import type { BrowserWindow } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
 import { setup as setupState } from './state';
-import { MEDIA_PATH } from './constants';
 import { initMenu } from './menu';
-import { initStore } from './store';
+import { initStore, registerStoreHandlers } from './store';
+import type { Store } from './store';
 
 export { Preferences } from './store';
 
 let stopStateMachine: () => void;
+let store: Store;
 let keepAliveTimeout: NodeJS.Timeout;
 
 /**
@@ -48,7 +49,8 @@ app.on('will-quit', async () => {
  */
 app.on('activate', async () => {
   const window = await restoreOrCreateWindow();
-  const { service, stop } = await setupState(window.webContents);
+  registerStoreHandlers(store, window.webContents);
+  const { service, stop } = await setupState(window.webContents, store);
   stopStateMachine = stop;
   initMenu(service);
 });
@@ -70,15 +72,13 @@ app
     }
   })
   .then(() => {
-    protocol.registerFileProtocol('pb', (request, callback) => {
-      const file = request.url.substr(3);
-      callback({ path: path.join(MEDIA_PATH, file) });
-    });
+    store = initStore();
   })
   .then(restoreOrCreateWindow)
   .then(async (window: BrowserWindow) => {
-    initStore(window.webContents);
-    const { stop, service } = await setupState(window.webContents);
+    registerStoreHandlers(store, window.webContents);
+
+    const { stop, service } = await setupState(window.webContents, store);
     initMenu(service);
     stopStateMachine = stop;
   })

@@ -5,17 +5,21 @@ import type { InterpreterFrom } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
 import { openStreamDeck } from '@elgato-stream-deck/node';
 import { machine } from './machine';
+import type { Store } from '../store';
 
 export type Service = InterpreterFrom<typeof machine>;
 
-export async function setup(webContents: WebContents) {
+export async function setup(webContents: WebContents, store: Store) {
   const deck = await openStreamDeck();
 
   deck.clearPanel();
 
   const service = interpret(machine);
   service.start();
-  service.send({ type: 'INIT', data: deck });
+  service.send({ type: 'INIT', data: { streamdeck: deck, mediaPath: store.get('mediaPath') } });
+  store.onDidAnyChange((newValue) => {
+    service.send({ type: 'SET_CONTEXT', data: newValue });
+  });
 
   deck.on('up', (keyIndex: number) => {
     const action = service.state.context.keys[keyIndex];

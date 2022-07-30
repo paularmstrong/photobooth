@@ -11,6 +11,7 @@ interface Listen {
 interface Send {
   (channel: 'transition', data: Record<string, unknown>): void;
   (channel: 'preferences', data: Partial<Preferences>): void;
+  (channel: 'selectMediaPath'): void;
 }
 
 export interface Api {

@@ -10,7 +10,11 @@ interface Context {
 const PreferencesContext = React.createContext<Context>({ getValue: () => '', setValue: () => {} });
 
 export function PreferencesProvider({ children }: { children: React.ReactNode }) {
-  const [preferences, setPreferences] = React.useState<Preferences>({ photoboothUrl: '', videoSaveMessage: '' });
+  const [preferences, setPreferences] = React.useState<Preferences>({
+    mediaPath: '',
+    photoboothUrl: '',
+    videoSaveMessage: '',
+  });
 
   React.useEffect(() => {
     const removeListener = window.api.addListener('preferences', (newState: Preferences) => {

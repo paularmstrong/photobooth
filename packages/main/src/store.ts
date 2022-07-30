@@ -1,19 +1,28 @@
-import { ipcMain } from 'electron';
+import path from 'path';
+import { dialog, ipcMain, protocol } from 'electron';
 import type { WebContents } from 'electron';
-import Store from 'electron-store';
+import EStore from 'electron-store';
+import { MEDIA_PATH } from './constants';
 
 export interface Preferences {
+  mediaPath: string;
   photoboothUrl: string;
   videoSaveMessage: string;
 }
 
-export function initStore(webContents: WebContents) {
-  const store = new Store<Preferences>({
+export type Store = EStore<Preferences>;
+
+export function initStore() {
+  const store = new EStore<Preferences>({
     defaults: {
+      mediaPath: MEDIA_PATH,
       photoboothUrl: 'https://example.com',
       videoSaveMessage: 'Your video has been saved to our guestbook. We look forward to watching it soon!',
     },
     schema: {
+      mediaPath: {
+        type: 'string',
+      },
       photoboothUrl: {
         type: 'string',
         format: 'uri',
@@ -24,7 +33,32 @@ export function initStore(webContents: WebContents) {
     },
   });
 
+  protocol.registerFileProtocol('pb', (request, callback) => {
+    const file = request.url.substr(3);
+    try {
+      callback({ path: path.join(store.get('mediaPath'), file) });
+    } catch (e) {
+      console.error('pb error', e);
+    }
+  });
+
+  ipcMain.on('selectMediaPath', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      defaultPath: store.get('mediaPath'),
+      properties: ['openDirectory', 'createDirectory'],
+    });
+    if (canceled) {
+      return;
+    }
+    store.set('mediaPath', filePaths[0]);
+  });
+
+  return store;
+}
+
+export function registerStoreHandlers(store: Store, webContents: WebContents) {
   webContents.send('preferences', store.store);
+
   ipcMain.on('preferences', (event, data) => {
     for (const [key, value] of Object.entries(data)) {
       try {
@@ -39,6 +73,4 @@ export function initStore(webContents: WebContents) {
   store.onDidAnyChange((newValue) => {
     webContents.send('preferences', newValue);
   });
-
-  return store;
 }
