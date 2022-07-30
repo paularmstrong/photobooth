@@ -12,7 +12,7 @@ interface Props extends Omit<CountdownProps, 'colors' | 'colorsTime'> {
 
 export function CountdownCircle({ status, ...props }: Props) {
   return (
-    <div className={status ? transition(status, 'zoom') : undefined}>
+    <div className={status ? transition(status, 'slideLeft') : undefined}>
       <Card mode="more-transparent">
         <CountdownCircleTimer
           isPlaying
