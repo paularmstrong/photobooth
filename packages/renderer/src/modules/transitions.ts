@@ -65,14 +65,7 @@ export const transitions: Record<Transition, (index: number) => Record<Transitio
 
 const startRotations = ['rotate-12', '-rotate-12', 'rotate-12', '-rotate-12', 'rotate-12', '-rotate-12'];
 
-const rotations = [
-  '-rotate-6 translate-y-4',
-  'rotate-6 translate-x-3',
-  '-rotate-3 -translate-x-3 -translate-y-2',
-  'rotate-3',
-  'rotate-2',
-  '-rotate-2',
-];
+const rotations = ['-rotate-6', 'rotate-6', '-rotate-3', 'rotate-3', 'rotate-2', '-rotate-2'];
 
 export function useTransitionIndex() {
   return useMemo(() => Math.floor(Math.random() * rotations.length), []);

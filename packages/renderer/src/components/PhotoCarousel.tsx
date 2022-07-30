@@ -2,6 +2,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { useLocation } from '../context';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { transition } from '../modules';
 import { Photo } from './Photo';
 
 export function PhotoCarousel() {
@@ -12,14 +13,10 @@ export function PhotoCarousel() {
     () =>
       photos.reduce(
         (memo, photo, index) => {
-          memo[index % 3].push({
-            photo,
-            index: photos.length - 1 - index,
-            rotation: rotations[Math.floor(Math.random() * rotations.length)],
-          });
+          memo[index % 3].push({ photo, index: photos.length - 1 - index });
           return memo;
         },
-        new Array(MAX_PHOTOS).fill(null).map(() => [] as Array<{ photo: string; index: number; rotation: string }>)
+        new Array(MAX_PHOTOS).fill(null).map(() => [] as Array<{ photo: string; index: number }>)
       ),
     [photos]
   );
@@ -54,13 +51,12 @@ export function PhotoCarousel() {
         }
         return (
           <SwitchTransition key={i} mode="out-in">
-            <CSSTransition
-              appear
-              key={visible.index}
-              classNames={transitionClassnames('shadow-2xl basis-1/3', visible.rotation)}
-              timeout={300}
-            >
-              <Photo src={`pb:${visible.photo}`} />
+            <CSSTransition appear key={visible.index} timeout={250}>
+              {(status) => (
+                <div className={clsx('shadow-2xl basis-1/3', transition(status, 'zoomRotate', i))}>
+                  <Photo src={`pb:${visible!.photo}`} />
+                </div>
+              )}
             </CSSTransition>
           </SwitchTransition>
         );
@@ -79,30 +75,3 @@ function isVisible(sliceStart: number, count: number, index: number, total: numb
 }
 
 const MAX_PHOTOS = 3;
-
-function transitionClassnames(allClasses: string, rotation: string) {
-  return {
-    appear: clsx(allClasses, initial),
-    appearActive: clsx(allClasses, initial),
-    appearDone: clsx(allClasses, rotation, 'opacity-1 scale-100 transition-all ease-in-out duration-300'),
-    enter: clsx(allClasses, initial),
-    enterActive: clsx(allClasses, initial),
-    enterDone: clsx(allClasses, rotation, 'opacity-1 scale-100 transition-all ease-in-out duration-300'),
-    exit: clsx(allClasses, rotation, 'opacity-1 scale-100'),
-    exitActive: clsx(allClasses, 'opacity-0 -rotate-90 scale-50 transition-all ease-in-out duration-300'),
-    exitDone: clsx(allClasses, 'opacity-0'),
-  };
-}
-
-const initial = 'opacity-0 rotate-90 scale-125';
-
-const rotations = [
-  'rotate-6',
-  '-rotate-6',
-  'rotate-3',
-  '-rotate-3',
-  'rotate-12',
-  '-rotate-12',
-  'rotate-2',
-  '-rotate-2',
-];

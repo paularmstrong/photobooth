@@ -1,6 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { CSSTransition } from 'react-transition-group';
+import { transition } from '../modules';
 import type { Props } from './props';
 import { useMediaStream, usePhotos } from '../context';
 import { CountdownCircle, Shutter } from '../components';
@@ -67,8 +68,17 @@ export function PhotoCapture({ status }: Props) {
       </div>
 
       <div className="absolute inset-0 flex flex-row justify-center items-center">
-        <CSSTransition in={showLastPhoto} classNames={transitionClassnames()} timeout={300}>
-          <canvas ref={canvas} className={clsx('w-1/2 aspect-[16/10]', { 'opacity-0': !showLastPhoto })} />
+        <CSSTransition in={showLastPhoto} timeout={250}>
+          {(status) => (
+            <div
+              className={clsx(
+                'p-1 bg-white drop-shadow-2xl w-1/2 aspect-[16/10]',
+                transition(status, 'zoomRotate', Math.floor(Math.random() * 4))
+              )}
+            >
+              <canvas ref={canvas} className={clsx('w-full h-full', { 'opacity-0': !showLastPhoto })} />
+            </div>
+          )}
         </CSSTransition>
       </div>
 
@@ -76,21 +86,3 @@ export function PhotoCapture({ status }: Props) {
     </>
   );
 }
-
-const allClasses = 'p-1 bg-white drop-shadow-2xl transition-all ease-in-out duration-150 delay-150';
-const startClasses = 'scale-90 opacity-0';
-const showClasses = 'scale-100 opacity-1';
-function transitionClassnames() {
-  const startRotation = rotations[Math.floor(Math.random() * rotations.length)];
-  const endRotation = rotations[Math.floor(Math.random() * rotations.length)];
-  return {
-    enter: clsx(allClasses, startClasses, startRotation),
-    enterActive: clsx(allClasses, startClasses, startRotation),
-    enterDone: clsx(allClasses, showClasses, endRotation),
-    exit: clsx(allClasses, showClasses, endRotation),
-    exitActive: clsx(allClasses, showClasses, endRotation),
-    exitDone: clsx(allClasses, startClasses, startRotation),
-  };
-}
-
-const rotations = ['-rotate-6', 'rotate-6', '-rotate-3', 'rotate-3', 'rotate-2', '-rotate-2'];
