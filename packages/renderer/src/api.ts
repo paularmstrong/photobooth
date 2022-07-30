@@ -1,10 +1,9 @@
-import type { Preferences } from '@pb/main';
+import type { Preferences, TransitionData } from '@pb/main';
 
 export type ReceivableEvent = 'transition' | 'preferences';
-export type Data = { value: Array<string>; meta: { photoType?: string; photos: Array<string> } };
 
 interface Listen {
-  (channel: 'transition', evt: (data: Data) => void): () => void;
+  (channel: 'transition', evt: (data: TransitionData) => void): () => void;
   (channel: 'preferences', evt: (data: Preferences) => void): () => void;
 }
 

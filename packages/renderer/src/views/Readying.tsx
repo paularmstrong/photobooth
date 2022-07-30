@@ -20,7 +20,7 @@ export function Readying({ status }: Props) {
         }}
         status={status}
       />
-      <HelpCard title="Get ready!!" description="The camera is being prepared…" items={[]} status={status} />
+      <HelpCard title="Get ready!!" description="The camera is being prepared…" status={status} />
     </div>
   );
 }

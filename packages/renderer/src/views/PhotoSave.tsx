@@ -3,10 +3,6 @@ import type { Props } from './props';
 import { useLocation } from '../context';
 import { HelpCard } from '../components';
 import { getFilename } from '../modules';
-import QuadIcon from '@pb/images/quad.svg';
-import QuadtychIcon from '@pb/images/quadtych.svg';
-import CollageIcon from '@pb/images/collage.svg';
-import RandomIcon from '@pb/images/random.svg';
 import { usePhotos } from '../context';
 
 // 5.8 megapixel
@@ -27,13 +23,13 @@ export function PhotoSave({ status }: Props) {
   const actualCanvas = React.useRef<HTMLCanvasElement>(null);
 
   React.useEffect(() => {
-    if (photos.length && canvas.current) {
+    if (photos.length && canvas.current && photoType) {
       drawImages(canvas.current, photos, photoType);
     }
   }, [canvas, photos, photoType]);
 
   React.useEffect(() => {
-    if (pathname.endsWith('/saving') && actualCanvas.current && photos.length) {
+    if (pathname.endsWith('/saving') && actualCanvas.current && photos.length && photoType) {
       drawImages(actualCanvas.current, photos, photoType);
       actualCanvas.current.toBlob(
         async (blob: Blob | null) => {
@@ -69,20 +65,13 @@ export function PhotoSave({ status }: Props) {
         height={window.innerHeight}
       />
       {pathname.endsWith('/saving') ? (
-        <HelpCard items={[]} title="Saving" description="Just a moment…" status={status} />
+        <HelpCard title="Saving" description="Just a moment…" status={status} />
       ) : (
-        <HelpCard items={items} title="Choose a layout" status={status} />
+        <HelpCard title="Choose a layout" status={status} />
       )}
     </div>
   );
 }
-
-const items = [
-  { icon: QuadIcon, description: '' },
-  { icon: QuadtychIcon, description: '' },
-  { icon: CollageIcon, description: '' },
-  { icon: RandomIcon, description: '' },
-];
 
 interface LayoutArgs {
   photo: ImageBitmap;

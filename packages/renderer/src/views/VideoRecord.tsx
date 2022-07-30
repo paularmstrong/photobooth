@@ -1,5 +1,4 @@
 import * as React from 'react';
-import StopIcon from '@pb/images/stop.svg';
 import type { Props } from './props';
 import { CountdownCircle, HelpCard } from '../components';
 import { useLocation, useMediaStream } from '../context';
@@ -80,14 +79,10 @@ export function VideoRecord({ status }: Props) {
             status={status}
           />
 
-          <HelpCard
-            title={''}
-            items={[{ icon: StopIcon, description: 'Press to stop recording early' }]}
-            status={status}
-          />
+          <HelpCard title={''} status={status} />
         </>
       ) : (
-        <HelpCard title="Saving…" items={[]} status={status} />
+        <HelpCard title="Saving…" status={status} />
       )}
     </div>
   );

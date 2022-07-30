@@ -5,9 +5,15 @@ import type { InterpreterFrom } from 'xstate';
 import type { StreamDeck } from '@elgato-stream-deck/node';
 import { openStreamDeck } from '@elgato-stream-deck/node';
 import { machine } from './machine';
+import type { Context } from './machine';
 import type { Store } from '../store';
 
 export type Service = InterpreterFrom<typeof machine>;
+
+export interface TransitionData {
+  value: Array<string>;
+  meta: Omit<Context, 'streamdeck'>;
+}
 
 export async function setup(webContents: WebContents, store: Store) {
   const deck = await openStreamDeck();
@@ -30,8 +36,8 @@ export async function setup(webContents: WebContents, store: Store) {
   });
 
   service.onTransition((state) => {
-    const { streamdeck, keys, ...meta } = state.context;
-    webContents.send('transition', { value: state.toStrings(), meta });
+    const { streamdeck, ...meta } = state.context;
+    webContents.send('transition', { value: state.toStrings(), meta } as TransitionData);
   });
 
   ipcMain.on('transition', (event, action) => {

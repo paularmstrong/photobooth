@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import type { IpcRendererEvent } from 'electron';
-import type { Api, Data } from './api';
-import type { Preferences } from '@pb/main';
+import type { Api } from './api';
+import type { Preferences, TransitionData } from '@pb/main';
 
 const receivableEvents = ['transition', 'preferences'];
 const sendableChannels = ['transition', 'preferences', 'selectMediaPath'];
@@ -24,7 +24,7 @@ contextBridge.exposeInMainWorld('api', {
     } catch (e) {
       return;
     }
-    const fn = (event: IpcRendererEvent, data: Data | Preferences) => func(data);
+    const fn = (event: IpcRendererEvent, data: TransitionData | Preferences) => func(data);
     ipcRenderer.on(channel, fn);
 
     return () => ipcRenderer.removeListener(channel, fn);

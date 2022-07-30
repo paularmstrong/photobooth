@@ -23,9 +23,14 @@ export function Main({ status }: Props) {
             <div className="absolute drop-shadow-lg aspect-square rounded-full text-white bg-lime-600 p-4 text-4xl overflow-hidden animate-ping">
               ⬇
             </div>
-            <div className="drop-shadow-lg aspect-square rounded-full text-white bg-lime-600 p-4 text-4xl overflow-hidden">
+            <button
+              className="drop-shadow-lg aspect-square rounded-full text-white bg-lime-600 p-4 text-4xl overflow-hidden"
+              onClick={() => {
+                window.api.send('transition', { type: 'GET_HELP' });
+              }}
+            >
               ⬇
-            </div>
+            </button>
           </div>
         </div>
       </div>

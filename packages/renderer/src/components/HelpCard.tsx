@@ -1,25 +1,30 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import type { TransitionStatus } from 'react-transition-group';
-import { transition } from '../modules';
+import { keyImages, transition } from '../modules';
 import { Card } from './Card';
 import { H2, Text } from './Text';
-
-interface Item {
-  icon: React.StatelessComponent<React.SVGAttributes<SVGElement>>;
-  description: string;
-}
+import { useLocation } from '../context';
 
 interface Props {
   title?: string;
   description?: string;
-  items: Array<Item>;
+  keysWithoutDescription?: boolean;
   status?: TransitionStatus;
 }
 
 const defaultTitle = 'What am I doing here?';
 
-export function HelpCard({ description, items, status, title = defaultTitle }: Props) {
+export function HelpCard({ description, keysWithoutDescription = true, status, title = defaultTitle }: Props) {
+  const {
+    state: { keys },
+  } = useLocation();
+
+  const rememberedKeys = React.useMemo(
+    () => keys.filter((key) => key && (keysWithoutDescription || key.description)),
+    []
+  );
+
   return (
     <div
       className={clsx(
@@ -27,19 +32,27 @@ export function HelpCard({ description, items, status, title = defaultTitle }: P
         status ? transition(status, 'slideUp') : undefined
       )}
     >
-      <Card blur>
+      <Card blur className="min-w-[512px]">
         <div className="flex flex-col gap-2">
           {title ? <H2>{title}</H2> : null}
           {description ? <Text className="text-3xl">{description}</Text> : null}
-          <div className="flex flex-row gap-8 justify-center">
-            {items.map(({ icon: Icon, description }, i) => (
-              <div className="flex flex-row gap-2 items-center" key={i}>
-                <span className="rounded-xl p-2 bg-black/80">
-                  <Icon />
-                </span>
-                <span className="text-2xl">{description}</span>
-              </div>
-            ))}
+          <div className="flex flex-row gap-12 justify-around">
+            {rememberedKeys.map((key, i) => {
+              const Icon = keyImages[key!.key];
+              return (
+                <div className={clsx('flex flex-col gap-2 items-center')} key={i}>
+                  <button
+                    className="rounded-xl p-2 bg-black/80"
+                    onClick={() => {
+                      window.api.send('transition', { type: key!.type });
+                    }}
+                  >
+                    <Icon />
+                  </button>
+                  {key!.description ? <span className="text-2xl">{key!.description}</span> : null}
+                </div>
+              );
+            })}
           </div>
         </div>
       </Card>

@@ -1,5 +1,4 @@
 import { app, systemPreferences } from 'electron';
-import path from 'path';
 import type { BrowserWindow } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
@@ -9,6 +8,7 @@ import { initStore, registerStoreHandlers } from './store';
 import type { Store } from './store';
 
 export { Preferences } from './store';
+export type { TransitionData } from './state';
 
 let stopStateMachine: () => void;
 let store: Store;

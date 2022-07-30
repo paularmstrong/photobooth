@@ -33,7 +33,7 @@ const images = {
 } as const;
 
 type Key = keyof typeof images;
-type KeyAction = { key: Key; type: string } | null;
+type KeyAction = { key: Key; type: string; description?: string } | null;
 
 export interface Context {
   keys: [KeyAction, KeyAction, KeyAction, KeyAction, KeyAction, KeyAction];
@@ -44,10 +44,10 @@ export interface Context {
   streamdeck: StreamDeck | null;
 }
 
-const initialKeys = [
-  { key: 'photo', type: 'TAKE_PHOTOS' },
+const initialKeys: Array<KeyAction> = [
+  { key: 'photo', type: 'TAKE_PHOTOS', description: 'Take photos' },
   null,
-  { key: 'video', type: 'REC_VIDEO' },
+  { key: 'video', type: 'REC_VIDEO', description: 'Leave a video message' },
   null,
   { key: 'help', type: 'GET_HELP' },
   null,
@@ -140,7 +140,14 @@ export const machine = createMachine(
           confirming: {
             entry: [
               assign({
-                keys: () => [{ key: 'rec', type: 'CONFIRM' }, null, null, null, null, { key: 'back', type: 'CANCEL' }],
+                keys: () => [
+                  { key: 'rec', type: 'CONFIRM', description: 'Begin' },
+                  null,
+                  null,
+                  null,
+                  null,
+                  { key: 'back', type: 'CANCEL' },
+                ],
               }),
               'renderKeys',
             ],
@@ -173,7 +180,7 @@ export const machine = createMachine(
                       { key: 'collage', type: 'SELECT' },
                       { key: 'random', type: 'SELECT' },
                       null,
-                      { key: 'done', type: 'DONE' },
+                      { key: 'done', type: 'DONE', description: 'Save your collage' },
                     ],
                   }),
                   'renderKeys',
@@ -242,7 +249,14 @@ export const machine = createMachine(
           confirming: {
             entry: [
               assign({
-                keys: () => [{ key: 'rec', type: 'CONFIRM' }, null, null, null, null, { key: 'back', type: 'CANCEL' }],
+                keys: () => [
+                  { key: 'rec', type: 'CONFIRM', description: 'Record' },
+                  null,
+                  null,
+                  null,
+                  null,
+                  { key: 'back', type: 'CANCEL' },
+                ],
               }),
               'renderKeys',
             ],
@@ -264,7 +278,14 @@ export const machine = createMachine(
               recording: {
                 entry: [
                   assign({
-                    keys: () => [null, null, null, null, null, { key: 'stop', type: 'DONE' }],
+                    keys: () => [
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                      { key: 'stop', type: 'DONE', description: 'Stop recording' },
+                    ],
                   }),
                   'renderKeys',
                 ],
