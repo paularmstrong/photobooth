@@ -85,8 +85,9 @@ export function Preferences({ status }: MainProps) {
                 label="Photo save location"
                 value={mediaPath}
                 readOnly
-                onFocus={() => {
+                onFocus={(event) => {
                   window.api.send('selectMediaPath');
+                  event.target.blur();
                 }}
               />
             </div>
