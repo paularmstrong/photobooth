@@ -39,7 +39,7 @@ export function PhotoCarousel() {
   }, [photos]);
 
   return (
-    <div className="flex flex-row gap-6 max-w-screen-2xl self-center justify-center">
+    <div className="flex flex-row gap-6 max-w-screen-2xl mx-auto self-center justify-center">
       {photoBuckets.map((bucket, i) => {
         if (!bucket.length) {
           return null;
