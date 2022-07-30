@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { CSSTransition } from 'react-transition-group';
+import { useTransitionIndex, transition } from '../modules';
 import type { Props } from './props';
 import { ReviewLayout } from '../layouts';
 import { H2, Photo, Text } from '../components';
@@ -13,6 +13,7 @@ export function PhotoReview({ status }: Props) {
   } = useLocation();
   const [url] = usePreference('photoboothUrl');
   const canvas = React.useRef<HTMLCanvasElement>(null);
+  const index = useTransitionIndex();
 
   React.useLayoutEffect(() => {
     if (!canvas.current) {
@@ -34,35 +35,14 @@ export function PhotoReview({ status }: Props) {
           <Text className="underline text-teal-700 text-4xl">{url}</Text>
         </>
       }
+      status={status}
       title={titles[photos.length % titles.length]}
     >
-      <CSSTransition in appear classNames={transitionClassnames()} timeout={150}>
+      <div className={clsx('absolute shadow-2xl', transition(status, 'zoomRotate', index))}>
         <Photo src={`pb:${photos[photos.length - 1]}`} />
-      </CSSTransition>
+      </div>
     </ReviewLayout>
   );
 }
-
-const allClasses = 'absolute transition-all ease-in duration-150 shadow-2xl';
-const initialClasses = 'opacity-0 scale-90';
-function transitionClassnames() {
-  const index = Math.floor(Math.random() * rotations.length);
-  return {
-    appear: clsx(allClasses, initialClasses, startRotations[index]),
-    appearActive: clsx(allClasses, initialClasses, startRotations[index]),
-    appearDone: clsx(allClasses, 'opacity-1 scale-100', rotations[index]),
-  };
-}
-
-const startRotations = ['rotate-12', '-rotate-12', 'rotate-12', '-rotate-12', 'rotate-12', '-rotate-12'];
-
-const rotations = [
-  '-rotate-6 translate-y-4',
-  'rotate-6 translate-x-3',
-  '-rotate-3 -translate-x-3 -translate-y-2',
-  'rotate-3',
-  'rotate-2',
-  '-rotate-2',
-];
 
 const titles = ['Great shots!', 'Super cool!', 'Lookin’ good!', '🥳 😎 🥸', 'You’re a natural!'];
