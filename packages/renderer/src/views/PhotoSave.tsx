@@ -23,13 +23,13 @@ export function PhotoSave({ status }: Props) {
   const actualCanvas = React.useRef<HTMLCanvasElement>(null);
 
   React.useEffect(() => {
-    if (photos.length && canvas.current && photoType) {
+    if (photos.length && canvas.current) {
       drawImages(canvas.current, photos, photoType);
     }
   }, [canvas, photos, photoType]);
 
   React.useEffect(() => {
-    if (pathname.endsWith('/saving') && actualCanvas.current && photos.length && photoType) {
+    if (pathname.endsWith('/saving') && actualCanvas.current && photos.length) {
       drawImages(actualCanvas.current, photos, photoType);
       actualCanvas.current.toBlob(
         async (blob: Blob | null) => {

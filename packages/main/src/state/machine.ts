@@ -32,13 +32,15 @@ const images = {
   help,
 } as const;
 
+const defaultPhotoType = 'quad';
+
 type Key = keyof typeof images;
 type KeyAction = { key: Key; type: string; description?: string } | null;
 
 export interface Context {
   keys: [KeyAction, KeyAction, KeyAction, KeyAction, KeyAction, KeyAction];
   lastVideo: string | void;
-  photoType: string | void;
+  photoType: string;
   photos: Array<string>;
   mediaPath: string;
   streamdeck: StreamDeck | null;
@@ -82,7 +84,7 @@ export const machine = createMachine(
     context: {
       keys: initialKeys,
       lastVideo: undefined,
-      photoType: undefined,
+      photoType: defaultPhotoType,
       photos: [] as Array<string>,
       mediaPath: MEDIA_PATH,
       streamdeck: null,
@@ -135,7 +137,7 @@ export const machine = createMachine(
       },
       photo: {
         initial: 'confirming',
-        exit: [assign({ photoType: undefined })],
+        exit: [assign({ photoType: defaultPhotoType })],
         states: {
           confirming: {
             entry: [

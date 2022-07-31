@@ -44,7 +44,7 @@ export function HelpCard({ description, keysWithoutDescription = true, status, t
                   <button
                     className="rounded-xl p-2 bg-black/80"
                     onClick={() => {
-                      window.api.send('transition', { type: key!.type });
+                      window.api.send('transition', { type: key!.type, key: key!.key });
                     }}
                   >
                     <Icon />

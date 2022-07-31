@@ -34,23 +34,25 @@ export function PhotoCapture({ status }: Props) {
     }
   }, [photos]);
 
+  if (!mediaStream) {
+    return null;
+  }
+
   return (
     <>
       <div className="w-screen h-screen p-12 flex justify-end items-end">
         {photos.length < 4 ? (
           <CountdownCircle
-            key={photos.length}
+            key={taking ? photos.length - 1 : photos.length}
             duration={4}
+            isPlaying={!taking}
             onUpdate={(remainingTime) => {
-              if (remainingTime) {
+              if (remainingTime && remainingTime < 4) {
                 tone.play();
               }
             }}
             onComplete={() => {
               shutter.play();
-              if (!mediaStream) {
-                throw new Error('no canvas');
-              }
               setTaking(true);
               const track = mediaStream.getVideoTracks()[0];
               const imageCapture = new ImageCapture(track);
