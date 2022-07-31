@@ -5,6 +5,9 @@ import type { Service } from './state';
 export function initMenu(service: Service) {
   const template: Array<MenuItemConstructorOptions | MenuItem> = [
     {
+      role: 'editMenu',
+    },
+    {
       label: 'View',
       submenu: [{ role: 'togglefullscreen' }],
     },
