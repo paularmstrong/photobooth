@@ -2020,25 +2020,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@elgato-stream-deck/core@npm:5.4.0-alpha.0":
-  version: 5.4.0-alpha.0
-  resolution: "@elgato-stream-deck/core@npm:5.4.0-alpha.0"
+"@elgato-stream-deck/core@npm:5.5.0":
+  version: 5.5.0
+  resolution: "@elgato-stream-deck/core@npm:5.5.0"
   dependencies:
     eventemitter3: ^4.0.7
-  checksum: 38c7d1be5658f316c2d048492dafd0ec9cf5d76ac80cbc83445ad9d7157248961cfc2fbdef0e19a5933190ad8f364b931333a775d0cd89c16509dbc0b859b208
+    tslib: ^2.4.0
+  checksum: 50258b35e07da8112b47dc5754d131f019acd44c34f2a80d2a50e9be34c8ff5ea5437fa5035842983230adfddd5aed14814bf390e75ea83e27debde329b6b368
   languageName: node
   linkType: hard
 
-"@elgato-stream-deck/node@npm:^5.4.0-alpha.0":
-  version: 5.4.0-alpha.0
-  resolution: "@elgato-stream-deck/node@npm:5.4.0-alpha.0"
+"@elgato-stream-deck/node@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "@elgato-stream-deck/node@npm:5.5.0"
   dependencies:
-    "@elgato-stream-deck/core": 5.4.0-alpha.0
+    "@elgato-stream-deck/core": 5.5.0
     jpeg-js: ^0.4.2
     node-hid: ^2.1.1
+    tslib: ^2.4.0
   peerDependencies:
-    "@julusian/jpeg-turbo": ^1.1.2
-  checksum: ac1b5602bec27cb16ed35badf7bc9640046f3bfd2128ef3ff58c6e84abf786a31d55e9954aac037db8ef0204bb73f652c6d81dcfc8cc1c29253300d3ad560c6e
+    "@julusian/jpeg-turbo": ^1.1.2 || ^2.0.0-0
+  checksum: 63f955c05c1358fb5ea555183805a068c332d0f94a1a7b2c0a8e8ee5c73ad4a5955de601a299443027989f86eff9e95931f040e5f9260babcfeed4636bdb93d8
   languageName: node
   linkType: hard
 
@@ -2259,7 +2261,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@pb/main@workspace:packages/main"
   dependencies:
-    "@elgato-stream-deck/node": ^5.4.0-alpha.0
+    "@elgato-stream-deck/node": ^5.5.0
     "@pb/images": "workspace:packages/images"
     "@pb/webpack": "workspace:packages/webpack"
     "@types/node": ^18.0.0
@@ -11230,7 +11232,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.3, tslib@npm:^2.1.0":
+"tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.4.0":
   version: 2.4.0
   resolution: "tslib@npm:2.4.0"
   checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
