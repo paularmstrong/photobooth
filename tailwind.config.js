@@ -5,6 +5,9 @@ module.exports = {
       fontFamily: {
         sans: ['Yanone Kaffeesatz', 'sans-serif'],
       },
+      fontSize: {
+        dynamic: 'clamp(6rem, 0.4615rem + 18.4615vw, 30rem)',
+      },
       animation: {
         'bounce-slow': 'bounce-slow 3s infinite',
         flap0: 'flap0 0.5s 1',

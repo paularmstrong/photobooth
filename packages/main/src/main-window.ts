@@ -8,8 +8,9 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 async function createWindow() {
   const browserWindow = new BrowserWindow({
     show: false, // Use 'ready-to-show' event to show window
-    width: 1152,
-    height: 750,
+    width: 1280,
+    height: 800,
+    frame: false,
     webPreferences: {
       // nativeWindowOpen: true,
       // webviewTag: false, // The webview tag is not recommended. Consider alternatives like iframe or Electron's BrowserView. https://www.electronjs.org/docs/latest/api/webview-tag#warning
@@ -32,6 +33,7 @@ async function createWindow() {
   });
 
   browserWindow.setAspectRatio(16 / 10);
+  browserWindow.setMinimumSize(800, 500);
 
   await browserWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 

@@ -12,7 +12,7 @@ export function Main({ status }: Props) {
       <div className="h-screen overflow-hidden">
         <div className="flex flex-col h-full p-12 gap-6 xl:gap-12">
           <div className={clsx('grow shrink', transition(status, 'slideDown'))}>
-            <Title animated />
+            <Title />
           </div>
 
           <div className={transition(status, 'zoom')}>
