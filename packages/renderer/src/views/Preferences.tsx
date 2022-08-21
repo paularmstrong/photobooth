@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import type { Props as MainProps } from './props';
-import { H2, TextField } from '../components';
+import { H2, QrCode, TextField } from '../components';
 import clsx from 'clsx';
 import { usePreference } from '../context';
 import type { Preferences as PreferenceStore } from '@pb/main';
@@ -11,6 +11,7 @@ import TimesCircleIcon from 'humbleicons/icons/times-circle.svg';
 import { transition } from '../modules';
 
 export function Preferences({ status }: MainProps) {
+  const [url, setUrl] = React.useState('https://example.com');
   function handleDone() {
     window.api.send('transition', { type: 'DONE' });
   }
@@ -44,12 +45,18 @@ export function Preferences({ status }: MainProps) {
 
               <PreferenceTextField preference="splashTitle" label="Splash screen title" />
 
-              <PreferenceTextField
-                preference="photoboothUrl"
-                leadingIcon={<LinkIcon />}
-                label="Online photo gallery URL"
-                helpText="Displayed along with a QR code after a photo is saved."
-              />
+              <div className="flex flex-row gap-6 grow">
+                <PreferenceTextField
+                  preference="photoboothUrl"
+                  onChangeText={(url) => setUrl(url)}
+                  leadingIcon={<LinkIcon />}
+                  label="Online photo gallery URL"
+                  helpText="Displayed along with a QR code after a photo is saved."
+                />
+                <div className="h-32 w-32 grow-0 overflow-hidden">
+                  <QrCode url={url} />
+                </div>
+              </div>
 
               <PreferenceTextField
                 preference="videoSaveMessage"
@@ -87,6 +94,10 @@ function PreferenceTextField({ preference, ...props }: PrefProp) {
     setSaved(true);
   }, 900);
 
+  React.useEffect(() => {
+    props.onChangeText && props.onChangeText(value);
+  }, []);
+
   return (
     <TextField
       {...props}
@@ -95,6 +106,7 @@ function PreferenceTextField({ preference, ...props }: PrefProp) {
       onChangeText={(url) => {
         setSaved(false);
         setValue(url);
+        props.onChangeText && props.onChangeText(url);
       }}
       value={value}
     />

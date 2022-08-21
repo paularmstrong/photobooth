@@ -5,6 +5,7 @@ export * from './HelpCard';
 export * from './Photo';
 export * from './PhotoCarousel';
 export * from './Preview';
+export * from './QrCode';
 export * from './Shutter';
 export * from './Text';
 export * from './TextField';
