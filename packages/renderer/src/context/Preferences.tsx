@@ -13,6 +13,7 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
   const [preferences, setPreferences] = React.useState<Preferences>({
     mediaPath: '',
     photoboothUrl: '',
+    splashTitle: '',
     videoSaveMessage: '',
   });
 

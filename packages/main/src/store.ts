@@ -7,6 +7,7 @@ import { MEDIA_PATH } from './constants';
 export interface Preferences {
   mediaPath: string;
   photoboothUrl: string;
+  splashTitle: string;
   videoSaveMessage: string;
 }
 
@@ -17,6 +18,7 @@ export function initStore() {
     defaults: {
       mediaPath: MEDIA_PATH,
       photoboothUrl: 'https://example.com',
+      splashTitle: 'Photo Booth',
       videoSaveMessage: 'Your video has been saved to our guestbook. We look forward to watching it soon!',
     },
     schema: {
@@ -28,6 +30,9 @@ export function initStore() {
         format: 'uri',
       },
       videoSaveMessage: {
+        type: 'string',
+      },
+      splashTitle: {
         type: 'string',
       },
     },

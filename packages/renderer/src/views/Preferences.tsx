@@ -4,27 +4,13 @@ import type { Props as MainProps } from './props';
 import { H2, TextField } from '../components';
 import clsx from 'clsx';
 import { usePreference } from '../context';
+import type { Preferences as PreferenceStore } from '@pb/main';
 import LinkIcon from 'humbleicons/icons/link.svg';
 import CheckIcon from 'humbleicons/icons/check.svg';
 import TimesCircleIcon from 'humbleicons/icons/times-circle.svg';
 import { transition } from '../modules';
 
 export function Preferences({ status }: MainProps) {
-  const [mediaPath] = usePreference('mediaPath');
-  const [url, _setUrl] = usePreference('photoboothUrl');
-  const [urlSaved, setUrlSaved] = React.useState(false);
-  const [saveMessage, _setSaveMessage] = usePreference('videoSaveMessage');
-  const [messageSaved, setMessageSaved] = React.useState(false);
-
-  const setUrl = useDebouncedCallback((value: string) => {
-    _setUrl(value);
-    setUrlSaved(true);
-  }, 900);
-  const setSaveMessage = useDebouncedCallback((value: string) => {
-    _setSaveMessage(value);
-    setMessageSaved(true);
-  }, 500);
-
   function handleDone() {
     window.api.send('transition', { type: 'DONE' });
   }
@@ -56,34 +42,24 @@ export function Preferences({ status }: MainProps) {
                 </button>
               </div>
 
-              <TextField
+              <PreferenceTextField preference="splashTitle" label="Splash screen title" />
+
+              <PreferenceTextField
+                preference="photoboothUrl"
                 leadingIcon={<LinkIcon />}
-                trailingIcon={urlSaved ? <CheckIcon className="text-green-500" /> : null}
                 label="Online photo gallery URL"
                 helpText="Displayed along with a QR code after a photo is saved."
-                onBlur={() => setUrlSaved(false)}
-                onChangeText={(url) => {
-                  setUrlSaved(false);
-                  setUrl(url);
-                }}
-                value={url}
               />
 
-              <TextField
+              <PreferenceTextField
+                preference="videoSaveMessage"
                 label="Video saved message"
                 helpText="Displayed after a recorded video has been saved."
-                trailingIcon={messageSaved ? <CheckIcon className="text-green-500" /> : null}
-                onBlur={() => setMessageSaved(false)}
-                onChangeText={(msg) => {
-                  setMessageSaved(false);
-                  setSaveMessage(msg);
-                }}
-                value={saveMessage}
               />
 
-              <TextField
+              <PreferenceTextField
+                preference="mediaPath"
                 label="Photo save location"
-                value={mediaPath}
                 readOnly
                 onFocus={(event) => {
                   window.api.send('selectMediaPath');
@@ -95,5 +71,32 @@ export function Preferences({ status }: MainProps) {
         </div>
       </div>
     </>
+  );
+}
+
+interface PrefProp extends React.ComponentProps<typeof TextField> {
+  preference: keyof PreferenceStore;
+}
+
+function PreferenceTextField({ preference, ...props }: PrefProp) {
+  const [value, _setValue] = usePreference(preference);
+  const [saved, setSaved] = React.useState(false);
+
+  const setValue = useDebouncedCallback((value: string) => {
+    _setValue(value);
+    setSaved(true);
+  }, 900);
+
+  return (
+    <TextField
+      {...props}
+      trailingIcon={saved ? <CheckIcon className="text-green-500" /> : null}
+      onBlur={() => setSaved(false)}
+      onChangeText={(url) => {
+        setSaved(false);
+        setValue(url);
+      }}
+      value={value}
+    />
   );
 }
