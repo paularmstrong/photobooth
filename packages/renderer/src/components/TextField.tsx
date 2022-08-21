@@ -64,7 +64,7 @@ export function TextField({
   return (
     <div className="w-full">
       <div
-        className={clsx('bg-white rounded border-gray-400 border h-14 p-2 px-4 flex items-center justify-stretch', {
+        className={clsx('bg-white rounded border-gray-400 border h-18 p-2 px-4 flex items-center justify-stretch', {
           'border-teal-600 ring-4 ring-teal-100 ring-opacity-30': isFocused,
           'opacity-70 cursor-not-allowed': disabled,
         })}
@@ -74,7 +74,7 @@ export function TextField({
 
           <div className="flex items-center justify-items-stretch relative grow">
             <input
-              className="h-8 mt-4 grow bg-transparent font-normal focus:outline-none focus:ring-0"
+              className="text-xl h-10 mt-5 grow bg-transparent font-normal focus:outline-none focus:ring-0"
               disabled={disabled}
               onBlur={handleBlur}
               onFocus={handleFocus}
@@ -85,8 +85,9 @@ export function TextField({
             />
 
             <div
-              className={clsx('absolute top-3 bg-white rounded transition transition-all transform', {
-                'text-xs font-medium -translate-y-2': labelMoved,
+              className={clsx('absolute top-5 bg-white rounded transition transition-all transform', {
+                'text-lg': !labelMoved,
+                'text-sm font-medium -translate-y-4 text-slate-700': labelMoved,
                 'text-teal-700 font-medium': isFocused,
               })}
             >
@@ -97,7 +98,7 @@ export function TextField({
           {trailingIcon ? <div className="w-6 h-full">{trailingIcon}</div> : null}
         </label>
       </div>
-      {helpText ? <div className="text-s pl-3 pt-1">{helpText}</div> : null}
+      {helpText ? <div className="text-sm pl-3 pt-1">{helpText}</div> : null}
     </div>
   );
 }
