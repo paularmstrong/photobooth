@@ -2,6 +2,7 @@ export * from './ActivityIndicator';
 export * from './Card';
 export * from './CountdownCircle';
 export * from './HelpCard';
+export * from './HiddenTitlebar';
 export * from './Photo';
 export * from './PhotoCarousel';
 export * from './Preview';

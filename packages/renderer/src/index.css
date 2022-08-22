@@ -32,3 +32,8 @@
 .flap5 {
   transform: rotate(-180deg) rotate(0.83333333turn) skewX(30deg) translateX(-100%) translateY(90%);
 }
+
+.titlebar {
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
