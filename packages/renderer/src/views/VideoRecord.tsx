@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { Props } from './props';
-import { CountdownCircle, HelpCard } from '../components';
+import { ActivityIndicator, CountdownCircle, HelpCard } from '../components';
 import { useLocation, useMediaStream } from '../context';
 import { getFilename } from '../modules';
 
@@ -82,7 +82,7 @@ export function VideoRecord({ status }: Props) {
           <HelpCard title={''} status={status} />
         </>
       ) : (
-        <HelpCard title="Saving…" status={status} />
+        <HelpCard title="Saving…" description={<ActivityIndicator />} status={status} />
       )}
     </div>
   );

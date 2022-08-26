@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Props } from './props';
 import { useLocation } from '../context';
-import { HelpCard } from '../components';
+import { ActivityIndicator, HelpCard } from '../components';
 import { getFilename } from '../modules';
 import { usePhotos } from '../context';
 
@@ -65,7 +65,7 @@ export function PhotoSave({ status }: Props) {
         height={window.innerHeight}
       />
       {pathname.endsWith('/saving') ? (
-        <HelpCard title="Saving" description="Just a moment…" status={status} />
+        <HelpCard title="Saving…" description={<ActivityIndicator />} status={status} />
       ) : (
         <HelpCard title="Choose a layout" status={status} />
       )}

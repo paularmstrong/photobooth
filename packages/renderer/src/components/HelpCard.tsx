@@ -8,7 +8,7 @@ import { useLocation } from '../context';
 
 interface Props {
   title?: string;
-  description?: string;
+  description?: React.ReactNode;
   keysWithoutDescription?: boolean;
   status?: TransitionStatus;
 }
@@ -34,7 +34,7 @@ export function HelpCard({ description, keysWithoutDescription = true, status, t
     >
       <Card blur className="min-w-[512px]">
         {title ? <H2>{title}</H2> : null}
-        {description ? <Text className="text-3xl">{description}</Text> : null}
+        {typeof description === 'string' ? <Text className="text-3xl">{description}</Text> : description || null}
         <div className="flex flex-row gap-12 justify-around">
           {rememberedKeys.map((key, i) => {
             const Icon = keyImages[key!.key];
