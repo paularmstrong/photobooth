@@ -7,7 +7,7 @@ export function VideoConfirm({ status }: Props) {
     <>
       <HelpCard
         title="Leave a video message"
-        description="Think of it like a video guest book! You’ll have up to 30 seconds once you start recording!"
+        description="Think of it like a video guest book! You’ll have up to 30 seconds once you start recording."
         status={status}
       />
     </>

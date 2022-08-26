@@ -33,27 +33,25 @@ export function HelpCard({ description, keysWithoutDescription = true, status, t
       )}
     >
       <Card blur className="min-w-[512px]">
-        <div className="flex flex-col gap-2">
-          {title ? <H2>{title}</H2> : null}
-          {description ? <Text className="text-3xl">{description}</Text> : null}
-          <div className="flex flex-row gap-12 justify-around">
-            {rememberedKeys.map((key, i) => {
-              const Icon = keyImages[key!.key];
-              return (
-                <div className={clsx('flex flex-col gap-2 items-center')} key={i}>
-                  <button
-                    className="rounded-xl p-2 bg-black/80"
-                    onClick={() => {
-                      window.api.send('transition', { type: key!.type, key: key!.key });
-                    }}
-                  >
-                    <Icon />
-                  </button>
-                  {key!.description ? <span className="text-2xl">{key!.description}</span> : null}
-                </div>
-              );
-            })}
-          </div>
+        {title ? <H2>{title}</H2> : null}
+        {description ? <Text className="text-3xl">{description}</Text> : null}
+        <div className="flex flex-row gap-12 justify-around">
+          {rememberedKeys.map((key, i) => {
+            const Icon = keyImages[key!.key];
+            return (
+              <div className={clsx('flex flex-col gap-2 items-center')} key={i}>
+                <button
+                  className="rounded-xl p-2 bg-black/80"
+                  onClick={() => {
+                    window.api.send('transition', { type: key!.type, key: key!.key });
+                  }}
+                >
+                  <Icon />
+                </button>
+                {key!.description ? <span className="text-2xl">{key!.description}</span> : null}
+              </div>
+            );
+          })}
         </div>
       </Card>
     </div>

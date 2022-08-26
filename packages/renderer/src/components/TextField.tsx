@@ -74,7 +74,7 @@ export function TextField({
 
           <div className="flex items-center justify-items-stretch relative grow">
             <input
-              className="text-xl h-10 mt-5 grow bg-transparent font-normal focus:outline-none focus:ring-0"
+              className="text-xl h-10 mt-5 grow bg-transparent font-light focus:outline-none focus:ring-0"
               disabled={disabled}
               onBlur={handleBlur}
               onFocus={handleFocus}
@@ -87,7 +87,7 @@ export function TextField({
             <div
               className={clsx('absolute top-5 bg-white rounded transition transition-all transform', {
                 'text-lg': !labelMoved,
-                'text-sm font-medium -translate-y-4 text-slate-700': labelMoved,
+                'text-sm font-normal -translate-y-4 text-slate-700': labelMoved,
                 'text-teal-700 font-medium': isFocused,
               })}
             >

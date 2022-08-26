@@ -11,7 +11,7 @@ interface Props {
 export function Card({ blur = true, children, className, mode = 'normal' }: Props) {
   return (
     <div
-      className={clsx('flex flex-col gap-4 shadow-lg rounded-lg p-4', className, {
+      className={clsx('flex flex-col gap-4 shadow-lg rounded-lg p-4 md:p-8', className, {
         'bg-white/80': mode === 'normal',
         'bg-white/30': mode === 'more-transparent',
         'backdrop-blur-sm': blur,

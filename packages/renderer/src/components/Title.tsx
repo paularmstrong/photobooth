@@ -6,7 +6,7 @@ export function Title() {
   const [title] = usePreference('splashTitle');
 
   return (
-    <h1 className="text-center text-white transition-[font-size] duration-500 font-semibold text-dynamic animate-bounce-slow whitespace-nowrap relative top-12">
+    <h1 className="text-center text-white transition-[font-size] duration-500 font-bold text-dynamic animate-bounce-slow whitespace-nowrap relative top-12">
       {title.split(' ').map((part, i) => (
         <span
           key={part}

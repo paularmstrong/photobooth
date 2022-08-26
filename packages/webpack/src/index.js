@@ -6,7 +6,7 @@ module.exports.rules = [
     use: ['@svgr/webpack'],
   },
   {
-    test: /\.(png|jpg|jpeg|gif|mp3|wav)$/i,
+    test: /\.(png|jpg|jpeg|gif|mp3|wav|ttf)$/i,
     type: 'asset/resource',
   },
   // Add support for native node modules
