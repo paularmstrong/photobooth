@@ -16,9 +16,11 @@ export interface TransitionData {
 }
 
 export async function setup(webContents: WebContents, store: Store) {
-  const deck = await openStreamDeck();
-
-  deck.clearPanel();
+  let deck: StreamDeck | void;
+  try {
+    deck = await openStreamDeck();
+    deck.clearPanel();
+  } catch (e) {}
 
   const service = interpret(machine);
   service.start();
@@ -27,13 +29,15 @@ export async function setup(webContents: WebContents, store: Store) {
     service.send({ type: 'SET_CONTEXT', data: newValue });
   });
 
-  deck.on('up', (keyIndex: number) => {
-    const action = service.state.context.keys[keyIndex];
-    if (!action) {
-      return;
-    }
-    service.send(action);
-  });
+  if (deck) {
+    deck.on('up', (keyIndex: number) => {
+      const action = service.state.context.keys[keyIndex];
+      if (!action) {
+        return;
+      }
+      service.send(action);
+    });
+  }
 
   service.onTransition((state) => {
     const { streamdeck, ...meta } = state.context;
@@ -47,7 +51,7 @@ export async function setup(webContents: WebContents, store: Store) {
   return {
     service,
     stop: async function stopService() {
-      return await stop(deck);
+      return deck ? await stop(deck) : undefined;
     },
   };
 }

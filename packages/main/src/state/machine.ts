@@ -361,7 +361,7 @@ export const machine = createMachine(
       renderKeys: async (context) => {
         const { keys, streamdeck } = context;
         if (!streamdeck) {
-          throw new Error('Must set streamdeck context before rendering');
+          return;
         }
 
         for (let i = 0; i < keys.length; i++) {
