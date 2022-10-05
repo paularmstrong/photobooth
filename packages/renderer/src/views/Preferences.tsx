@@ -2,21 +2,18 @@ import * as React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import type { Props as MainProps } from './props';
 import { H2, H3, QrCode } from '../components';
-import { SelectField, TextField } from '@reui/reui';
-import { Item } from 'react-stately';
+import { Item, SelectField, TextField } from '@reui/reui';
 import clsx from 'clsx';
 import { usePreference, useSetMediaStream } from '../context';
 import type { Preferences as PreferenceStore } from '@pb/main';
-import LinkIcon from 'humbleicons/icons/link.svg';
-import CheckIcon from 'humbleicons/icons/check.svg';
-import TimesCircleIcon from 'humbleicons/icons/times-circle.svg';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import { transition } from '../modules';
 
 export function Preferences({ status }: MainProps) {
   const [url, setUrl] = React.useState('https://example.com');
   const [videoDevices, setVideoDevices] = React.useState<Array<MediaDeviceInfo>>([]);
   const [audioDevices, setAudioDevices] = React.useState<Array<MediaDeviceInfo>>([]);
-  const { setVideoId, setAudioId } = useSetMediaStream();
+  const { videoId, setVideoId, audioId, setAudioId } = useSetMediaStream();
 
   function handleDone() {
     window.api.send('transition', { type: 'DONE' });
@@ -52,21 +49,26 @@ export function Preferences({ status }: MainProps) {
               <div className="flex flex-row gap-6 justify-between items-start">
                 <H2>Preferences</H2>
                 <button className="inline-flex gap-2 flex-row p-2 hover:bg-white/80 rounded" onClick={handleDone}>
-                  <TimesCircleIcon className="grow h-6 w-6" /> Close
+                  <XMarkIcon className="grow h-6 w-6" /> Close
                 </button>
               </div>
 
-              <PreferenceTextField preference="splashTitle" label="Splash screen title" />
+              <div className="grid grid-cols-12 gap-4">
+                <div className="col-span-5">
+                  <PreferenceTextField preference="splashTitle" label="Splash screen title" />
+                </div>
 
-              <div className="flex flex-row gap-6 grow">
-                <PreferenceTextField
-                  preference="photoboothUrl"
-                  onChange={(url) => setUrl(url)}
-                  leadingIcon={LinkLeader}
-                  label="Online photo gallery URL"
-                  description="Displayed along with a QR code after a photo is saved."
-                />
-                <div className="h-32 w-32 grow-0 overflow-hidden">
+                <div className="col-span-7 grid grid-cols-6 gap-2">
+                  <div className="col-span-5">
+                    <PreferenceTextField
+                      preference="photoboothUrl"
+                      onChange={(url) => setUrl(url)}
+                      leadingIcon="LinkIcon"
+                      label="Online photo gallery URL"
+                      description="Displayed along with a QR code after a photo is saved."
+                    />
+                  </div>
+
                   <QrCode url={url} />
                 </div>
               </div>
@@ -90,17 +92,29 @@ export function Preferences({ status }: MainProps) {
 
               <H3>Inputs</H3>
               <div className="grid grid-cols-2 gap-4">
-                <SelectField label="Video device" onSelectionChange={(key) => setVideoId(key as string)}>
-                  {videoDevices.map((dev) => (
-                    <Item key={dev.deviceId}>{dev.label}</Item>
-                  ))}
-                </SelectField>
+                {videoDevices.length ? (
+                  <SelectField
+                    label="Video device"
+                    defaultSelectedKey={videoId || videoDevices[0]?.deviceId}
+                    onSelectionChange={(key) => setVideoId(key as string)}
+                  >
+                    {videoDevices.map((dev) => (
+                      <Item key={dev.deviceId}>{getDeviceName(dev.label) || dev.label}</Item>
+                    ))}
+                  </SelectField>
+                ) : null}
 
-                <SelectField label="Audio device" onSelectionChange={(key) => setAudioId(key as string)}>
-                  {audioDevices.map((dev) => (
-                    <Item key={dev.deviceId}>{dev.label}</Item>
-                  ))}
-                </SelectField>
+                {audioDevices.length ? (
+                  <SelectField
+                    label="Audio device"
+                    defaultSelectedKey={audioId || audioDevices[0]?.deviceId}
+                    onSelectionChange={(key) => setAudioId(key as string)}
+                  >
+                    {audioDevices.map((dev) => (
+                      <Item key={dev.deviceId}>{getDeviceName(dev.label) || dev.label}</Item>
+                    ))}
+                  </SelectField>
+                ) : null}
               </div>
             </div>
           </div>
@@ -108,6 +122,11 @@ export function Preferences({ status }: MainProps) {
       </div>
     </>
   );
+}
+
+function getDeviceName(str: string) {
+  const idx = str.lastIndexOf('(');
+  return str.substring(0, idx);
 }
 
 interface PrefProp extends React.ComponentProps<typeof TextField> {
@@ -132,7 +151,8 @@ function PreferenceTextField({ preference, ...props }: PrefProp) {
       {...props}
       defaultValue={value}
       // @ts-ignore
-      trailingIcon={saved ? SuccessIcon : null}
+      trailingIcon={saved ? 'CheckCircleIcon' : null}
+      trailingIconProps={saved ? successIconProps : undefined}
       onBlur={() => setSaved(false)}
       onChange={(value) => {
         setSaved(false);
@@ -143,10 +163,4 @@ function PreferenceTextField({ preference, ...props }: PrefProp) {
   );
 }
 
-function SuccessIcon() {
-  return <CheckIcon className="text-green-500" />;
-}
-
-function LinkLeader() {
-  return <LinkIcon />;
-}
+const successIconProps = { className: 'text-green-500' };

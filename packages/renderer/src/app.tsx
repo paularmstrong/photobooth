@@ -4,13 +4,31 @@ import { IconProvider } from '@reui/reui';
 import { MediaStreamProvider, NavigationProvider, PhotoStoreProvider, PreferencesProvider } from './context';
 import { Router } from './Router';
 import { HiddenTitlebar, Preview } from './components';
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
+import {
+  CheckCircleIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ChevronUpDownIcon,
+  LinkIcon,
+  XCircleIcon,
+} from '@heroicons/react/24/solid';
 
 export function App() {
   return (
     <>
       <PreferencesProvider>
-        <IconProvider value={{ CheckIcon, ChevronDownIcon, ChevronUpIcon, ChevronUpDownIcon }}>
+        <IconProvider
+          value={{
+            CheckCircleIcon,
+            CheckIcon,
+            ChevronDownIcon,
+            ChevronUpIcon,
+            ChevronUpDownIcon,
+            LinkIcon,
+            XCircleIcon,
+          }}
+        >
           <HashRouter>
             <NavigationProvider>
               <PhotoStoreProvider>

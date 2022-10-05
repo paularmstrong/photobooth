@@ -51,6 +51,6 @@ export function useMediaStream() {
 }
 
 export function useSetMediaStream() {
-  const { setVideoId, setAudioId } = React.useContext(MediaStreamContext);
-  return { setVideoId, setAudioId };
+  const { videoId, setVideoId, audioId, setAudioId } = React.useContext(MediaStreamContext);
+  return { videoId, setVideoId, audioId, setAudioId };
 }

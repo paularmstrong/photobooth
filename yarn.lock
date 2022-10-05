@@ -2391,7 +2391,7 @@ __metadata:
     "@pb/images": "workspace:packages/images"
     "@pb/main": "workspace:packages/main"
     "@pb/webpack": "workspace:packages/webpack"
-    "@reui/reui": ^0.1.0
+    "@reui/reui": alpha
     "@reui/tailwind-config": ^0.1.0
     "@svgr/webpack": ^6.3.1
     "@types/react": ^17
@@ -3810,9 +3810,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reui/activity-indicator@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/activity-indicator@npm:0.1.0"
+"@reui/activity-indicator@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/activity-indicator@npm:0.2.0-alpha.0"
   dependencies:
     clsx: ^1.2.1
   peerDependencies:
@@ -3820,13 +3820,13 @@ __metadata:
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: d8c97d910e0a268386f4a51c5f262c7aa314cf2be6528f6fe5008374b9fc97a38a9cdabc1c73ddebcf064e266c573795c968f39b5d66a99ee9e926860cd1fb1b
+  checksum: 267980dd53d4e8d1193286fb6703efe253672001bfe285d0e40a6b3965ba83d367884f7a7e58afcef8298baf0a1f15e54348018797665c697b9a0dbc5a15ec1b
   languageName: node
   linkType: hard
 
-"@reui/button@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/button@npm:0.1.0"
+"@reui/button@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/button@npm:0.2.0-alpha.0"
   dependencies:
     clsx: ^1.2.1
   peerDependencies:
@@ -3834,69 +3834,55 @@ __metadata:
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: ba3c3b9d5adb5667c36b17063ef9743fad42c1cbe46a110d76f69f33557cbadea1ed1220844735c79e745665ff29c00f516809c7cb52b92b6febd66357173938
+  checksum: 73b28e3d7487a79163eeb7ccdabccfab39f97c14d5d55813d3ab283b7439f3ab5574039d0c735d2afefdc6152ce06ff15b637b5c844984cfecda1a1247ad8be8
   languageName: node
   linkType: hard
 
-"@reui/checkbox@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/checkbox@npm:0.1.0"
+"@reui/checkbox@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/checkbox@npm:0.2.0-alpha.0"
   dependencies:
-    "@reui/icons": 0.1.0
+    "@reui/icons": 0.2.0-alpha.0
     clsx: ^1.2.1
   peerDependencies:
     react: ^18
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: f08c7adb42a01e772f229711ce1c9644705ea515259d1ed8670efccb5e334334f6620067e588fda3354711c404e824a54ec8b25878cbe9e1935cda150a9757dc
+  checksum: 3120adf4dffd7ed38560ed9d789d49d8798b2592186f15763b50dbba46a304c67917174c105def3526be8fd11a2859ae41074e297e842f6bce1786c014dbef61
   languageName: node
   linkType: hard
 
-"@reui/icons@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/icons@npm:0.1.0"
+"@reui/icons@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/icons@npm:0.2.0-alpha.0"
   peerDependencies:
     react: ^18
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: 13a491bfdc07d7a79e0591dc1265d4a86b6cf0da0a345d412328ef165be4b83a162e848c8e3f59df84221d056269d05783b98aee6e2d66ec6e5109043eec99ec
+  checksum: 574e797587a47de248baa61be819645af48023d2f3e2769606761abbb618359813e7ea51607660d25f3f655cd909f700cfa6f9536ac855ba4ba6e56d6bfc1aa1
   languageName: node
   linkType: hard
 
-"@reui/listbox@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/listbox@npm:0.1.0"
+"@reui/listbox@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/listbox@npm:0.2.0-alpha.0"
   dependencies:
-    "@reui/icons": 0.1.0
+    "@reui/icons": 0.2.0-alpha.0
     clsx: ^1.2.1
   peerDependencies:
     react: ^18
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: 4086f59b0a3e2a46a2362badf7af2a7310c0a9ff129b4d1b49da5d1df07145d488ef3af7ebf9ce71caaa7e61e966b460595dc82689a208cb756449670ae615c5
+  checksum: 1e25bd2711fc6e38b8625b732e86e0507c8798f5823a9e813708e59f0fd6d432e12dfa1fe9d891b5e195119f946e35defc49fba7e98525c56f1203c9e5672ddb
   languageName: node
   linkType: hard
 
-"@reui/popover@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/popover@npm:0.1.0"
-  dependencies:
-    clsx: ^1.2.1
-  peerDependencies:
-    react: ^18
-    react-aria: ^3
-    react-stately: ^3
-    tailwindcss: ^3
-  checksum: 68502f361105675d8f9318d93291bbb67fa5aa750c03b8c49457221bcf16ce54d3c1f6fb625e0269b90f6117bb0e0a2f59dd68caf35082210fa1ab8ad165792b
-  languageName: node
-  linkType: hard
-
-"@reui/radio@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/radio@npm:0.1.0"
+"@reui/menu@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/menu@npm:0.2.0-alpha.0"
   dependencies:
     clsx: ^1.2.1
   peerDependencies:
@@ -3904,54 +3890,28 @@ __metadata:
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: d79fda6bcfcdd59e28bd913341044ea9c06e1bc2d694b78b4dab8a3e6df50b90e096b4648ce39838ad05892f198fc725eaad5dcb64f541954e534acdde31a169
+  checksum: b5ae8b8a414a9a4c1343a7b693c7143207a1d817dc68b784f8f7c683c313a8da797709042e79b4169b5b2eed61548d3038bf542bca1f4af845be075f0475316a
   languageName: node
   linkType: hard
 
-"@reui/reui@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@reui/reui@npm:0.1.0"
+"@reui/numberfield@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/numberfield@npm:0.2.0-alpha.0"
   dependencies:
-    "@reui/activity-indicator": 0.1.0
-    "@reui/button": 0.1.0
-    "@reui/checkbox": 0.1.0
-    "@reui/icons": 0.1.0
-    "@reui/listbox": 0.1.0
-    "@reui/popover": 0.1.0
-    "@reui/radio": 0.1.0
-    "@reui/selectfield": 0.1.0
-    "@reui/snackbar": 0.1.0
-    "@reui/switch": 0.1.0
-    "@reui/textfield": 0.1.0
-  peerDependencies:
-    react: ^18
-    react-aria: ^3
-    react-stately: ^3
-    tailwindcss: ^3
-  checksum: 0f71d52d35ca8a2443cc9b27e8b30af1a4d372aa025fcdfa343acf9d911f6c4fad80d801aa8de4174d2aca73bb1bb2e7aa558c5dfae0ebcd4718d85c4c82b230
-  languageName: node
-  linkType: hard
-
-"@reui/selectfield@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/selectfield@npm:0.1.0"
-  dependencies:
-    "@reui/icons": 0.1.0
-    "@reui/listbox": 0.1.0
-    "@reui/popover": 0.1.0
+    "@reui/button": 0.2.0-alpha.0
     clsx: ^1.2.1
   peerDependencies:
     react: ^18
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: b578f04e5749f82db502cef07d1a2d42fa6db71ce62f9b6b69b29008a3889fe9882b2ba944d4a57e09025f21b7f5c8165570f836652af4f332a73d5bb323417e
+  checksum: 2e20dc73873bba4d200b16b9833cf9dbcc1dab958e1e3778171ec4a6048ed89d98ec0d20f44b5965a8ee988a426b63c1c41b194707bcace8171f7b8173c8b9c3
   languageName: node
   linkType: hard
 
-"@reui/snackbar@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/snackbar@npm:0.1.0"
+"@reui/popover@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/popover@npm:0.2.0-alpha.0"
   dependencies:
     clsx: ^1.2.1
   peerDependencies:
@@ -3959,13 +3919,13 @@ __metadata:
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: 23de742951ef4014b28646622652383776f09b1da924ee50ad37b235854e8dc76f162536fa54920e72fef6bd3144513490a3ec7cde0796622a2c259837d10ea3
+  checksum: bb4816565fb172f2199b68fe9e206c5ec5dd48891c7bdd39a1c1baabb5679de27dcdbcaa96d513122bedd7a85b89eb5b5301406830e168e6e9e28d5b75e0306c
   languageName: node
   linkType: hard
 
-"@reui/switch@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/switch@npm:0.1.0"
+"@reui/radio@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/radio@npm:0.2.0-alpha.0"
   dependencies:
     clsx: ^1.2.1
   peerDependencies:
@@ -3973,7 +3933,93 @@ __metadata:
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: 1ac32245ac21d28d106c5251b78080034f2018ea196647afa5bb7a16e5e006300934ff902dd8b52a98bfbe2971de2e278b91c023453c0d92b893e554991f037a
+  checksum: bcc920cc04484cbd263779a44da67e502584f3275392f17820d89df748d6267b889582d2b2a8be9d7c4c1ecb9a27f45ed621cf4f8b0e2eee91847f760b79ec5c
+  languageName: node
+  linkType: hard
+
+"@reui/reui@npm:alpha":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/reui@npm:0.2.0-alpha.0"
+  dependencies:
+    "@reui/activity-indicator": 0.2.0-alpha.0
+    "@reui/button": 0.2.0-alpha.0
+    "@reui/checkbox": 0.2.0-alpha.0
+    "@reui/icons": 0.2.0-alpha.0
+    "@reui/listbox": 0.2.0-alpha.0
+    "@reui/menu": 0.2.0-alpha.0
+    "@reui/numberfield": 0.2.0-alpha.0
+    "@reui/popover": 0.2.0-alpha.0
+    "@reui/radio": 0.2.0-alpha.0
+    "@reui/selectfield": 0.2.0-alpha.0
+    "@reui/snackbar": 0.2.0-alpha.0
+    "@reui/switch": 0.2.0-alpha.0
+    "@reui/table": 0.2.0-alpha.0
+    "@reui/textfield": 0.2.0-alpha.0
+  peerDependencies:
+    react: ^18
+    react-aria: ^3
+    react-stately: ^3
+    tailwindcss: ^3
+  checksum: 4ed7328679c29a67f5d6de08c2a04722e630be168f0c7a80b367f36bba4b2e96ac1aa5080959b306711b415171cd29528ffec9fd8aceef8f6beee084384e4bec
+  languageName: node
+  linkType: hard
+
+"@reui/selectfield@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/selectfield@npm:0.2.0-alpha.0"
+  dependencies:
+    "@reui/icons": 0.2.0-alpha.0
+    "@reui/listbox": 0.2.0-alpha.0
+    "@reui/popover": 0.2.0-alpha.0
+    clsx: ^1.2.1
+  peerDependencies:
+    react: ^18
+    react-aria: ^3
+    react-stately: ^3
+    tailwindcss: ^3
+  checksum: d8aa2febda08c48b746fde3eca537866bb1666b7cd5b1e9cd9d816bccd4069c39b7f32af2efefd33b86f9f52efba006b8a48d01231f8647f3c4f46251880f9cb
+  languageName: node
+  linkType: hard
+
+"@reui/snackbar@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/snackbar@npm:0.2.0-alpha.0"
+  dependencies:
+    clsx: ^1.2.1
+  peerDependencies:
+    react: ^18
+    react-aria: ^3
+    react-stately: ^3
+    tailwindcss: ^3
+  checksum: 4e9180eb8c79a385bf3755760222a72200d7dfed818f073d1bd9eec2bcba76a520dd0fc0c88baaf33b6f486d76359d8b0b8c9dbc016b3771bc51674f53cb62ea
+  languageName: node
+  linkType: hard
+
+"@reui/switch@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/switch@npm:0.2.0-alpha.0"
+  dependencies:
+    clsx: ^1.2.1
+  peerDependencies:
+    react: ^18
+    react-aria: ^3
+    react-stately: ^3
+    tailwindcss: ^3
+  checksum: 8cae4c98a860eb81fe3af16ec96aa190e330133cab927bd41a938969c00907b9f3f78461480d7c095c1030625123018393ce9b0bf3f8cf3c42dc2ffe112aaef3
+  languageName: node
+  linkType: hard
+
+"@reui/table@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/table@npm:0.2.0-alpha.0"
+  dependencies:
+    clsx: ^1.2.1
+  peerDependencies:
+    react: ^18
+    react-aria: ^3
+    react-stately: ^3
+    tailwindcss: ^3
+  checksum: d9bea97fbe76f06c2f9ce56ea2e0170765a5930b9ff012ffbd2723d02ce68ca985dcc90492c57b2c094b76fa57df49cbad8298f49153c5c3a8cb84502ac12f7f
   languageName: node
   linkType: hard
 
@@ -3986,17 +4032,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reui/textfield@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@reui/textfield@npm:0.1.0"
+"@reui/textfield@npm:0.2.0-alpha.0":
+  version: 0.2.0-alpha.0
+  resolution: "@reui/textfield@npm:0.2.0-alpha.0"
   dependencies:
+    "@reui/icons": 0.2.0-alpha.0
     clsx: ^1.2.1
   peerDependencies:
     react: ^18
     react-aria: ^3
     react-stately: ^3
     tailwindcss: ^3
-  checksum: 1928869abbdd432b726104b2bdc17d9da015758d39c30f7c4aa10efb51b504dae6cd7838b3e1477a865596a87dd1ea556b46d8ef742cb40c5c7f47ee070a172b
+  checksum: de1c680dc0856a7727326ea8c1e6b2b98dad78302aea88f55926ea5e4960502384a321be6247be234f3cdc5aec0d97a5e03a9a537fd97d6385a7e077f80149e3
   languageName: node
   linkType: hard
 

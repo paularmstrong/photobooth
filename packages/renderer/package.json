@@ -4,7 +4,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.10",
     "@pb/images": "workspace:packages/images",
-    "@reui/reui": "^0.1.0",
+    "@reui/reui": "alpha",
     "@reui/tailwind-config": "^0.1.0",
     "clsx": "^1.1.1",
     "electron-store": "^8.0.2",
