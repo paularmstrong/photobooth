@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import type { Props as MainProps } from './props';
-import { H2, QrCode } from '../components';
-import { TextField } from '@reui/reui';
+import { H2, H3, QrCode } from '../components';
+import { SelectField, TextField } from '@reui/reui';
+import { Item } from 'react-stately';
 import clsx from 'clsx';
-import { usePreference } from '../context';
+import { usePreference, useSetMediaStream } from '../context';
 import type { Preferences as PreferenceStore } from '@pb/main';
 import LinkIcon from 'humbleicons/icons/link.svg';
 import CheckIcon from 'humbleicons/icons/check.svg';
@@ -13,11 +14,22 @@ import { transition } from '../modules';
 
 export function Preferences({ status }: MainProps) {
   const [url, setUrl] = React.useState('https://example.com');
+  const [videoDevices, setVideoDevices] = React.useState<Array<MediaDeviceInfo>>([]);
+  const [audioDevices, setAudioDevices] = React.useState<Array<MediaDeviceInfo>>([]);
+  const { setVideoId, setAudioId } = useSetMediaStream();
+
   function handleDone() {
     window.api.send('transition', { type: 'DONE' });
   }
 
   React.useEffect(() => {
+    async function getDevices() {
+      const devices = await window.navigator.mediaDevices.enumerateDevices();
+      setAudioDevices(devices.filter(({ kind }) => kind === 'audioinput'));
+      setVideoDevices(devices.filter(({ kind }) => kind === 'videoinput'));
+    }
+    getDevices();
+
     function handleEscape(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         handleDone();
@@ -35,7 +47,7 @@ export function Preferences({ status }: MainProps) {
       <div className={clsx('absolute inset-0 bg-slate-700/30 backdrop-blur-sm', transition(status, 'fade'))} />
       <div className={clsx('h-screen w-screen', transition(status, 'slideUp'))}>
         <div role="dialog" className="p-6 lg:p-12 w-full h-full">
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 max-h-full overflow-y-auto">
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 h-full overflow-y-auto">
             <div className="flex flex-col gap-6">
               <div className="flex flex-row gap-6 justify-between items-start">
                 <H2>Preferences</H2>
@@ -75,6 +87,21 @@ export function Preferences({ status }: MainProps) {
                   event.target.blur();
                 }}
               />
+
+              <H3>Inputs</H3>
+              <div className="grid grid-cols-2 gap-4">
+                <SelectField label="Video device" onSelectionChange={(key) => setVideoId(key as string)}>
+                  {videoDevices.map((dev) => (
+                    <Item key={dev.deviceId}>{dev.label}</Item>
+                  ))}
+                </SelectField>
+
+                <SelectField label="Audio device" onSelectionChange={(key) => setAudioId(key as string)}>
+                  {audioDevices.map((dev) => (
+                    <Item key={dev.deviceId}>{dev.label}</Item>
+                  ))}
+                </SelectField>
+              </div>
             </div>
           </div>
         </div>
