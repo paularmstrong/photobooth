@@ -1,27 +1,31 @@
 import * as React from 'react';
 import { HashRouter } from 'react-router-dom';
+import { IconProvider } from '@reui/reui';
 import { MediaStreamProvider, NavigationProvider, PhotoStoreProvider, PreferencesProvider } from './context';
 import { Router } from './Router';
 import { HiddenTitlebar, Preview } from './components';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 
 export function App() {
   return (
     <>
       <PreferencesProvider>
-        <HashRouter>
-          <NavigationProvider>
-            <PhotoStoreProvider>
-              <MediaStreamProvider>
-                <div className="bg-black w-screen h-screen overflow-hidden">
-                  <Preview />
-                  <div className="absolute w-screen h-screen overflow-hidden">
-                    <Router />
+        <IconProvider value={{ CheckIcon, ChevronDownIcon, ChevronUpIcon, ChevronUpDownIcon }}>
+          <HashRouter>
+            <NavigationProvider>
+              <PhotoStoreProvider>
+                <MediaStreamProvider>
+                  <div className="bg-black w-screen h-screen overflow-hidden">
+                    <Preview />
+                    <div className="absolute w-screen h-screen overflow-hidden">
+                      <Router />
+                    </div>
                   </div>
-                </div>
-              </MediaStreamProvider>
-            </PhotoStoreProvider>
-          </NavigationProvider>
-        </HashRouter>
+                </MediaStreamProvider>
+              </PhotoStoreProvider>
+            </NavigationProvider>
+          </HashRouter>
+        </IconProvider>
       </PreferencesProvider>
       <HiddenTitlebar />
     </>

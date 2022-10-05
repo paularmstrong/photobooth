@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import type { Props as MainProps } from './props';
-import { H2, QrCode, TextField } from '../components';
+import { H2, QrCode } from '../components';
+import { TextField } from '@reui/reui';
 import clsx from 'clsx';
 import { usePreference } from '../context';
 import type { Preferences as PreferenceStore } from '@pb/main';
@@ -48,10 +49,10 @@ export function Preferences({ status }: MainProps) {
               <div className="flex flex-row gap-6 grow">
                 <PreferenceTextField
                   preference="photoboothUrl"
-                  onChangeText={(url) => setUrl(url)}
-                  leadingIcon={<LinkIcon />}
+                  onChange={(url) => setUrl(url)}
+                  leadingIcon={LinkLeader}
                   label="Online photo gallery URL"
-                  helpText="Displayed along with a QR code after a photo is saved."
+                  description="Displayed along with a QR code after a photo is saved."
                 />
                 <div className="h-32 w-32 grow-0 overflow-hidden">
                   <QrCode url={url} />
@@ -61,15 +62,16 @@ export function Preferences({ status }: MainProps) {
               <PreferenceTextField
                 preference="videoSaveMessage"
                 label="Video saved message"
-                helpText="Displayed after a recorded video has been saved."
+                description="Displayed after a recorded video has been saved."
               />
 
               <PreferenceTextField
                 preference="mediaPath"
                 label="Photo save location"
-                readOnly
+                isReadOnly
                 onFocus={(event) => {
                   window.api.send('selectMediaPath');
+                  // @ts-ignore
                   event.target.blur();
                 }}
               />
@@ -95,20 +97,29 @@ function PreferenceTextField({ preference, ...props }: PrefProp) {
   }, 900);
 
   React.useEffect(() => {
-    props.onChangeText && props.onChangeText(value);
+    props.onChange && props.onChange(value);
   }, []);
 
   return (
     <TextField
       {...props}
-      trailingIcon={saved ? <CheckIcon className="text-green-500" /> : null}
+      defaultValue={value}
+      // @ts-ignore
+      trailingIcon={saved ? SuccessIcon : null}
       onBlur={() => setSaved(false)}
-      onChangeText={(url) => {
+      onChange={(value) => {
         setSaved(false);
-        setValue(url);
-        props.onChangeText && props.onChangeText(url);
+        setValue(value);
+        props.onChange && props.onChange(value);
       }}
-      value={value}
     />
   );
+}
+
+function SuccessIcon() {
+  return <CheckIcon className="text-green-500" />;
+}
+
+function LinkLeader() {
+  return <LinkIcon />;
 }

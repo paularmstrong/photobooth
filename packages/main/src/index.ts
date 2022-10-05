@@ -1,4 +1,4 @@
-import { app, systemPreferences } from 'electron';
+import { app, powerSaveBlocker, systemPreferences } from 'electron';
 import type { BrowserWindow } from 'electron';
 import './security-restrictions';
 import { restoreOrCreateWindow } from './main-window';
@@ -64,6 +64,7 @@ app
     if (process.platform !== 'darwin') {
       return;
     }
+    powerSaveBlocker.start('prevent-display-sleep');
     const statusCam = systemPreferences.getMediaAccessStatus('camera');
     const statusMic = systemPreferences.getMediaAccessStatus('microphone');
     if (statusCam !== 'granted' || statusMic !== 'granted') {
